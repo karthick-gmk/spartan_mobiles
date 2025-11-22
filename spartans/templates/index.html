@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{%block content%}
+{% load static %}
+<!-- Hero Section Begin -->
+<section class="hero">
+    <div class="hero__slider owl-carousel">
+        <!-- Slide 1 -->
+        <div class="hero__items set-bg" data-setbg="https://t4.ftcdn.net/jpg/13/32/92/31/240_F_1332923106_7cFANYUgh4XiK8YNQQltqn1rAhgIFi9N.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 col-md-8">
+                        <div class="hero__text">
+                            <h6>Spartans Mobile Service Center</h6>
+                            <h2>Fast & Trusted Mobile Repairs</h2>
+                            <p>We fix broken displays, motherboard issues, battery problems, and more. 
+                            Professional service with genuine parts and same-day delivery.</p>
+                            <a href="#" class="primary-btn">Book a Repair <span class="arrow_right"></span></a>
+                            <div class="hero__social">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="hero__items set-bg" data-setbg="https://t3.ftcdn.net/jpg/05/13/15/42/240_F_513154219_yHfxaqn9lnT0BiOk4JYRSRc95eg1bNC8.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-7 col-md-8">
+                        <div class="hero__text">
+                            <h6>Mobile Accessories & Products</h6>
+                            <h2>Premium Mobile Accessories Available</h2>
+                            <p>Shop high-quality chargers, earphones, cases, tempered glass, smart gadgets,
+                            and more. Best prices with warranty guaranteed.</p>
+                            <a href="#" class="primary-btn">Shop Now <span class="arrow_right"></span></a>
+                        <div class="hero__social">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- Hero Section End -->
+
+<!-- Banner Section Begin -->
+<section class="banner spad">
+    <div class="container">
+        <div class="row">
+            {% for banner in banners %}
+                {% if banner.banner_type == 'repair' %}
+                    <div class="col-lg-7 offset-lg-4">
+                        <div class="banner__item">
+                {% elif banner.banner_type == 'accessories' %}
+                    <div class="col-lg-5">
+                        <div class="banner__item banner__item--middle">
+                {% else %}
+                    <div class="col-lg-7">
+                        <div class="banner__item banner__item--last">
+                {% endif %}
+                            <div class="banner__item__pic">
+                                <img src="{{ banner.get_image_url }}" alt="{{ banner.title }}">
+                            </div>
+                            <div class="banner__item__text">
+                                <h2>{{ banner.title }}</h2>
+                                <a href="{{ banner.link_url }}">{{ banner.link_text }}</a>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Banner Section End -->
+
+<!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="filter__controls">
+                    <li class="active" data-filter="*">Best Sellers</li>
+                    <li data-filter=".new-arrivals">New Arrivals</li>
+                    <li data-filter=".hot-sales">Hot Deals</li>
+                </ul>
+            </div>
+        </div>
+        
+       
+        <div class="row product__filter">
+            {% for product in products %}
+            <div class="col-lg-3 col-md-6 col-sm-6 mix {{ product.category }}">
+                <div class="product__item {% if product.is_sale %}sale{% endif %}">
+                   <div class="product__item__pic set-bg" data-setbg="{{ product.get_image_url }}">
+                        {% if product.is_new %}<span class="label">New</span>{% endif %}
+                        {% if product.is_sale %}<span class="label">Sale</span>{% endif %}
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
+                            <li><a href="/detail"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>{{ product.name }}</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= product.rating %}
+                                    <i class="fa fa-star"></i>
+                                {% else %}
+                                    <i class="fa fa-star-o"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <h5>₹{{ product.price }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Product Section End -->
+
+
+<!-- Categories Section Begin -->
+<section class="categories spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                {% for category in categories %}
+                <div class="categories__text">
+                    <h2>{{ category.name }}<br /> 
+                        <span>{{ category.description }}</span> <br /> 
+                    </h2>
+                    <ul style="margin-top:15px; list-style:disc; margin-left:20px;">
+                        {% for item in category.get_items_list %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-lg-4">
+                <div class="categories__hot__deal">
+                    {% if deal %}
+                    <img src="{{ deal.get_image_url }}" alt="{{ deal.product_name }}">
+                    {% else %}
+                    <img src="img/product-sale.png" alt="">
+                    {% endif %}
+                    <div class="hot__deal__sticker">
+                        <span>Sale Of</span>
+                        <h5>₹{{ deal.sale_price|default:"499" }}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 offset-lg-1">
+                <div class="categories__deal__countdown">
+                    {% if deal %}
+                    <span>{{ deal.title }}</span>
+                    <h2>{{ deal.product_name }}</h2>
+                    <div class="categories__deal__countdown__timer" id="countdown">
+                        <div class="cd-item">
+                            <span>{{ deal.days }}</span>
+                            <p>Days</p>
+                        </div>
+                        <div class="cd-item">
+                            <span>{{ deal.hours }}</span>
+                            <p>Hours</p>
+                        </div>
+                        <div class="cd-item">
+                            <span>{{ deal.minutes }}</span>
+                            <p>Minutes</p>
+                        </div>
+                        <div class="cd-item">
+                            <span>{{ deal.seconds }}</span>
+                            <p>Seconds</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <a href="#" class="primary-btn">Shop now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Categories Section End -->
+
+
+<!-- Instagram Section Begin -->
+<section class="instagram spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="instagram__pic">
+                    {% for img in instagram_images %}
+                    <div class="instagram__pic__item set-bg" data-setbg="{{ img.get_image_url }}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <div class="col-lg-4">
+                <div class="instagram__text">
+                    <h2>{{ instagram.title|default:"Instagram" }}</h2>
+                    <p>{{ instagram.description|default:"Explore the latest mobile accessories — headphones, chargers, speakers, memory cards, and more. Follow us for daily tech updates and offers." }}</p>
+                    <h3>{{ instagram.hashtag|default:"#Electronic_Store" }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Instagram Section End -->
+
+<!-- Latest Blog Section Begin -->
+<section class="latest spad">
+    <div class="container">
+        <div class="row">
+        {% for service in services %}
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="blog__item">
+                    <div class="blog__item__pic set-bg" data-setbg="{{ service.get_image_url }}"></div>
+                    <div class="blog__item__text">
+                        <span><img src="img/icon/calendar.png" alt=""> {{ service.service_type }}</span>
+                        <h5>{{ service.title }}</h5>
+                        <p>{{ service.description }}</p>
+                        <a href="#">Know More</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Latest Blog Section End -->
+ 
+{% endblock %}
