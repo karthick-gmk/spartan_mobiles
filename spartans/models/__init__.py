@@ -30,4 +30,6 @@ def import_models_dynamically():
 import_models_dynamically()
 
 # Explicit imports for backward compatibility
-from .user_model import User
+from .master_model import Category, Brand, BrandModel
+from .product_model import product
+from .service_model import Service, UserRequestService

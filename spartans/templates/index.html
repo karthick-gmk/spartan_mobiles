@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {%block content%}
 {% load static %}
-<!-- Hero Section Begin -->
+
+ <!-- Hero Section Begin -->
 <section class="hero">
     <div class="hero__slider owl-carousel">
         <!-- Slide 1 -->
@@ -16,10 +17,10 @@
                             Professional service with genuine parts and same-day delivery.</p>
                             <a href="#" class="primary-btn">Book a Repair <span class="arrow_right"></span></a>
                             <div class="hero__social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
@@ -58,27 +59,45 @@
 <section class="banner spad">
     <div class="container">
         <div class="row">
-            {% for banner in banners %}
-                {% if banner.banner_type == 'repair' %}
-                    <div class="col-lg-7 offset-lg-4">
-                        <div class="banner__item">
-                {% elif banner.banner_type == 'accessories' %}
-                    <div class="col-lg-5">
-                        <div class="banner__item banner__item--middle">
-                {% else %}
-                    <div class="col-lg-7">
-                        <div class="banner__item banner__item--last">
-                {% endif %}
-                            <div class="banner__item__pic">
-                                <img src="{{ banner.get_image_url }}" alt="{{ banner.title }}">
-                            </div>
-                            <div class="banner__item__text">
-                                <h2>{{ banner.title }}</h2>
-                                <a href="{{ banner.link_url }}">{{ banner.link_text }}</a>
-                            </div>
-                        </div>
+            <!-- Banner 1: Mobile Repair -->
+            <div class="col-lg-7 offset-lg-4">
+                <div class="banner__item">
+                    <div class="banner__item__pic">
+                        <img  src="https://t3.ftcdn.net/jpg/02/40/25/00/240_F_240250083_uv4BiZdDXnE11RxoDm3DoLEaAEs0X28H.jpg" alt="">
                     </div>
-            {% endfor %}
+                    <div class="banner__item__text">
+                        <h2> Mobile Repair Services</h2>
+                        <a href="#">Book Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner 2: Accessories -->
+            <div class="col-lg-5">
+                <div class="banner__item banner__item--middle">
+                    <div class="banner__item__pic">
+                        <img class="serviceimg" src="https://t3.ftcdn.net/jpg/01/89/82/26/240_F_189822641_jMRbE9jVlBtSWqtDQ0bxfFFOWpKlJxjs.jpg" alt="">
+                    </div>
+                    <div class="banner__item__text">
+                        <h2>Mobile Accessories</h2>
+                        <a href="#">Shop Accessories</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner 3: New Mobile Sales -->
+            <div class="col-lg-7">
+                <div class="banner__item banner__item--last">
+                    <div class="banner__item__pic">
+                        <img class="serviceimg" src="https://images.unsplash.com/photo-1557906757-fbb05fc2fcee?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fExhdGVzdCUyMFNtYXJ0cGhvbmVzJTIwJTI2JTIwR2FkZ2V0c3xlbnwwfHwwfHx8MA%3D%3D" alt="">
+                    </div>
+                    <div class="banner__item__text">
+                        <h2>Latest Smartphones & Gadgets</h2>
+                        <a href="#">View Products</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -96,101 +115,279 @@
                 </ul>
             </div>
         </div>
-        
-       
-        <div class="row product__filter">
-            {% for product in products %}
-            <div class="col-lg-3 col-md-6 col-sm-6 mix {{ product.category }}">
-                <div class="product__item {% if product.is_sale %}sale{% endif %}">
-                   <div class="product__item__pic set-bg" data-setbg="{{ product.get_image_url }}">
-                        {% if product.is_new %}<span class="label">New</span>{% endif %}
-                        {% if product.is_sale %}<span class="label">Sale</span>{% endif %}
+
+        <div class="row product__filter ">
+            <!-- New Arrivals – Bluetooth Headphones -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/Bluetooth-headset.jpg">
+                        <span class="label">New</span>
                         <ul class="product__hover">
-                            <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
-                            <li><a href="/detail"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
                     <div class="product__item__text">
-                        <h6>{{ product.name }}</h6>
+                        <h6>Bluetooth Headphones</h6>
                         <a href="#" class="add-cart">+ Add To Cart</a>
                         <div class="rating">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= product.rating %}
-                                    <i class="fa fa-star"></i>
-                                {% else %}
-                                    <i class="fa fa-star-o"></i>
-                                {% endif %}
-                            {% endfor %}
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <i class="fa fa-star-o"></i>
                         </div>
-                        <h5>₹{{ product.price }}</h5>
+                        <h5>₹799</h5>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+
+            <!-- Hot Sales – Fast Charger -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix hot-sales">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/Fast-Mobile-Charger.avif">
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Fast Mobile Charger</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹499</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Arrivals – Tempered Glass -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals">
+                <div class="product__item sale">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/Tempered-Glass.jpg">
+                        <span class="label">Sale</span>
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Premium Tempered Glass</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹99</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hot Sales – Bluetooth Speaker -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix hot-sales">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg"data-setbg="images/product/Bluetooth-Speaker.jpg">
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Portable Bluetooth Speaker</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹899</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Arrivals – Pen Drive -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/Pen-Drive.jpg">
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>32GB Pen Drive</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹399</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hot Sales – Memory Card -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix hot-sales">
+                <div class="product__item sale">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/memorycard.jpg">
+                        <span class="label">Sale</span>
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>64GB Memory Card</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹549</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Arrivals – Airbuds -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/Wireless-Airbuds.jpg">
+                        <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>True Wireless Airbuds</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹999</h5>
+                    </div>
+                </div>
+            </div>
+            <!-- Hot Sales – Fast Charger -->
+            <div class="col-lg-3 col-md-6 col-sm-6 mix hot-sales">
+                <div class="product__item sale">
+                    <div class="product__item__pic set-bg" data-setbg="images/product/phone-product.jpg">
+                        <span class="label">Sale</span>
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                            <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>Phone Product</h6>
+                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+                        <h5>₹549</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 <!-- Product Section End -->
-
 
 <!-- Categories Section Begin -->
 <section class="categories spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
-                {% for category in categories %}
                 <div class="categories__text">
-                    <h2>{{ category.name }}<br /> 
-                        <span>{{ category.description }}</span> <br /> 
+                    <h2>Mobile Accessories<br /> 
+                        <span>Gadgets & Devices</span> <br/> 
                     </h2>
                     <ul style="margin-top:15px; list-style:disc; margin-left:20px;">
-                        {% for item in category.get_items_list %}
-                        <li>{{ item }}</li>
-                        {% endfor %}
+                        <li>Headphones</li>
+                        <li>Tempered Glass</li>
+                        <li>Speakers</li>
+                        <li>Bluetooth Headphones</li>
+                        <li>Pen Drive</li>
+                        <li>Charger</li>
+                        <li>Memory Card</li>
+                        <li>Airbuds</li>
                     </ul>
                 </div>
-                {% endfor %}
             </div>
 
             <div class="col-lg-4">
                 <div class="categories__hot__deal">
-                    {% if deal %}
-                    <img src="{{ deal.get_image_url }}" alt="{{ deal.product_name }}">
-                    {% else %}
                     <img src="img/product-sale.png" alt="">
-                    {% endif %}
                     <div class="hot__deal__sticker">
                         <span>Sale Of</span>
-                        <h5>₹{{ deal.sale_price|default:"499" }}</h5>
+                        <h5>₹499</h5>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4 offset-lg-1">
                 <div class="categories__deal__countdown">
-                    {% if deal %}
-                    <span>{{ deal.title }}</span>
-                    <h2>{{ deal.product_name }}</h2>
+                    <span>Deal Of The Week</span>
+                    <h2>Wireless Bluetooth Headphones</h2>
+
                     <div class="categories__deal__countdown__timer" id="countdown">
                         <div class="cd-item">
-                            <span>{{ deal.days }}</span>
+                            <span>3</span>
                             <p>Days</p>
                         </div>
                         <div class="cd-item">
-                            <span>{{ deal.hours }}</span>
+                            <span>1</span>
                             <p>Hours</p>
                         </div>
                         <div class="cd-item">
-                            <span>{{ deal.minutes }}</span>
+                            <span>50</span>
                             <p>Minutes</p>
                         </div>
                         <div class="cd-item">
-                            <span>{{ deal.seconds }}</span>
+                            <span>18</span>
                             <p>Seconds</p>
                         </div>
                     </div>
-                    {% endif %}
+
                     <a href="#" class="primary-btn">Shop now</a>
                 </div>
             </div>
@@ -199,25 +396,27 @@
 </section>
 <!-- Categories Section End -->
 
-
 <!-- Instagram Section Begin -->
 <section class="instagram spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
                 <div class="instagram__pic">
-                    {% for img in instagram_images %}
-                    <div class="instagram__pic__item set-bg" data-setbg="{{ img.get_image_url }}"></div>
-                    {% endfor %}
+                    <div class="instagram__pic__item set-bg" data-setbg="images/product/Bluetooth-headset.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="images/product/Bluetooth-Speaker.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="images/product/Fast-Mobile-Charger.avif"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="images/product/memorycard.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="images/product/Pen-Drive.jpg"></div>
+                    <div class="instagram__pic__item set-bg" data-setbg="images/product/Wireless-Airbuds.jpg"></div>
                 </div>
             </div>
 
-
             <div class="col-lg-4">
                 <div class="instagram__text">
-                    <h2>{{ instagram.title|default:"Instagram" }}</h2>
-                    <p>{{ instagram.description|default:"Explore the latest mobile accessories — headphones, chargers, speakers, memory cards, and more. Follow us for daily tech updates and offers." }}</p>
-                    <h3>{{ instagram.hashtag|default:"#Electronic_Store" }}</h3>
+                    <h2>Instagram</h2>
+                    <p>Explore the latest mobile accessories — headphones, chargers, speakers, memory cards, and more.
+                    Follow us for daily tech updates and offers.</p>
+                    <h3>#Electronic_Store</h3>
                 </div>
             </div>
         </div>
@@ -229,22 +428,57 @@
 <section class="latest spad">
     <div class="container">
         <div class="row">
-        {% for service in services %}
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <span>Our Services</span>
+                    <h2>Mobile Repair & Support</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Display Change -->
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="blog__item">
-                    <div class="blog__item__pic set-bg" data-setbg="{{ service.get_image_url }}"></div>
+                    <div class="blog__item__pic set-bg" data-setbg="images/product/Mobile-Display-Replacement.jpg"></div>
                     <div class="blog__item__text">
-                        <span><img src="img/icon/calendar.png" alt=""> {{ service.service_type }}</span>
-                        <h5>{{ service.title }}</h5>
-                        <p>{{ service.description }}</p>
-                        <a href="#">Know More</a>
+                        <span><img src="img/icon/calendar.png" alt=""> Quick Service</span>
+                        <h5>Mobile Display Replacement</h5>
+                        <p>We provide high-quality original & compatible display replacements for all mobile brands with fast and reliable service.</p>
+                        <a href="#">Contact Now</a>
                     </div>
                 </div>
             </div>
-        {% endfor %}
+
+            <!-- Motherboard Complaint -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="blog__item">
+                    <div class="blog__item__pic set-bg" data-setbg="images/product/Motherboard-Service.jpg"></div>
+                    <div class="blog__item__text">
+                        <span><img src="img/icon/calendar.png" alt=""> Expert Repair</span>
+                        <h5>Motherboard Service</h5>
+                        <p>We fix all types of motherboard issues such as dead phone, no power, charging problems, network issues, and more.</p>
+                        <a href="#">Contact Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Software Related -->
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="blog__item">
+                    <div class="blog__item__pic set-bg" data-setbg="images/product/Software.jpg"></div>
+                    <div class="blog__item__text">
+                        <span><img src="img/icon/calendar.png" alt=""> Fast Support</span>
+                        <h5>Software & OS Issues</h5>
+                        <p>We solve software problems like hanging, booting issue, OS installation, data recovery & performance tuning.</p>
+                        <a href="#">Contact Now</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 <!-- Latest Blog Section End -->
- 
+
 {% endblock %}

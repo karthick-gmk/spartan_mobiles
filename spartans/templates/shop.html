@@ -36,22 +36,24 @@
                         <div class="accordion" id="accordionExample">
                             <div class="card">
                                 <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    <a data-toggle="collapse" data-target="#collapseOne">Product</a>
                                 </div>
                                 <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
-                                        <div class="shop__sidebar__categories">                                            
-                                            <ul class="nice-scroll">
-                                                <li class="active" data-filter="*"><a href="#">All Products</a></li>
-                                                <li data-filter=".memory-card"><a href="#">Memory Card</a></li>
-                                                <li data-filter=".chargers"><a href="#">Chargers</a></li>
-                                                <li data-filter=".earphones"><a href="#">Earphones & Headphones</a></li>
-                                                <li data-filter=".power-banks"><a href="#">Power Banks</a></li>
-                                                <li data-filter=".screen-guards"><a href="#">Screen Guards</a></li>
-                                                <li data-filter=".smartwatches"><a href="#">Smartwatches</a></li>
-                                                <li data-filter=".bluetooth-headset"><a href="#">Bluetooth Headset</a></li>
-                                                <li data-filter=".bluetooth-speaker"><a href="#">Bluetooth Speaker</a></li>
-                                            </ul>
+                                        <div class="shop__sidebar__categories">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    <li class="active" data-filter="*"><a href="#">All Products</a></li>
+                                                    <li data-filter=".memory-card"><a href="#">Memory Card</a></li>
+                                                    <li data-filter=".chargers"><a href="#">Chargers</a></li>
+                                                    <li data-filter=".earphones"><a href="#">Earphones & Headphones</a></li>
+                                                    <li data-filter=".power-banks"><a href="#">Power Banks</a></li>
+                                                    <li data-filter=".screen-guards"><a href="#">Screen Guards</a></li>
+                                                    <li data-filter=".smartwatches"><a href="#">Smartwatches</a></li>
+                                                    <li data-filter=".bluetooth-headset"><a href="#">Bluetooth Headset</a></li>
+                                                    <li data-filter=".bluetooth-speaker"><a href="#">Bluetooth Speaker</a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -84,11 +86,11 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li data-filter=".price-0-500"><a href="#">₹0 – ₹500</a></li>
-                                                <li data-filter=".price-500-1000"><a href="#">₹500 – ₹1,000</a></li>
-                                                <li data-filter=".price-1000-1500"><a href="#">₹1,000 – ₹1,500</a></li>
-                                                <li data-filter=".price-1500-2000"><a href="#">₹1,500 – ₹2,000</a></li>
-                                                <li data-filter=".price-2000-plus"><a href="#">₹2,000+</a></li>
+                                                <li data-filter=".price-0-100"><a href="#">₹0 – ₹100</a></li>
+                                                <li data-filter=".price-100-200"><a href="#">₹100 – ₹200</a></li>
+                                                <li data-filter=".price-200-300"><a href="#">₹200 – ₹300</a></li>
+                                                <li data-filter=".price-300-400"><a href="#">₹300 – ₹400</a></li>
+                                                <li data-filter=".price-500-plus"><a href="#">₹500+</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -103,9 +105,7 @@
                                         <div class="shop__sidebar__tags">
                                             <a href="#">Display</a>
                                             <a href="#">Motherboard</a>
-                                            <a href="#">Battery</a>                                                                                      
-                                            <a href="#">Screen Guard</a>                                           
-                                            <a href="#">Camera Lens</a>                                                            
+                                            <a href="#">Battery</a>
                                             <a href="#">Repair Service</a>
                                         </div>
                                     </div>
@@ -136,36 +136,308 @@
                     </div>
                 </div>
                 <div class="row product__filter">
-                    {% for product in shop_products %}
-                    <div class="col-lg-4 col-md-6 col-sm-6 mix {{ product.category }} {{ product.brand }} {{ product.get_price_range_class }}">
-                        <div class="product__item {% if product.is_sale %}sale{% endif %}">
-                            <div class="product__item__pic set-bg" data-setbg="{{ product.get_image_url }}">
-                                {% if product.is_sale %}<span class="label">Sale</span>{% endif %}
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix memory-card apple">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
                                 <ul class="product__hover">
-                                    <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
-                                    <li><a href="/detail"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
-                                    <li><a href="/detail"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
                                 </ul>
                             </div>
                             <div class="product__item__text">
-                                <h6>{{ product.name }}</h6>
+                                <h6>Piqué Biker Jacket</h6>
                                 <a href="#" class="add-cart">+ Add To Cart</a>
                                 <div class="rating">
-                                    {% for i in "12345" %}
-                                        {% if forloop.counter <= product.rating %}
-                                            <i class="fa fa-star"></i>
-                                        {% else %}
-                                            <i class="fa fa-star-o"></i>
-                                        {% endif %}
-                                    {% endfor %}
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
                                 </div>
-                                <h5>₹{{ product.price }}</h5>
+                                <h5> ₹67.24</h5>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix memory-card apple">
+                        <div class="product__item sale">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
+                                <span class="label">Sale</span>
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Multi-pocket Chest Bag</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹43.48</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6  mix chargers samsung price-0-100">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
+                            <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Diagonal Textured Cap</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹99.9</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6  mix chargers samsung price-0-100">
+                        <div class="product__item sale">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-6.jpg">
+                                <span class="label">Sale</span>
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Ankle Boots</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹98.49</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix earphones vivo price-100-200">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
+                            <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>T-shirt Contrast Pocket</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹149.66</h5>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix earphones vivo price-100-200">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-8.jpg">
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Basic Flowing Scarf</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹196.28</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix power-banks oneplus price-200-300">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-9.jpg">
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Piqué Biker Jacket</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹267.24</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix power-banks oneplus price-200-300">
+                        <div class="product__item sale">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-10.jpg">
+                                <span class="label">Sale</span>
+                            <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Multi-pocket Chest Bag</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹243.48</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix screen-guards oppo price-300-400">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-11.jpg">
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Diagonal Textured Cap</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹360.9</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix screen-guards oppo price-300-400">
+                        <div class="product__item sale">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-12.jpg">
+                                <span class="label">Sale</span>
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Ankle Boots</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹398.49</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix smartwatches realme price-500-plus">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-13.jpg">
+                            <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>T-shirt Contrast Pocket</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹549.66</h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mix smartwatches realme price-500-plus">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="img/product/product-14.jpg">
+                                <ul class="product__hover">
+                                    <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li>
+                                    <li><a href="./shop-details.html"><img src="img/icon/search.png" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>Basic Flowing Scarf</h6>
+                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <div class="rating">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5> ₹526.28</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">

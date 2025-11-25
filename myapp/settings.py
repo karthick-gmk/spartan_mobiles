@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'spartans',
     'usermanagement',
+    'spartans',
+    
 ]
 
 MIDDLEWARE = [
@@ -77,12 +78,14 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+AUTH_USER_MODEL = 'usermanagement.User'
+
 DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spartans',
-        'USER': 'root',
-        'PASSWORD':'karthick@123gmk',
+        'NAME': 'spartan_mobile_db',
+        'USER': 'postgres',
+        'PASSWORD':'admin',
         'HOST' : 'localhost',
         'PORT': '5432'
     }
