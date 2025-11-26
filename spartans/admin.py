@@ -1,15 +1,15 @@
-# from django.contrib import admin
-# from .models import Product, Banner
-# # Register your models here.
-# # admin.py
+from django.contrib import admin
+from .models import product, Service, Brand, BrandModel
 
-# @admin.register(Product)
-# class ProductAdmin(admin.ModelAdmin):
-#     list_display = ['name', 'price', 'category', 'rating']
-#     list_filter = ['category', 'is_new', 'is_sale']
+@admin.register(product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['name', 'brand', 'brand_model', 'price', 'rating']
+    list_filter = ['brand', 'brand_model']
+    search_fields = ['name', 'brand__name', 'brand_model__name']
 
-# @admin.register(Banner)
-# class BannerAdmin(admin.ModelAdmin):
-#     list_display = ['title', 'banner_type', 'is_active', 'order']
-#     list_filter = ['banner_type', 'is_active']
-#     ordering = ['order']
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'service_type', 'category']
+    list_filter = ['service_type', 'category']
+    search_fields = ['name', 'discription']
+
