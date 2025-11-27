@@ -1,5 +1,5 @@
 from django.db import models
-from .master_model import Brand, BrandModel
+from .master_model import Brand, BrandModel, Category
 
 
 

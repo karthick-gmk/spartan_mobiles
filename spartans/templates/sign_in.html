@@ -6,26 +6,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spartans mobile- Sign Up</title>
-<link rel="stylesheet" href="{% static 'sign_up.css' %}" type="text/css">
+<title>Spartans mobile- Sign in</title>
+<link rel="stylesheet" href="{% static 'sign_in.css' %}" type="text/css">
 </head>
 <body>
 
 
-<div class="auth-box">
-    <h2>Sign In</h2>
+ <main class="card">
+    
+    <!-- LEFT SECTION -->
+    <aside class="card__aside">
+      <div class="logo">SP</div>
+      <h1 class="brand-text">SPARTANS</h1>
+      <p class="desc">
+        Welcome back! Sign in to continue managing customers, orders,
+        inventory and more.
+      </p>
+    </aside>
 
-    <form action="#">
-        <input type="email" placeholder="Email Address" required>
-        <input type="password" placeholder="Enter Password" required>
+    <!-- RIGHT SECTION -->
+    <section class="card__body">
+      <h2>Sign In</h2>
+      <p>Enter your email and password to access your SPARTANS account</p>
 
-        <button type="submit">Sign In</button>
+      <form method="post">
+        {% csrf_token %}
+        
+       <div>
+          <label for="fullname">User Name</label>
+          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2" />
+        </div>
 
-        <p>Don't have an account? <a href="/sign_up">Sign Up</a></p>
-        <p><a href="/forget" style="color:#007bff;">Forgot Password?</a></p>
-    </form>
-</div>
+        <div>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" required />
+        </div>
 
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-danger">
+              <span style="color:red;">{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <button class="btn" type="submit">Sign In</button>
+
+        <div class="small-center">
+          <a href="/forget" class="link">Forgot Password?</a>
+        </div>
+
+        <div class="small-center">
+          Don’t have an account? 
+          <a href="/sign_up" class="link">Create one</a>
+        </div>
+
+       
+      </form>
+    </section>
+
+  </main>
 </body>
 </html>
 {% endblock %}

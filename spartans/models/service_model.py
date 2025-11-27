@@ -7,7 +7,7 @@ class Service(models.Model):
     name = models.CharField(max_length=100)
     discription = models.TextField()
     service_type = models.CharField(max_length=100)
-    image_url = models.URLField()
+    image_url = models.URLField(null=True, blank=True)
     category = models.CharField(max_length=100)
    
     class Meta:

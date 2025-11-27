@@ -1,7 +1,7 @@
-from django.shortcuts import render
-
-
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import login
+from usermanagement.models.user_model import User
 
 
 def index(request):
@@ -37,11 +37,59 @@ def checkout(request):
 
 
 def sign_up(request):
-    return render(request, 'sign_up.html')
+    success_message = None
+    if request.method == 'POST':
+        print("adfdfd",request.POST)
+        fullname = request.POST.get('fullname')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        password = request.POST.get('password')
+        cpassword = request.POST.get('cpassword')
+        address1 = request.POST.get('address1')
+        address2 = request.POST.get('address2', '')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        
+        # Validation
+        if User.objects.filter(phone=mobile).exists():
+            messages.error(request, "Mobile number already registered")
+        elif User.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered")
+        elif password != cpassword:
+            messages.error(request, "Passwords don't match")
+        else:
+            User.objects.create_user(
+                username=email,
+                first_name=fullname,
+                email=email,
+                phone=mobile,
+                address1=address1,
+                address2=address2,
+                city=city,
+                state=state,
+                password=password
+            )
+            success_message = "Registration successful!"
+    return render(request, 'sign_up.html', {'success_message': success_message})
+
 
 
 def sign_in(request):
+    if request.method == 'POST':
+        fullname = request.POST.get('fullname')
+        password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(username=fullname)
+            if user.check_password(password):
+                login(request, user)
+                return redirect('/')
+            else:
+                messages.error(request, "Invalid username or password")
+        except User.DoesNotExist:
+            messages.error(request, "Invalid username or password")
     return render(request, 'sign_in.html')
+
 
 
 def forget(request):

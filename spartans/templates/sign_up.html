@@ -1,33 +1,131 @@
 {%block content%}
 {% load static %}
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spartans mobile- Sign Up</title>
-<link rel="stylesheet" href="{% static 'sign_up.css' %}" type="text/css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SPARTANS - Sign Up</title>
+    <link rel="stylesheet" href="{% static 'sign_up.css' %}" type="text/css"> 
 </head>
 <body>
+  <main class="card" role="main" aria-labelledby="signup-title">
+    <aside class="card__aside" aria-hidden="true">
+      <div class="brand">
+        <div class="logo">SP</div>
+        <div>
+          <div style="font-size:12px;opacity:.95">Welcome to</div>
+          <div style="font-weight:700">SPARTANS</div>
+        </div>
+      </div>
 
-<div class="auth-box">
-    <h2>Create Account</h2>
+      <h2 class="aside__title">Create your SPARTANS account</h2>
+      <p class="aside__desc">
+        Quick registration for shop owners and staff. Enter your details and start managing orders, inventory and customers.
+      </p>
+    </aside>
 
-    <form action="#">
-        <input type="text" placeholder="Full Name" required>
-        <input type="email" placeholder="Email Address" required>
-        <input type="text" placeholder="Mobile Number" required>
-        <input type="password" placeholder="Create Password" required>
-        <input type="password" placeholder="Confirm Password" required>
+    <section class="card__body">
+      <div class="head">
+        <div>
+          <h2 id="signup-title">Sign up</h2>
+          <p>Fill the form to create your account for SPARTANS</p>
+        </div>
+        <div class="note">Already registered? <a href="/sign_in" style="color:blue; text-decoration:none;">Sign in</a></div>
+      </div>
+      
+        {% if success_message %}
+            <div class="alert" style="color:green;"  role="alert">
+                {{success_message}}
+            </div>
+        {% endif %}
 
-        <button type="submit">Sign Up</button>
+      <form method="post">
+        {% csrf_token %}
+        <!-- Full name -->
+        <div>
+          <label for="fullname">Full name</label>
+          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2" />
+        </div>
 
-        <p>Already have an account? <a href="/sign_in">Sign In</a></p>
-    </form>
-</div>
+        <!-- Email -->
+        <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+        </div>
 
 
+        <!-- Mobile (required) -->
+        <div>
+          <label for="mobile">Mobile</label>
+          <input id="mobile" name="mobile" type="tel" placeholder="+91 98765 43210" pattern="^\+?[0-9\s\-]{6,20}$" required />
+          <div class="small">Include country code (e.g. +91). Numbers, spaces and dashes allowed.</div>
+        </div>
+
+        <!-- State -->
+        <div>
+          <label for="state">State</label>
+          <input id="state" name="state" type="text" placeholder="Tamil Nadu" required />
+        </div>
+
+        <!-- Address1 -->
+        <div class="full">
+          <label for="addr1">Address 1</label>
+          <input id="addr1" name="address1" type="text" placeholder="House / Flat no., Street" required />
+        </div>
+
+        <!-- Address2 -->
+        <div class="full">
+          <label for="addr2">Address 2 (optional)</label>
+          <input id="addr2" name="address2" type="text" placeholder="Locality / Landmark" />
+        </div>
+
+        <!-- City -->
+        <div>
+          <label for="city">City</label>
+          <input id="city" name="city" type="text" placeholder="Chennai" required />
+        </div>
+
+        <!-- Shop name (pre-filled) -->
+        <div>
+          <label for="shop">Shop name</label>
+          <input id="shop" name="shop" type="text" value="SPARTANS" required />
+        </div>
+
+        <!-- Password -->
+        <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password"
+                placeholder="Enter password" minlength="6" required />
+        <div class="small">Minimum 6 characters.</div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+        <label for="cpassword">Confirm Password</label>
+        <input id="cpassword" name="cpassword" type="password"
+                placeholder="Re-enter password" required />
+        </div>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-danger">
+              <span style="color:red;">{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="actions full">
+          <div class="note">By creating an account you agree to our <a href="#" style="color:var(--accent)">Terms</a>.</div>
+          <div style="display:flex;gap:10px">
+            <button type="reset" class="btn btn--ghost">Reset</button>
+            <button type="submit" class="btn">Create account</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
 </body>
 </html>
+
+
 {% endblock %}
