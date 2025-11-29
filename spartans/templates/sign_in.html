@@ -33,13 +33,14 @@
         {% csrf_token %}
         
        <div>
-          <label for="fullname">User Name</label>
-          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2" />
+          <label for="fullname">Enter Email</label>
+          <input id="fullname" name="fullname" type="text" placeholder="spartans@123gmail.com" required minlength="2"/>
         </div>
 
         <div>
           <label for="password">Password</label>
-          <input id="password" name="password" type="password" placeholder="••••••••" required />
+          <input style="margin-bottom:8px;" id="password" name="password" type="password" placeholder="••••••••" required />
+          <div class="check" style="display:flex;align-items:center;gap:5px"><input style="width:12px;" type="checkbox" id="showPassword" onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'"><label style="margin-top:5px;" for="showPassword">Show Password</label></div>
         </div>
 
         {% if messages %}

@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout as auth_logout
 from usermanagement.models.user_model import User
-
+import email
+from django.core.mail import send_mail
+from django.conf import settings
 
 def index(request):
     return render(request, 'index.html')
@@ -86,11 +88,17 @@ def sign_in(request):
                 return redirect('/')
             else:
                 messages.error(request, "Invalid username or password")
+                return render(request, 'sign_in.html')
         except User.DoesNotExist:
             messages.error(request, "Invalid username or password")
     return render(request, 'sign_in.html')
 
 
-
 def forget(request):
     return render(request, 'forget_pw.html')
+
+
+def logout(request):
+    auth_logout(request)
+    return redirect('/')
+

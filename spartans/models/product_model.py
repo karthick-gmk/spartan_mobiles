@@ -1,5 +1,7 @@
 from django.db import models
-from .master_model import Brand, BrandModel, Category
+from .master_model import Brand, BrandModel
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 
 
@@ -9,7 +11,7 @@ class product(models.Model):
     brand_model = models.ForeignKey(BrandModel, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image_url = models.URLField(null=True, blank=True)
-    rating = models.IntegerField(null=True, blank=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)],null=True,blank=True)
 
     class Meta:
         db_table = 'product'

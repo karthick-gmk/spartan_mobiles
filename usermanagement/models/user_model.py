@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-
+from django.core.exceptions import ValidationError
 class UserManager(BaseUserManager):
 
     def create_user(self, username, email , password=None, **extra_fields):
@@ -27,7 +27,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     # Remove username field if using email as login
-    phone = models.CharField(max_length=20, null=True, blank=True)
+    phone = models.CharField(max_length=10, null=True, blank=True)
     address1 = models.TextField(null=True, blank=True)
     address2 = models.TextField(null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -51,6 +51,10 @@ class User(AbstractUser):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
+    
+    def clean(self):
+        if self.phone and (not self.phone.isdigit() or len(self.phone) != 10):
+            raise ValidationError("Phone must be exactly 10 digits")
 
     def clean(self):
         if self.phone and not self.phone.isdigit():
