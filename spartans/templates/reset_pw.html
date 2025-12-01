@@ -33,8 +33,8 @@
       <p>Set a new password for your account</p>
     </div>
 
-    <form onsubmit="return resetSubmit(event)" novalidate>
-
+    <form method="post" onsubmit="return resetSubmit(event)" novalidate>
+      {% csrf_token %}
       <div>
         <label for="newpass">New Password</label>
         <input id="newpass" type="password" minlength="6" placeholder="Enter new password" required>
@@ -50,7 +50,7 @@
       <button type="submit" class="btn">Update Password</button>
 
       <div class="note-link">
-        Remembered? <a href="#">Sign in</a>
+        Remembered? <a href="/sign_in">Sign in</a>
       </div>
 
     </form>

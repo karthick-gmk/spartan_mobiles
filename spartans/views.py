@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout as auth_logout
 from usermanagement.models.user_model import User
-from .forms import Forget_pwForm
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -101,23 +100,7 @@ def sign_in(request):
 
 
 def forget(request):
-    form = Forget_pwForm()
-    if request.method == 'POST':
-        form = Forget_pwForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            user = User.objects.get(email=email)
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            current_site = get_current_site (request)
-            domain = current_site.domain
-            subject = 'Password Reset Request'
-            message = f'Click the link to reset your password: http://{current_site.domain}/reset_pw/{uid}/{token}/'
-            send_mail(subject, message, 'spartans2025@gmail.com', [email], fail_silently=False)
-            messages.success(request, 'Password reset link sent to your email')
-        else:
-            form = Forget_pwForm()
-    return render(request, 'forget_pw.html',{'form': form})
+    return render(request, 'forget_pw.html')
 
 
 def logout(request):
