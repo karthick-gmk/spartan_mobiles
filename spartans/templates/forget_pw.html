@@ -13,8 +13,18 @@
 <div class="auth-box">
     <h2>Forgot Password</h2>
     <p class="subtitle">Enter your email address to reset your password</p>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert" style="color:green;">{{ message }}</div>
+            {% else %}
+                <div class="alert" style="color:red;">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
-    <form action="#">
+    <form method="post">
+        {% csrf_token %}
         <input type="email" placeholder="Email Address" required>
 
         <button type="submit" class="btn">Send Reset Link</button>

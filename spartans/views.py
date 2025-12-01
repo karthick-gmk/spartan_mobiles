@@ -2,6 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout as auth_logout
 from usermanagement.models.user_model import User
+from .forms import Forget_pwForm
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 def index(request):
     return render(request, 'index.html')
@@ -69,7 +77,8 @@ def sign_up(request):
                 password=password
             )
             success_message = "Registration successful!"
-    return render(request, 'sign_up.html', {'success_message': success_message})
+        return render(request, 'sign_up.html', {'success_message': success_message})
+    return render(request, "sign_up.html")
 
 
 
@@ -92,10 +101,28 @@ def sign_in(request):
 
 
 def forget(request):
-    return render(request, 'forget_pw.html')
+    form = Forget_pwForm()
+    if request.method == 'POST':
+        form = Forget_pwForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            current_site = get_current_site (request)
+            domain = current_site.domain
+            subject = 'Password Reset Request'
+            message = f'Click the link to reset your password: http://{current_site.domain}/reset_pw/{uid}/{token}/'
+            send_mail(subject, message, 'spartans2025@gmail.com', [email], fail_silently=False)
+            messages.success(request, 'Password reset link sent to your email')
+        else:
+            form = Forget_pwForm()
+    return render(request, 'forget_pw.html',{'form': form})
 
 
 def logout(request):
     auth_logout(request)
     return redirect('/')
 
+def reset_pw(request):
+    return render(request, 'reset_pw.html')

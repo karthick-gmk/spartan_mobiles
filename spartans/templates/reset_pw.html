@@ -1,0 +1,62 @@
+{%block content%}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SPARTANS - Reset Password</title>
+  <link rel="stylesheet" href="{% static 'reset_pw.css' %}" type="text/css">
+</head>
+
+<body>
+
+<main class="card">
+  <aside class="card__aside">
+    <div class="brand">
+      <div class="logo">SP</div>
+      <div>
+        <div style="font-size:12px;opacity:.9">Welcome to</div>
+        <div style="font-size:18px;font-weight:700;">SPARTANS</div>
+      </div>
+    </div>
+
+    <h2 style="font-size:20px;font-weight:700;">Reset your password</h2>
+    <p style="font-size:14px;opacity:.9;">
+      Enter your new password below. Make sure it is strong and secure.
+    </p>
+  </aside>
+
+  <section class="card__body">
+    <div class="head">
+      <h2>Reset Password</h2>
+      <p>Set a new password for your account</p>
+    </div>
+
+    <form onsubmit="return resetSubmit(event)" novalidate>
+
+      <div>
+        <label for="newpass">New Password</label>
+        <input id="newpass" type="password" minlength="6" placeholder="Enter new password" required>
+        <div class="check" style="display:flex;align-items:center;gap:5px"><input style="width:12px;" type="checkbox" id="showPassword" onchange="document.getElementById('newpass').type = this.checked ? 'text' : 'password'"><label style="margin-top:5px;" for="showPassword">Show Password</label></div>
+      </div>
+
+      <div>
+        <label for="cpass">Confirm Password</label>
+        <input id="cpass" type="password" placeholder="Re-enter password" required>
+        <div class="check" style="display:flex;align-items:center;gap:5px"><input style="width:12px;" type="checkbox" id="showPassword" onchange="document.getElementById('cpass').type = this.checked ? 'text' : 'password'"><label style="margin-top:5px;" for="showPassword">Show Password</label></div>
+      </div>
+
+      <button type="submit" class="btn">Update Password</button>
+
+      <div class="note-link">
+        Remembered? <a href="#">Sign in</a>
+      </div>
+
+    </form>
+  </section>
+</main>
+</body>
+</html>
+
+{%endblock%}

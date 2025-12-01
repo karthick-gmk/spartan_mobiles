@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>SPARTANS - Sign Up</title>
     <link rel="stylesheet" href="{% static 'sign_up.css' %}" type="text/css"> 
+    <meta name="description" content="A modern password strength meter that provides real-time feedback on password security. Features include strength indicators, password requirements, and security tips.">
+    <meta name="keywords" content="password strength, security, javascript, web development, password meter, password validation, security tool">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <main class="card" role="main" aria-labelledby="signup-title">
@@ -23,6 +26,11 @@
       <p class="aside__desc">
         Quick registration for shop owners and staff. Enter your details and start managing orders, inventory and customers.
       </p>
+      <ul style="display:flex;gap:30px;list-style:none;padding:0;">
+        <li><a href="/" style="color:white;text-decoration:none;">Home</a></li>
+        <li><a href="/about" style="color:white;text-decoration:none;">About</a></li>
+        <li><a href="/contact" style="color:white;text-decoration:none;">Contact</a></li>
+      </ul>
     </aside>
 
     <section class="card__body">
@@ -48,45 +56,45 @@
         <!-- Full name -->
         <div>
           <label for="fullname">Full name</label>
-          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2"  />
+          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2" value="{{ request.POST.fullname }}" />
         </div>
 
         <!-- Email -->
         <div>
             <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" required/>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required value="{{ request.POST.email }}"/>
         </div>
 
 
         <!-- Mobile (required) -->
         <div>
           <label for="mobile">Mobile</label>
-          <input id="mobile" name="mobile" type="tel" placeholder="98765 43210" pattern="[0-9]{10}" maxlength="10" required />
+          <input id="mobile" name="mobile" type="tel" placeholder="98765 43210" pattern="[0-9]{10}" maxlength="10" required value="{{ request.POST.mobile }}"/>
           <div class="small">Enter 10 digit mobile number only.</div>
         </div>
 
         <!-- State -->
         <div>
           <label for="state">State</label>
-          <input id="state" name="state" type="text" placeholder="Tamil Nadu" required  />
+          <input id="state" name="state" type="text" placeholder="Tamil Nadu" required  value="{{ request.POST.state }}" />
         </div>
 
         <!-- Address1 -->
         <div class="full">
           <label for="addr1">Address 1</label>
-          <input id="addr1" name="address1" type="text" placeholder="House / Flat no., Street" required  />
+          <input id="addr1" name="address1" type="text" placeholder="House / Flat no., Street" required  value="{{ request.POST.address1 }}"/>
         </div>
 
         <!-- Address2 -->
         <div class="full">
           <label for="addr2">Address 2 (optional)</label>
-          <input id="addr2" name="address2" type="text" placeholder="Locality / Landmark" />
+          <input id="addr2" name="address2" type="text" placeholder="Locality / Landmark" required value="{{ request.POST.address2 }}"/>
         </div>
 
         <!-- City -->
         <div>
           <label for="city">City</label>
-          <input id="city" name="city" type="text" placeholder="Chennai" required  />
+          <input id="city" name="city" type="text" placeholder="Chennai" required  value="{{ request.POST.city }}"/>
         </div>
 
         <!-- Shop name (pre-filled) -->
@@ -97,18 +105,52 @@
 
         <div>
           <label for="password">Password</label>
-          <input style="margin-bottom:8px;" id="password" name="password" type="password" placeholder="Enter password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" minlength="8" required />
-          <div class="check" style="display:flex;align-items:center;gap:5px"><input style="width:12px;" type="checkbox" id="showPassword" onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'"><label style="margin-top:5px;" for="showPassword">Show Password</label></div>
-          <div class="small">Must contain: 1 lowercase, 1 uppercase, 1 number, 1 special character (@$!%*?&), minimum 8 characters.</div>
+          <div class="password-input-container">
+            <input style="margin-bottom:8px;" type="password" id="password" placeholder="Enter your password">
+            <button id="togglePassword" class="toggle-password">
+                      <i class="fas fa-eye"></i>
+            </button>
+          </div> 
+          <div class="strength-meter">
+                <div class="strength-meter-fill" data-strength="0"></div>
+          </div>
+          <div class="strength-text">
+                <span id="strengthText"></span>
+          </div>
+         <ul style="list-style: none;">
+              <li id="length" class="requirement">
+                  <i class="fas fa-circle"></i>
+                  At least 8 characters
+              </li>
+              <li id="uppercase" class="requirement">
+                  <i class="fas fa-circle"></i>
+                  One uppercase letter
+              </li>
+              <li id="lowercase" class="requirement">
+                  <i class="fas fa-circle"></i>
+                  One lowercase letter
+              </li>
+              <li id="number" class="requirement">
+                  <i class="fas fa-circle"></i>
+                  One number
+              </li>
+              <li id="special" class="requirement">
+                  <i class="fas fa-circle"></i>
+                  One special character
+              </li>
+          </ul>
         </div>
-
-
         <!-- Confirm Password -->
         <div>
-          <label for="cpassword">Confirm Password</label>
-          <input style="margin-bottom:8px;" id="cpassword" name="cpassword" type="password" placeholder="Re-enter password" required />
-          <div class="check" style="display:flex;align-items:center;gap:5px"><input style="width:12px;" type="checkbox" id="showPassword" onchange="document.getElementById('cpassword').type = this.checked ? 'text' : 'password'"><label style="margin-top:5px;" for="showPassword">Show Password</label></div>
-        </div>
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-input-container">
+            <input style="margin-bottom:8px;" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required />
+            <button id="toggleConfirmPassword" class="toggle-password" type="button">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div> 
+
         {% if messages %}
           {% for message in messages %}
             <div class="alert alert-danger">
@@ -130,4 +172,123 @@
 </html>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const form = document.querySelector('form');
+    const submitBtn = document.querySelector('.btn[type="submit"]');
+
+    // Disable submit button initially
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.5";
+    submitBtn.style.cursor = "not-allowed";
+
+    function enableSubmitIfValid() {
+        if (form.checkValidity()) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = "1";
+            submitBtn.style.cursor = "pointer";
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.5";
+            submitBtn.style.cursor = "not-allowed";
+        }
+    }
+
+    const togglePassword = document.getElementById('togglePassword');
+    const strengthMeter = document.querySelector('.strength-meter-fill');
+    const strengthText = document.getElementById('strengthText');
+
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+    const requirements = {
+        length: document.getElementById('length'),
+        uppercase: document.getElementById('uppercase'),
+        lowercase: document.getElementById('lowercase'),
+        number: document.getElementById('number'),
+        special: document.getElementById('special')
+    };
+
+    // Password matching validation
+    confirmPasswordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            confirmPasswordInput.setCustomValidity('Passwords do not match');
+        } else {
+            confirmPasswordInput.setCustomValidity('');
+        }
+
+        enableSubmitIfValid();
+    });
+
+    // Toggle password visibility
+    togglePassword.addEventListener('click', () => {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        togglePassword.querySelector('i').classList.toggle('fa-eye');
+        togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+    // Toggle confirm password visibility
+    toggleConfirmPassword.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+        confirmPasswordInput.type = type;
+        toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye');
+        toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+    // Check password strength
+    passwordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
+        let strength = 0;
+        let validRequirements = 0;
+
+        // Check length
+        if (password.length >= 8) { requirements.length.classList.add('valid'); validRequirements++; }
+        else { requirements.length.classList.remove('valid'); }
+
+        // Uppercase
+        if (/[A-Z]/.test(password)) { requirements.uppercase.classList.add('valid'); validRequirements++; }
+        else { requirements.uppercase.classList.remove('valid'); }
+
+        // Lowercase
+        if (/[a-z]/.test(password)) { requirements.lowercase.classList.add('valid'); validRequirements++; }
+        else { requirements.lowercase.classList.remove('valid'); }
+
+        // Number
+        if (/[0-9]/.test(password)) { requirements.number.classList.add('valid'); validRequirements++; }
+        else { requirements.number.classList.remove('valid'); }
+
+        // Special char
+        if (/[^A-Za-z0-9]/.test(password)) { requirements.special.classList.add('valid'); validRequirements++; }
+        else { requirements.special.classList.remove('valid'); }
+
+        // Strength logic
+        if (password.length > 0) {
+            strength = Math.min(4, Math.floor(validRequirements * 0.8));
+        }
+
+        strengthMeter.setAttribute('data-strength', strength);
+
+        switch (strength) {
+            case 0: strengthText.textContent = 'Enter a password'; strengthText.style.color = '#666'; break;
+            case 1: strengthText.textContent = 'Very Weak'; break;
+            case 2: strengthText.textContent = 'Weak'; break;
+            case 3: strengthText.textContent = 'Strong'; break;
+            case 4: strengthText.textContent = 'Very Strong'; break;
+        }
+
+        enableSubmitIfValid();
+    });
+
+    // Check all form inputs on typing
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', enableSubmitIfValid);
+    });
+});
+</script>
 {% endblock %}
