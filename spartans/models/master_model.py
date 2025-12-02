@@ -16,7 +16,8 @@ class Category(models.Model):
 class Brand(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, related_name='brands', blank=True)
+
 
     # CASCADE,
     # DO_NOTHING,

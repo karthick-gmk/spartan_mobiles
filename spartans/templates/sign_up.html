@@ -144,13 +144,15 @@
         <div>
           <label for="confirmPassword">Confirm Password</label>
           <div class="password-input-container">
-            <input style="margin-bottom:8px;" id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required />
+            <input style="margin-bottom:8px;" id="confirmPassword" name="cpassword" type="password" placeholder="Confirm password" required />
             <button id="toggleConfirmPassword" class="toggle-password" type="button">
               <i class="fas fa-eye"></i>
             </button>
           </div>
-        </div> 
-
+          <div id="passwordMismatchError" style="color:red; font-size:12px; display:none;">
+            Passwords do not match
+          </div>
+        </div>
         {% if messages %}
           {% for message in messages %}
             <div class="alert alert-danger">
@@ -210,19 +212,25 @@ document.addEventListener('DOMContentLoaded', () => {
         special: document.getElementById('special')
     };
 
-    // Password matching validation
+        // Password matching validation
     confirmPasswordInput.addEventListener('input', () => {
         const password = passwordInput.value;
         const confirmPassword = confirmPasswordInput.value;
+        const errorDiv = document.getElementById('passwordMismatchError');
         
         if (confirmPassword && password !== confirmPassword) {
             confirmPasswordInput.setCustomValidity('Passwords do not match');
+            errorDiv.style.display = 'block';
+            confirmPasswordInput.style.borderColor = 'red';
         } else {
             confirmPasswordInput.setCustomValidity('');
+            errorDiv.style.display = 'none';
+            confirmPasswordInput.style.borderColor = '';
         }
 
         enableSubmitIfValid();
     });
+
 
     // Toggle password visibility
     togglePassword.addEventListener('click', () => {

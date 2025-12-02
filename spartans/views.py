@@ -9,14 +9,28 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from spartans.models.product_model import product
+from spartans.models.master_model import Category,Brand
 
 def index(request):
     return render(request, 'index.html')
 
 
 
+
 def shop(request):
-    return render(request, 'shop.html')
+    category_id = request.GET.get('category')
+    products = product.objects.select_related('brand').all()
+    categories = Category.objects.all()
+    
+    if category_id:
+        products = products.filter(category_id=category_id)
+        brands = Brand.objects.filter(category=category_id)
+    else:
+        brands = Brand.objects.all()
+    
+    return render(request, 'shop.html', {'products': products, 'categories': categories, 'brands': brands})
+
 
 
 
@@ -80,7 +94,6 @@ def sign_up(request):
     return render(request, "sign_up.html")
 
 
-
 def sign_in(request):
     if request.method == 'POST':
         fullname = request.POST.get('fullname')
@@ -92,7 +105,7 @@ def sign_in(request):
                 login(request, user)
                 return redirect('/')
             else:
-                messages.error(request, "Invalid username or password")
+                messages.error(request, "Password is incorrect")
                 return render(request, 'sign_in.html')
         except User.DoesNotExist:
             messages.error(request, "Invalid username or password")
