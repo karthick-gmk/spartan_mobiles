@@ -126,10 +126,10 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 mix {{ product.brand.category.name|lower|slugify }} {{ product.brand.name|lower|slugify }} price-{{ product.get_price_range }}">
                         <div class="product__item">
                             <div class="product__item__pic">
-                               <a href="{% url 'spartans:detail' product.id %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% endif %}" alt="{{ product.name }}"></a>
+                              <a href="{% url 'spartans:detail' product.id product.name|slugify %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% endif %}" alt="{{ product.name }}"></a>
                                 <ul class="product__hover">
                                     <li><a href="#"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
-                                    <li><a href="{% url 'spartans:detail' product.id %}"><svg style="background:white; width:33px; height:33px; padding:2px; border-radius:3px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
+                                    <li><a href="#"><svg style="background:white; width:33px; height:33px; padding:2px; border-radius:3px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
                                 </ul>
                             </div>
                             <div class="product__item__text">

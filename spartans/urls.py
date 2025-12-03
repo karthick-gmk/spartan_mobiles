@@ -6,7 +6,7 @@ app_name = 'spartans'
 
 urlpatterns = [
     path("", views.index, name='index'),
-    path('detail/<int:product_id>/', views.detail, name='detail'),
+  path('detail/<int:product_id>/<str:product_name>/', views.detail, name='detail'),
     path("contact", views.contact, name='contact'),
     path("about", views.about, name='about'),
     path('shop', views.shop, name='shop'),
