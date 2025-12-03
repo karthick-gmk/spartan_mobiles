@@ -6,7 +6,7 @@ app_name = 'spartans'
 
 urlpatterns = [
     path("", views.index, name='index'),
-    path("detail", views.detail, name='detail'),
+    path('detail/<int:product_id>/', views.detail, name='detail'),
     path("contact", views.contact, name='contact'),
     path("about", views.about, name='about'),
     path('shop', views.shop, name='shop'),
@@ -18,5 +18,4 @@ urlpatterns = [
     path('forget', views.forget, name='forget'),
     path('reset_pw', views.reset_pw, name='reset_pw'),
     ]
-
 

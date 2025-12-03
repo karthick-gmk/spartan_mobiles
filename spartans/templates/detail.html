@@ -22,56 +22,37 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="images/product/Bluetooth2.avif">
+                                <div class="product__thumb__pic set-bg" data-setbg="{% if product.main_image %}{{ product.main_image.url }}{% endif %}">
                                 </div>
                             </a>
                         </li>
+                        {% for image in product.get_gallery_images %}
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="images/product/Bluetooth3.avif">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-{{ forloop.counter|add:1 }}" role="tab">
+                                <div class="product__thumb__pic set-bg" data-setbg="{{ image.url }}">
                                 </div>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="images/product/Bluetooth4.avif">
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="images/product/Bluetooth5.avif">
-                                    <i class="fa fa-play"></i>
-                                </div>
-                            </a>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
 
-                <!-- Main Image -->
                 <div class="col-lg-6 col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
                             <div class="product__details__pic__item">
-                                <img src="images/product/Bluetoothmain.avif" alt="">
+                                {% if product.main_image %}
+                                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                                {% endif %}
                             </div>
                         </div>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                        {% for image in product.get_gallery_images %}
+                        <div class="tab-pane" id="tabs-{{ forloop.counter|add:1 }}" role="tabpanel">
                             <div class="product__details__pic__item">
-                                <img src="images/product/Bluetoothmain4.avif" alt="">
+                                <img src="{{ image.url }}" alt="{{ product.name }}">
                             </div>
                         </div>
-                        <div class="tab-pane" id="tabs-3" role="tabpanel">
-                            <div class="product__details__pic__item">
-                                <img src="images/product/Bluetoothmain3.avif" alt="">
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-4" role="tabpanel">
-                            <div class="product__details__pic__item">
-                                <img src="images/product/Bluetooth2.avif" alt="">
-                                <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1" class="video-popup"><i class="fa fa-play"></i></a>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -83,32 +64,25 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
                     <div class="product__details__text">
-
-                        <h4>Boat Rockerz 550 Pro Wireless Headphones</h4>
-
+                        <h4>{{ product.name }}</h4>
                         <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span> - 32 Reviews</span>
+                            {% for i in "12345" %}
+                                <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > product.rating %}-o{% endif %}"></i>
+                            {% endfor %}
+                            <span> - {{ product.rating }} Rating</span>
                         </div>
 
-                        <h3>₹1,799 <span>₹3,499</span></h3>
+                        <h3>₹{{ product.price }}</h3>
 
                         <p>
-                            Boat Rockerz 550 Pro offers deep bass sound, 750mAh massive battery for 
-                            up to 35 hours playback, Bluetooth v5.2, and soft cushioning ear cups for all-day comfort.
-                            Perfect for music lovers and gamers.
+                            {{ product.description|default:"Product description not available." }}
                         </p>
 
                         <!-- Options -->
                         <div class="product__details__option">
                             <div class="product__details__option__size">
-                                <span>Type:</span>
-                                <label class="active">Wireless</label>
-                                <label>Wired</label>
+                                <span>Brand:</span>
+                                <label class="active">{{ product.brand.name }}</label>
                             </div>
                         </div>
 
@@ -124,11 +98,6 @@
                         <div class="product__details__btns__option">
                             <a href="#"><i class="fa fa-heart"></i> Add to Wishlist</a>
                             <a href="#"><i class="fa fa-exchange"></i> Compare</a>
-                        </div>
-
-                        <div class="product__details__last__option">
-                            <h5><span>Guaranteed Safe Checkout</span></h5>
-                            <img src="data:image/png;base64,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" alt="payment_img">
                         </div>
                     </div>
                 </div>
@@ -340,4 +309,39 @@
     </div>
 </section>
 <!-- Related Section End -->
+
+
+<style>
+    .tab-content .tab-pane {
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+    }
+
+    .tab-content .tab-pane.active {
+        opacity: 1;
+    }
+
+    .nav-tabs .nav-link {
+        transition: all 0.3s ease;
+    }
+
+    .product__thumb__pic {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+
+    .product__thumb__pic:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .nav-tabs .nav-item .nav-link.active .product__thumb__pic {
+        border: 2px solid #FF9529;
+    }
+</style>
+
 {% endblock %}    
+
+
+
+
