@@ -29,7 +29,9 @@ def shop(request):
 
 def detail(request, product_id, product_name):
     product_obj = get_object_or_404(product, id=product_id)
-    return render(request, 'detail.html', {'product': product_obj})
+    related_products = product.objects.exclude(id=product_obj.id)[:4]
+    return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products})
+
 
 
 def about(request):

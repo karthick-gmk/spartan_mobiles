@@ -180,131 +180,39 @@
                 <h3 class="related-title">Related Products</h3>
             </div>
         </div>
-
         <div class="row">
-
-            <!-- Product 1 -->
+            {% for related_product in related_products %}
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="images/product/Bluetooth-headset.jpg">
+                <div class="product__item{% if related_product.is_on_sale %} sale{% endif %}">
+                    <div class="product__item__pic">
+                        <img src="{% if related_product.main_image %}{{ related_product.main_image.url }}{% endif %}" alt="{{ related_product.name }}">
+                        {% if related_product.is_new %}
                         <span class="label">New</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Bluetooth-headset</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>₹299</h5>
-                        <div class="product__color__select">
-                            <label for="pc-1"><input type="radio" id="pc-1"></label>
-                            <label class="active black" for="pc-2"><input type="radio" id="pc-2"></label>
-                            <label class="grey" for="pc-3"><input type="radio" id="pc-3"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="images/product/Fast-Mobile-Charger.avif">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Fast-Mobile-Charger.</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <h5>₹199</h5>
-                        <div class="product__color__select">
-                            <label for="pc-4"><input type="radio" id="pc-4"></label>
-                            <label class="active black" for="pc-5"><input type="radio" id="pc-5"></label>
-                            <label class="grey" for="pc-6"><input type="radio" id="pc-6"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="product__item sale">
-                    <div class="product__item__pic set-bg" data-setbg="images/product/Tempered-Glass.jpg">
+                        {% elif related_product.is_on_sale %}
                         <span class="label">Sale</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
+                        {% endif %}
+                         <ul class="product__hover">
+                                    <li><a href="#"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
+                                    <li><a href="#"><svg style="background:white; width:33px; height:33px; padding:2px; border-radius:3px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
+                            </ul>
                     </div>
                     <div class="product__item__text">
-                        <h6>Tempered-Glass</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
+                        <h6>{{ related_product.name }}</h6>
                         <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= related_product.rating %}
+                                    <i style="color: #FF9529;"  class="fa fa-star"></i>
+                                {% else %}
+                                    <i style="color: #FF9529;"  class="fa fa-star-o"></i>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        <h5>₹349</h5>
-                        <div class="product__color__select">
-                            <label for="pc-7"><input type="radio" id="pc-7"></label>
-                            <label class="active black" for="pc-8"><input type="radio" id="pc-8"></label>
-                            <label class="grey" for="pc-9"><input type="radio" id="pc-9"></label>
-                        </div>
+                        <h6>{{ related_product.brand.name }}</h6>
+                        <h5>₹{{ related_product.price }}</h5>
                     </div>
                 </div>
             </div>
-
-            <!-- Product 4 -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="images/product/Bluetooth-Speaker.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Bluetooth-Speaker</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>₹499</h5>
-                        <div class="product__color__select">
-                            <label for="pc-10"><input type="radio" id="pc-10"></label>
-                            <label class="active black" for="pc-11"><input type="radio" id="pc-11"></label>
-                            <label class="grey" for="pc-12"><input type="radio" id="pc-12"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </div>
 </section>

@@ -13,8 +13,10 @@ class product(models.Model):
     image2 = models.ImageField(upload_to='products/gallery/', null=True, blank=True)
     image3 = models.ImageField(upload_to='products/gallery/', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    is_new = models.BooleanField(default=False, help_text="Mark as new product", null=True, blank=True)
+    is_on_sale = models.BooleanField(default=False, help_text="Mark as sale product", null=True, blank=True)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
-    
+
     class Meta:
         db_table = 'product'
         verbose_name = 'Product'
