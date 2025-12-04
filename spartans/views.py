@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout as auth_logout
 from usermanagement.models.user_model import User
 from spartans.models.product_model import product
 from spartans.models.master_model import Category,Brand
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 def index(request):
     return render(request, 'index.html')
@@ -13,22 +13,22 @@ def index(request):
 
 def shop(request):
     category_id = request.GET.get('category')
-    products = product.objects.select_related('brand', 'category').all()
+    products = product.objects.all()
     categories = Category.objects.all()
-    
+
     if category_id:
-        products = products.filter(category_id=category_id)
+        products = product.objects.filter(category_id=category_id)
         brands = Brand.objects.filter(category=category_id)
     else:
         brands = Brand.objects.all()
-    
+
     return render(request, 'shop.html', {'products': products, 'categories': categories, 'brands': brands})
 
 
 
 
 def detail(request, product_id, product_name):
-    product_obj = get_object_or_404(product, id=product_id)
+    product_obj = product.objects.get(id=product_id)
     related_products = product.objects.exclude(id=product_obj.id)[:4]
     return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products})
 

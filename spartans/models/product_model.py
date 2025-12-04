@@ -1,6 +1,15 @@
 from django.db import models
 from .master_model import Brand, BrandModel, Category
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.text import slugify
+from .master_model import Category, Brand, BrandModel
+
+
+
+def product_main_image_path(instance, filename):
+    product = slugify(instance.name)
+    brand = slugify(instance.brand.name)
+    return f"products/{brand}/{product}/main_image/{filename}"
 
 class product(models.Model):
     name = models.CharField(max_length=100)
@@ -8,10 +17,7 @@ class product(models.Model):
     brand_model = models.ForeignKey(BrandModel, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    main_image = models.ImageField(upload_to='products/main_images/', help_text="Main display image", null=True, blank=True)
-    image1 = models.ImageField(upload_to='products/gallery/', null=True, blank=True)
-    image2 = models.ImageField(upload_to='products/gallery/', null=True, blank=True)
-    image3 = models.ImageField(upload_to='products/gallery/', null=True, blank=True)
+    main_image = models.ImageField(upload_to=product_main_image_path, help_text="Main display image", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
 
@@ -20,6 +26,8 @@ class product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
+    
+    
     def __str__(self):
         return self.name
 
@@ -37,9 +45,24 @@ class product(models.Model):
             return "500-plus"
 
     def get_gallery_images(self):
-        images = []
-        for i in range(1, 4):
-            img = getattr(self, f'image{i}')
-            if img:
-                images.append(img)
-        return images
+        return self.productimage_set.all()
+
+
+def product_image_path(instance, filename):
+        brand = slugify(instance.product.brand.name)
+        product = slugify(instance.product.name)
+        return f"products/{brand}/{product}/images/{filename}"
+class ProductImage(models.Model):
+    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=product_image_path)
+
+    class Meta:
+        db_table = 'product_image'
+        verbose_name = 'Product Image'
+        verbose_name_plural = 'Product Images'
+
+    def __str__(self):
+        return f"{self.product.name} - Image {self.id}"
+    
+
+    
