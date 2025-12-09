@@ -5,9 +5,13 @@ from usermanagement.models.user_model import User
 from spartans.models.product_model import product
 from spartans.models.master_model import Category,Brand
 from django.shortcuts import render, redirect
+from spartans.models.service_model import Service
+
 
 def index(request):
-    return render(request, 'index.html')
+    products = product.objects.all()[:8]  # First 8 products
+    services = Service.objects.all()
+    return render(request, 'index.html',{'services': services,'products': products})
 
 
 
@@ -25,7 +29,10 @@ def shop(request):
     return render(request, 'shop.html', {'products': products, 'categories': categories, 'brands': brands})
 
 
-
+def service_type(request):
+    services = Service.objects.all()
+    return render(request, 'service_type.html', {'services': services})
+   
 
 def detail(request, product_id, product_name):
     product_obj = product.objects.get(id=product_id)
