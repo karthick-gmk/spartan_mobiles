@@ -6,7 +6,7 @@ from spartans.models.product_model import product
 from spartans.models.master_model import Category,Brand
 from django.shortcuts import render, redirect
 from spartans.models.service_model import Service, UserRequestService
-
+from spartans.models.master_model import Category, Brand, BrandModel
 
 
 def index(request):
@@ -29,7 +29,7 @@ def shop(request):
 
     return render(request, 'shop.html', {'products': products, 'categories': categories, 'brands': brands})
 
-from spartans.models.master_model import Category, Brand, BrandModel
+
 
 def service_type(request):
     if not request.user.is_authenticated:
@@ -73,7 +73,7 @@ def service_type(request):
                 delivery_date=delivery_date
             )
             user_request.save()
-            messages.success(request, "Service request submitted successfully!")
+            messages.success(request, "Service request submitted successfully!")   
         except Exception as e:
             print(f"Error: {e}")
             messages.error(request, f"Error: {str(e)}")
