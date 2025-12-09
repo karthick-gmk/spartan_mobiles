@@ -36,7 +36,6 @@
     </div>
 </section>
 
-
   
 <section class="form_req">
   <main class="card" role="main">
@@ -58,22 +57,43 @@
         <p>Fill details for the user service request</p>
       </div>
 
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                  {{ message }}
+              </div>
+          {% endfor %}
+      {% endif %}
+
       <form method="post">
         {% csrf_token %}
         
-        <div>
+        {% comment %} <div>
           <label for="user">User</label>
-          <select id="user" name="user" required>
+          <select id="user" name="user_id" required>
             <option value="">— Select user —</option>
             {% for user in users %}
               <option value="{{ user.id }}">{{ user.first_name }} ({{ user.username }})</option>
             {% endfor %}
           </select>
+        </div> {% endcomment %}
+
+        <div>
+          <label for="user">User</label>
+          {% if request.user.is_authenticated %}
+            <input type="hidden" name="user_id" value="{{ request.user.id }}">
+            <input type="text" value="{{ request.user.first_name }} ({{ request.user.username }})" readonly style="background-color: #f5f5f5;">
+          {% else %}
+            <select id="user" name="user_id" required>
+              <option value="">— Please login first —</option>
+            </select>
+          {% endif %}
         </div>
+
 
         <div>
           <label for="service">Service</label>
-          <select id="service" name="service" required>
+          <select id="service" name="service_id" required>
             <option value="">— Select service —</option>
             {% for service in services %}
               <option value="{{ service.id }}">{{ service.name }}</option>
@@ -83,7 +103,7 @@
 
         <div>
           <label for="category">Category</label>
-          <select id="category" name="category" required>
+          <select id="category" name="category_id" required>
             <option value="">— Select category —</option>
             {% for category in categories %}
               <option value="{{ category.id }}">{{ category.name }}</option>
@@ -93,27 +113,22 @@
 
         <div>
           <label for="brand">Brand</label>
-          <select id="brand" name="brand" required>
+          <select id="brand" name="brand_id" required>
             <option value="">— Select brand —</option>
             {% for brand in brands %}
-              <option value="{{ brand.id }}">{{ brand.name }}</option>
+              <option  value="{{ brand.id }}">{{ brand.name }} </option>
             {% endfor %}
           </select>
         </div>
 
         <div class="full">
           <label for="brandModel">Brand Model</label>
-          <select id="brandModel" name="brandModel" required>
-            <option value="">— Select model —</option>
-            {% for model in brand_models %}
-              <option value="{{ model.id }}">{{ model.name }}</option>
-            {% endfor %}
-          </select>
+          <input style="width:240px;" id="brandModel" name="brand_model_id" type="text" placeholder="Enter your Brand Model" required />
         </div>
 
         <div>
           <label for="price">Price (optional)</label>
-          <input id="price" name="price" type="number" step="0.01" min="0" placeholder="e.g. 1500.00" />
+          <input id="price" name="price" type="number" step="any" min="0" placeholder="e.g. 1500.00" />
         </div>
 
         <div>
@@ -126,17 +141,6 @@
           <textarea id="notes" name="notes" rows="3" placeholder="Anything extra the user said..."></textarea>
         </div>
 
-        <div>
-          <label for="status">Status</label>
-          <select id="status" name="status" required>
-            <option value="Pending" selected>Pending</option>
-            <option value="Accepted">Accepted</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-        </div>
-
         <div class="actions full">
           <div style="font-size:13px;color:var(--muted)">Request will record request_date automatically on server.</div>
           <div style="display:flex;gap:10px">
@@ -145,12 +149,21 @@
           </div>
         </div>
       </form>
+
     </section>
   </main>
 </section>
 
 
 <style>
+    label:after {
+      content: " *";
+      color: red;
+    }
+    label:not([for="price"]):not([for="notes"]):after {
+      content: " *";
+      color: red;
+    }
     :root{
       --bg:#f4f7fb;
       --card:#ffffff;
@@ -205,5 +218,4 @@
     @media(max-width:880px){.card{grid-template-columns:1fr}form{grid-template-columns:1fr}}
 </style>
 
-
-{% endblock %}
+{%endblock%}

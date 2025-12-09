@@ -5,7 +5,8 @@ from usermanagement.models.user_model import User
 from spartans.models.product_model import product
 from spartans.models.master_model import Category,Brand
 from django.shortcuts import render, redirect
-from spartans.models.service_model import Service
+from spartans.models.service_model import Service, UserRequestService
+
 
 
 def index(request):
@@ -28,10 +29,62 @@ def shop(request):
 
     return render(request, 'shop.html', {'products': products, 'categories': categories, 'brands': brands})
 
+from spartans.models.master_model import Category, Brand, BrandModel
 
 def service_type(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login first to create service request")
+        return redirect('/sign_in')
+    
+    if request.method == 'POST':
+        print("service_request",request.POST)
+        user_id = request.POST.get('user_id')
+        service_id = request.POST.get('service_id')
+        category_id = request.POST.get('category_id')
+        brand_id = request.POST.get('brand_id')
+        brand_model_name = request.POST.get('brand_model_id')  # Text input
+        price = request.POST.get('price')
+        delivery_date = request.POST.get('delivery_date')
+
+        # Validation for required fields
+        if not all([user_id, service_id, category_id, brand_id, brand_model_name]):
+            messages.error(request, "Please fill all required fields")
+            return render(request, 'service_type.html', {
+                'services': Service.objects.all(),
+                'categories': Category.objects.all(),
+                'brands': Brand.objects.all(),
+                'users': User.objects.all()
+            })
+
+        try:
+            # Get or create BrandModel from text input
+            brand_model, created = BrandModel.objects.get_or_create(
+                name=brand_model_name,
+                defaults={'brand_id': brand_id}
+            )
+            
+            user_request = UserRequestService(
+                user_id=user_id,
+                service_id=service_id,
+                category_id=category_id,
+                brand_id=brand_id,
+                brandModel_id=brand_model.id,  # Use the created/found BrandModel ID
+                price=price,
+                delivery_date=delivery_date
+            )
+            user_request.save()
+            messages.success(request, "Service request submitted successfully!")
+        except Exception as e:
+            print(f"Error: {e}")
+            messages.error(request, f"Error: {str(e)}")
+            
     services = Service.objects.all()
-    return render(request, 'service_type.html', {'services': services})
+    categories = Category.objects.all()
+    brands = Brand.objects.all()
+    users = User.objects.all()
+    return render(request, 'service_type.html', {'services': services, 'categories':categories ,'brands':brands , 'users':users})
+
+
    
 
 def detail(request, product_id, product_name):
