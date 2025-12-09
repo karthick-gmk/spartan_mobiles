@@ -46,7 +46,6 @@ def service_type(request):
         price = request.POST.get('price')
         delivery_date = request.POST.get('delivery_date')
 
-        # Validation for required fields
         if not all([user_id, service_id, category_id, brand_id, brand_model_name]):
             messages.error(request, "Please fill all required fields")
             return render(request, 'service_type.html', {
