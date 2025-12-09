@@ -46,15 +46,6 @@ def service_type(request):
         price = request.POST.get('price')
         delivery_date = request.POST.get('delivery_date')
 
-        if not all([user_id, service_id, category_id, brand_id, brand_model_name]):
-            messages.error(request, "Please fill all required fields")
-            return render(request, 'service_type.html', {
-                'services': Service.objects.all(),
-                'categories': Category.objects.all(),
-                'brands': Brand.objects.all(),
-                'users': User.objects.all()
-            })
-
         try:
             # Get or create BrandModel from text input
             brand_model, created = BrandModel.objects.get_or_create(
