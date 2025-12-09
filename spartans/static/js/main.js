@@ -344,3 +344,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 }); 
+
+  const form = document.querySelector('form');
+  const submitBtn = document.querySelector('.btn[type="submit"]');
+
+  // Disable submit button initially
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = "0.5";
+  submitBtn.style.cursor = "not-allowed";
+
+  function enableSubmitIfValid() {
+      if (form.checkValidity()) {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
+          submitBtn.style.cursor = "pointer";
+      } else {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = "0.5";
+          submitBtn.style.cursor = "not-allowed";
+      }
+  }
+
+  // Check all form inputs and selects
+  document.querySelectorAll('input, select').forEach(element => {
+      element.addEventListener('input', enableSubmitIfValid);
+      element.addEventListener('change', enableSubmitIfValid);
+  });
+
+  // Check initial state
+  enableSubmitIfValid();

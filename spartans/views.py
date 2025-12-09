@@ -66,7 +66,7 @@ def service_type(request):
             messages.success(request, "Service request submitted successfully!")   
         except Exception as e:
             print(f"Error: {e}")
-            messages.error(request, f"Error: {str(e)}")
+            messages.error(request, f"Error: {str(e)}")    
             
     services = Service.objects.all()
     categories = Category.objects.all()
