@@ -67,17 +67,6 @@
 
       <form method="post">
         {% csrf_token %}
-        
-        {% comment %} <div>
-          <label for="user">User</label>
-          <select id="user" name="user_id" required>
-            <option value="">— Select user —</option>
-            {% for user in users %}
-              <option value="{{ user.id }}">{{ user.first_name }} ({{ user.username }})</option>
-            {% endfor %}
-          </select>
-        </div> {% endcomment %}
-
         <div>
           <label for="user">User</label>
           {% if request.user.is_authenticated %}
