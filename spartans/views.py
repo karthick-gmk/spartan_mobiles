@@ -7,6 +7,7 @@ from spartans.models.master_model import Category,Brand
 from django.shortcuts import render, redirect
 from spartans.models.service_model import Service, UserRequestService
 from spartans.models.master_model import Category, Brand, BrandModel
+from spartans.models.product_review_model import ProductReview
 
 
 def index(request):
@@ -32,9 +33,6 @@ def shop(request):
 
 
 def service_type(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "Please login first to create service request")
-        return redirect('/sign_in')
     
     if request.method == 'POST':
         print("service_request",request.POST)
@@ -80,7 +78,63 @@ def service_type(request):
 def detail(request, product_id, product_name):
     product_obj = product.objects.get(id=product_id)
     related_products = product.objects.exclude(id=product_obj.id)[:4]
-    return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products})
+
+    user_review = None
+    if request.user.is_authenticated:
+        try:
+            user_review = ProductReview.objects.get(user=request.user, product=product_obj)
+        except ProductReview.DoesNotExist:
+            pass
+
+    if request.method == 'POST':
+        action = request.POST.get('action', 'create')
+        
+        if action == 'delete':
+            if user_review:
+                user_review.delete()
+                messages.success(request, "Review deleted successfully!")
+            else:
+                messages.error(request, "No review found to delete!")
+                
+        elif action == 'edit':
+            rating = request.POST.get('rating')
+            review_text = request.POST.get('review')
+            
+            if not rating or not review_text:
+                messages.error(request, "Please provide both rating and review!")
+                return redirect(request.path)
+            
+            if user_review:
+                user_review.rating = int(rating)
+                user_review.review = review_text
+                user_review.save()
+                messages.success(request, "Review updated successfully!")
+            else:
+                messages.error(request, "No review found to edit!")
+                
+        else:  # create new review
+            rating = request.POST.get('rating')
+            review_text = request.POST.get('review')
+            
+            if not rating or not review_text:
+                messages.error(request, "Please provide both rating and review!")
+                return redirect(request.path)
+            
+            if user_review:
+                messages.error(request, "You have already reviewed this product! You can edit your existing review.")
+            else:
+                ProductReview.objects.create(
+                    user=request.user,
+                    product=product_obj,
+                    rating=int(rating),
+                    review=review_text
+                )
+                messages.success(request, "Review submitted successfully!")
+        return redirect(request.path)
+    reviews = ProductReview.objects.filter(product=product_obj).order_by('-created_at')
+    return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products,'reviews': reviews,'user_review': user_review})
+
+
 
 
 

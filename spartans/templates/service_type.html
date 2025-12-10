@@ -22,7 +22,7 @@
                             <span><img src="{% static 'img/calendar.png' %}" alt=""> {{ service.service_type }}</span>
                             <h5>{{ service.name }}</h5>
                             <p>{{ service.discription }}</p>
-                            <a href="#">Contact Now</a>
+                            <a href="#service_req">Service Request</a>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
 </section>
 
   
-<section class="form_req">
+<section class="form_req" id="service_req">
   <main class="card" role="main">
     <aside class="aside" aria-hidden="true">
       <div style="display:flex;gap:12px;align-items:center">
@@ -65,80 +65,88 @@
           {% endfor %}
       {% endif %}
 
-      <form method="post">
-        {% csrf_token %}
-        <div>
-          <label for="user">User</label>
-          {% if request.user.is_authenticated %}
-            <input type="hidden" name="user_id" value="{{ request.user.id }}">
-            <input type="text" value="{{ request.user.first_name }} ({{ request.user.username }})" readonly style="background-color: #f5f5f5;">
+      {% if request.user.is_authenticated %}
+          <!-- Show form only for logged in users -->
+          <form method="post">
+            {% csrf_token %}
+            <div>
+              <label for="user">User</label>
+              <input type="hidden" name="user_id" value="{{ request.user.id }}">
+              <input type="text" value="{{ request.user.first_name }} ({{ request.user.username }})" readonly style="background-color: #f5f5f5;">
+            </div>
+
+            <div>
+              <label for="service">Service</label>
+              <select id="service" name="service_id" required>
+                <option value="">— Select service —</option>
+                {% for service in services %}
+                  <option value="{{ service.id }}">{{ service.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div>
+              <label for="category">Category</label>
+              <select id="category" name="category_id" required>
+                <option value="">— Select category —</option>
+                {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div>
+              <label for="brand">Brand</label>
+              <select id="brand" name="brand_id" required>
+                <option value="">— Select brand —</option>
+                {% for brand in brands %}
+                  <option value="{{ brand.id }}">{{ brand.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="full">
+              <label for="brandModel">Brand Model</label>
+              <input id="brandModel" name="brand_model_id" type="text" placeholder="Enter your Brand Model" required />
+            </div>
+
+            <div>
+              <label for="price">Price (optional)</label>
+              <input id="price" name="price" type="number" step="any" min="0" placeholder="e.g. 1500.00" />
+            </div>
+
+            <div>
+              <label for="delivery_date">Delivery Date & Time</label>
+              <input id="delivery_date" name="delivery_date" type="datetime-local" required />
+            </div>
+
+            <div class="full">
+              <label for="notes">Notes (optional)</label>
+              <textarea id="notes" name="notes" rows="3" placeholder="Anything extra the user said..."></textarea>
+            </div>
+
+            <div class="actions full">
+              <div style="font-size:13px;color:var(--muted)">Request will record request_date automatically on server.</div>
+              <div style="display:flex;gap:10px">
+                <button type="reset" class="btn btn--ghost">Reset</button>
+                <button type="submit" class="btn">Create Request</button>
+              </div>
+            </div>
+          </form>
+
           {% else %}
-            <select id="user" name="user_id" required>
-              <option value="">— Please login first —</option>
-            </select>
-          {% endif %}
-        </div>
-
-
-        <div>
-          <label for="service">Service</label>
-          <select id="service" name="service_id" required>
-            <option value="">— Select service —</option>
-            {% for service in services %}
-              <option value="{{ service.id }}">{{ service.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label for="category">Category</label>
-          <select id="category" name="category_id" required>
-            <option value="">— Select category —</option>
-            {% for category in categories %}
-              <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div>
-          <label for="brand">Brand</label>
-          <select id="brand" name="brand_id" required>
-            <option value="">— Select brand —</option>
-            {% for brand in brands %}
-              <option  value="{{ brand.id }}">{{ brand.name }} </option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="full">
-          <label for="brandModel">Brand Model</label>
-          <input style="width:240px;" id="brandModel" name="brand_model_id" type="text" placeholder="Enter your Brand Model" required />
-        </div>
-
-        <div>
-          <label for="price">Price (optional)</label>
-          <input id="price" name="price" type="number" step="any" min="0" placeholder="e.g. 1500.00" />
-        </div>
-
-        <div>
-          <label for="delivery_date">Delivery Date & Time</label>
-          <input id="delivery_date" name="delivery_date" type="datetime-local" required />
-        </div>
-
-        <div class="full">
-          <label for="notes">Notes (optional)</label>
-          <textarea id="notes" name="notes" rows="3" placeholder="Anything extra the user said..."></textarea>
-        </div>
-
-        <div class="actions full">
-          <div style="font-size:13px;color:var(--muted)">Request will record request_date automatically on server.</div>
-          <div style="display:flex;gap:10px">
-            <button type="reset" class="btn btn--ghost">Reset</button>
-            <button type="submit" class="btn">Create Request</button>
+          <!-- Show login buttons for non-authenticated users -->
+          <div class="login-required" style="text-align:center;padding:40px 20px;">
+            <h3 style="margin-bottom:10px;">Login Required</h3>
+            <p style="color:var(--muted);margin-bottom:24px;">
+              Please sign in or create an account to request a service.
+            </p>
+            <div style="display:flex;gap:14px;justify-content:center;">
+              <a href="{% url 'spartans:sign_in' %}" class="btn">Sign In</a>
+              <a href="{% url 'spartans:sign_up' %}" class="btn btn--ghost">Sign Up</a>
+            </div>
           </div>
-        </div>
-      </form>
-
+      {% endif %}
     </section>
   </main>
 </section>

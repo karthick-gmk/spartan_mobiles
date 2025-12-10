@@ -77,11 +77,6 @@
                         </div>
 
                         <h3>₹{{ product.price }}</h3>
-
-                        <p>
-                            {{ product.description|default:"Product description not available." }}
-                        </p>
-
                         <!-- Options -->
                         <div class="product__details__option">
                             <div class="product__details__option__size">
@@ -96,7 +91,7 @@
                                     <input type="text" value="1">
                                 </div>
                             </div>
-                            <a href="#" class="primary-btn">Add to Cart</a>
+                            <a href="#" class="primary-btn">Payment</a>
                         </div>
 
                         <div class="product__details__btns__option">
@@ -115,57 +110,179 @@
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-5" role="tab">Description</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer Reviews (32)</a>
+                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer Reviews ({{ reviews.count }})</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Specifications</a>
                             </li>
                         </ul>
 
+                        <!-- tab-content -->
                         <div class="tab-content">
-
                             <!-- Description -->
                             <div class="tab-pane active" id="tabs-5">
                                 <div class="product__details__tab__content">
-                                    <p class="note">Latest Boat wireless model with enhanced bass drivers and premium built.</p>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Product Information</h5>
-                                        <p>
-                                            Rockerz 550 Pro delivers theater-like audio experience with noise isolation cushioned pads.
-                                        </p>
-                                    </div>
+                                    <p>
+                                        {{ product.description|default:"Product description not available." }}
+                                    </p>
                                 </div>
                             </div>
 
                             <!-- Reviews -->
                             <div class="tab-pane" id="tabs-6">
                                 <div class="product__details__tab__content">
+                                    <!-- Display Reviews -->
                                     <div class="product__details__tab__content__item">
-                                        <h5>Customer Feedback</h5>
-                                        <p>✔ Great bass quality</p>
-                                        <p>✔ Battery lasts long</p>
-                                        <p>✔ Comfortable design</p>
+                                        <h5>Customer Reviews ({{ reviews.count }})</h5>
+                                        {% for review in reviews %}
+                                            <div style="border-bottom: 1px solid #eee; padding: 15px 0; margin-bottom: 15px;">
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                                    <strong style="color: #333;">{{ review.user.first_name|default:review.user.username }}</strong>
+                                                    <div style="display: flex; align-items: center; gap: 15px;">
+                                                        <div class="rating">
+                                                            {% for i in "12345" %}
+                                                                <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > review.rating %}-o{% endif %}"></i>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p style="margin: 10px 0; color: #666; line-height: 1.5;">{{ review.review }}</p>
+                                                <small style="color: #999;">{{ review.created_at|date:"M d, Y" }}</small>
+                                            </div>
+                                        {% empty %}
+                                            <p style="text-align: center; color: #999; padding: 20px;">No reviews yet. Be the first to review this product!</p>
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- Add Review Form -->
+                                    <div class="review-form" style="margin-top: 30px; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+                                        {% if user.is_authenticated %}
+                                            {% if user_review %}
+                                                <!-- Show existing review for editing -->
+                                                <h5>Your Review</h5>
+                                                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                                                    <div class="rating" style="margin-bottom: 10px;">
+                                                        {% for i in "12345" %}
+                                                            <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > user_review.rating %}-o{% endif %}"></i>
+                                                        {% endfor %}
+                                                        <span style="margin-left: 10px; color: #666;">{{ user_review.rating }}/5</span>
+                                                    </div>
+                                                    <p style="margin: 10px 0; line-height: 1.5;">{{ user_review.review }}</p>
+                                                    <small style="color: #999;">Posted on {{ user_review.created_at|date:"M d, Y" }}</small>
+                                                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                                        <button onclick="editReview({{ user_review.id }}, '{{ user_review.review|escapejs }}', {{ user_review.rating }})" style="background: #28a745; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">Edit Review</button>
+                                                        <form method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete your review?')">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="action" value="delete">
+                                                            <button type="submit" style="background: #dc3545; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">Delete Review</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Hidden Edit Form -->
+                                                <div id="edit-form" style="display: none;">
+                                                    <h5>Edit Your Review</h5>
+                                                    <form method="post" action="">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="action" value="edit">
+                                                        
+                                                        <!-- Star Rating -->
+                                                        <div style="margin-bottom: 15px;">
+                                                            <label>Rating:</label>
+                                                            <div class="star-rating" style="margin-top: 5px;">
+                                                                <input type="radio" name="rating" value="5" id="edit-star5">
+                                                                <label for="edit-star5">★</label>
+                                                                <input type="radio" name="rating" value="4" id="edit-star4">
+                                                                <label for="edit-star4">★</label>
+                                                                <input type="radio" name="rating" value="3" id="edit-star3">
+                                                                <label for="edit-star3">★</label>
+                                                                <input type="radio" name="rating" value="2" id="edit-star2">
+                                                                <label for="edit-star2">★</label>
+                                                                <input type="radio" name="rating" value="1" id="edit-star1">
+                                                                <label for="edit-star1">★</label>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Review Text -->
+                                                        <div style="margin-bottom: 15px;">
+                                                            <label for="edit-review">Your Review:</label>
+                                                            <textarea name="review" id="edit-review" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" required></textarea>
+                                                        </div>
+
+                                                        <div style="display: flex; gap: 10px;">
+                                                            <button type="submit" style="background: #e53637; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Update Review</button>
+                                                            <button type="button" onclick="cancelEdit()" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            {% else %}
+                                                <!-- New Review Form -->
+                                                <h5>Write a Review</h5>
+                                                <p style="margin-bottom: 15px; color: #666;">
+                                                    <strong>Posting as:</strong> {{ user.first_name|default:user.username }}
+                                                </p>
+
+                                                <form method="post" action="">
+                                                    {% csrf_token %}
+                                                    
+                                                    <!-- Star Rating -->
+                                                    <div style="margin-bottom: 15px;">
+                                                        <label>Rating:</label>
+                                                        <div class="star-rating" style="margin-top: 5px;">
+                                                            <input type="radio" name="rating" value="5" id="star5" required>
+                                                            <label for="star5">★</label>
+                                                            <input type="radio" name="rating" value="4" id="star4" required>
+                                                            <label for="star4">★</label>
+                                                            <input type="radio" name="rating" value="3" id="star3" required>
+                                                            <label for="star3">★</label>
+                                                            <input type="radio" name="rating" value="2" id="star2" required>
+                                                            <label for="star2">★</label>
+                                                            <input type="radio" name="rating" value="1" id="star1" required>
+                                                            <label for="star1">★</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Review Text -->
+                                                    <div style="margin-bottom: 15px;">
+                                                        <label for="review">Your Review:</label>
+                                                        <textarea name="review" id="review" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" placeholder="Write your review here..." required></textarea>
+                                                    </div>
+
+                                                    <button type="submit" style="background: #e53637; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Submit Review</button>
+                                                </form>
+                                            {% endif %}
+
+                                            {% if messages %}
+                                                <div class="messages" style="margin: 20px 0;">
+                                                    {% for message in messages %}
+                                                        <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin: 5px 0; border-radius: 4px; {% if message.tags == 'success' %}background: #d4edda; color: #155724; border: 1px solid #c3e6cb;{% elif message.tags == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% endif %}">
+                                                            {{ message }}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            <h5>Write a Review</h5>
+                                            <p style="text-align: center; padding: 20px; color: #666;">
+                                                <a href="/sign_in" style="color: #e53637;">Please login</a> to write a review
+                                            </p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Specs -->
+                            <!--specifications -->
                             <div class="tab-pane" id="tabs-7">
                                 <div class="product__details__tab__content">
                                     <div class="product__details__tab__content__item">
-                                        <h5>Technical Specifications</h5>
-                                        <p>• Bluetooth: v5.2</p>
-                                        <p>• Battery: 750mAh (35 hrs playback)</p>
-                                        <p>• Driver Size: 50mm</p>
-                                        <p>• Connectivity: Wireless + AUX support</p>
-                                        <p>• Charging Port: Type-C Fast Charging</p>
-                                        <p>• Mic: Built-in for calls & gaming</p>
-                                        <p>• Weight: 245g lightweight design</p>
+                                        <p>
+                                        {{ product.specifications|default:"Product specifications not available." }}
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div> <!-- tab-content -->
+                            </div> 
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -245,6 +362,46 @@
         border: 2px solid #FF9529;
     }
 </style>
+
+<style>
+    .star-rating {
+        direction: rtl;
+        display: inline-block;
+    }
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+    .star-rating label {
+        color: #ddd;
+        font-size: 25px;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star-rating input[type="radio"]:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+</style>
+
+
+<script>
+    function editReview(reviewId, reviewText, rating) {
+        // Show edit form
+        document.getElementById('edit-form').style.display = 'block';
+        
+        // Fill form with existing data
+        document.getElementById('edit-review').value = reviewText;
+        document.querySelector(`input[name="rating"][value="${rating}"]`).checked = true;
+        
+        // Scroll to form
+        document.getElementById('edit-form').scrollIntoView({behavior: 'smooth'});
+    }
+
+    function cancelEdit() {
+        document.getElementById('edit-form').style.display = 'none';
+    }
+</script>
 
 {% endblock %}    
 

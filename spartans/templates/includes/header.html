@@ -51,11 +51,11 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="/">Home</a></li>
-                        <li><a href="/shop">Shop</a></li>
-                        <li><a href="/service_type">Service Type</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contact">Contacts</a></li>
+                        <li {% if request.path == '/' %}class="active"{% endif %}><a href="/">Home</a></li>
+                        <li {% if request.path == '/shop' %}class="active"{% endif %}><a href="/shop">Shop</a></li>
+                        <li {% if request.path == '/service_type' %}class="active"{% endif %}><a href="/service_type">Service Type</a></li>
+                        <li {% if request.path == '/about' %}class="active"{% endif %}><a href="/about">About Us</a></li>
+                        <li {% if request.path == '/contact' %}class="active"{% endif %}><a href="/contact">Contacts</a></li>
                     </ul>
                 </nav>
             </div>

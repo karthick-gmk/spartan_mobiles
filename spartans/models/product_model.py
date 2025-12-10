@@ -19,6 +19,7 @@ class product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     main_image = models.ImageField(upload_to=product_main_image_path, help_text="Main display image", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    specifications = models.TextField(null=True, blank=True)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
     is_new = models.BooleanField(default=False, help_text="Mark as New Arrival")
     on_sale = models.BooleanField(default=False, help_text="Mark as Hot Deal/Sale")
@@ -54,6 +55,9 @@ def product_image_path(instance, filename):
         brand = slugify(instance.product.brand.name)
         product = slugify(instance.product.name)
         return f"products/{brand}/{product}/images/{filename}"
+
+
+
 class ProductImage(models.Model):
     product = models.ForeignKey(product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=product_image_path)
@@ -65,6 +69,4 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - Image {self.id}"
-    
-
     
