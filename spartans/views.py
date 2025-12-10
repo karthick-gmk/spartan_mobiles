@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from spartans.models.service_model import Service, UserRequestService
 from spartans.models.master_model import Category, Brand, BrandModel
 from spartans.models.product_review_model import ProductReview
+from spartans.models.contact_model import Contact
 
 
 def index(request):
@@ -63,7 +64,7 @@ def service_type(request):
             user_request.save()
             messages.success(request, "Service request submitted successfully!")   
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Service-Error: {e}")
             messages.error(request, f"Error: {str(e)}")    
             
     services = Service.objects.all()
@@ -144,6 +145,25 @@ def about(request):
 
 
 def contact(request):
+    if request.method == 'POST':
+        print("contact", request.POST)
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        message = request.POST.get('message')
+
+        try:
+            contact_request = Contact.objects.create(
+                name=name,
+                email=email,
+                mobile=mobile,
+                message=message
+            )
+            contact_request.save()
+            messages.success(request, "Message sent successfully!")
+            return redirect('/contact')
+        except User.DoesNotExist:
+            messages.error(request, "Error sending message. Please try again!")
     return render(request, 'contact.html')
 
 
