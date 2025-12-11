@@ -9,7 +9,7 @@ from spartans.models.service_model import Service, UserRequestService
 from spartans.models.master_model import Category, Brand, BrandModel
 from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
-
+from .models.shop_cart import Cart
 
 def index(request):
     products = product.objects.all()[:8]  # First 8 products
@@ -241,3 +241,34 @@ def logout(request):
 
 def reset_pw(request):
     return render(request, 'reset_pw.html')
+
+
+
+def add_to_cart(request, product_id):
+    if request.user.is_authenticated:
+        quantity = int(request.POST.get('quantity', 1))
+        cart_item, created = Cart.objects.get_or_create(
+            user=request.user,
+            product_id=product_id,
+            defaults={'quantity': quantity}
+        )
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.save()
+        messages.success(request, f"{quantity} item(s) added to cart!")
+        return redirect('spartans:detail', product_id=product_id, product_name=product.name)
+    else:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')
+
+
+def shoping_card(request):
+    if request.user.is_authenticated:
+        cart_items = Cart.objects.filter(user=request.user)
+        subtotal = sum(item.get_total_price() for item in cart_items)
+        return render(request, 'shoping-cart.html', {
+            'cart_items': cart_items,
+            'subtotal': subtotal
+        })
+    return render(request, 'shoping-cart.html', {'cart_items': []})
+

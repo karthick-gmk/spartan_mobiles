@@ -6,7 +6,7 @@ app_name = 'spartans'
 
 urlpatterns = [
     path("", views.index, name='index'),
-  path('detail/<int:product_id>/<str:product_name>/', views.detail, name='detail'),
+    path('detail/<int:product_id>/<str:product_name>/', views.detail, name='detail'),
     path("contact", views.contact, name='contact'),
     path("about", views.about, name='about'),
     path('shop', views.shop, name='shop'),
@@ -18,5 +18,7 @@ urlpatterns = [
     path('logout',views.logout,name='logout'),
     path('forget', views.forget, name='forget'),
     path('reset_pw', views.reset_pw, name='reset_pw'),
+    path('shoping_card', views.shoping_card, name='shoping_card'),
+    path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     ]
 

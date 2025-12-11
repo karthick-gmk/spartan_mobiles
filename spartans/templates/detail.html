@@ -86,17 +86,21 @@
                         </div>
 
                         <div class="product__details__cart__option">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
+                            <form method="post" action="{% url 'spartans:add_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="number" name="quantity" value="1" min="1" max="99">
+                                    </div>
                                 </div>
-                            </div>
-                            <a href="#" class="primary-btn">Payment</a>
+                                <button type="submit" class="primary-btn">Add to Cart</button>
+                            </form>
                         </div>
-
                         <div class="product__details__btns__option">
                             <a href="#"><i class="fa fa-heart"></i> Add to Wishlist</a>
+                           
                         </div>
+                         <a href="#" class="primary-btn">Payment</a>
                     </div>
                 </div>
             </div>
