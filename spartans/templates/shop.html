@@ -129,7 +129,15 @@
                               <a href="{% url 'spartans:detail' product.id product.name|slugify %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% endif %}" alt="{{ product.name }}"></a>
                                 <ul class="product__hover">
                                     <li><a href="#"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
-                                    <li><a href="#"><svg style="background:white; width:33px; height:33px; padding:2px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
+                                    <li>
+                                        <a href="#" onclick="addToCartFromShop({{ product.id }})">
+                                            <svg style="background:white; width:33px; height:33px; padding:2px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black">
+                                                <path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/>
+                                            </svg>
+                                            <span>Add To Cart</span>
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </div>
                             <div class="product__item__text">
@@ -164,6 +172,28 @@
     </div>
 </section>
 <!-- Shop Section End -->
+<script>
+function addToCartFromShop(productId) {
+    fetch(`/add_to_cart/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'quantity=1'
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Product added to cart!');
+        } else {
+            alert('Please login first!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
 
 <style>
     /* Mobile gap between image and text */

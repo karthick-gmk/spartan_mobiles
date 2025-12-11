@@ -19,6 +19,8 @@ urlpatterns = [
     path('reset_pw', views.reset_pw, name='reset_pw'),
     path('shoping_card', views.shoping_card, name='shoping_card'),
     path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('remove_cart/<int:cart_id>/', views.remove_cart, name='remove_cart'),
+
     
     ]
 

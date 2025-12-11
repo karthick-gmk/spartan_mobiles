@@ -10,6 +10,10 @@ from spartans.models.master_model import Category, Brand, BrandModel
 from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
 from .models.shop_cart import Cart
+from django.http import JsonResponse
+
+
+
 
 def index(request):
     products = product.objects.all()[:8]  # First 8 products
@@ -253,15 +257,13 @@ def add_to_cart(request, product_id):
             defaults={'quantity': quantity}
         )
         if not created:
-            # Replace quantity instead of adding
-            cart_item.quantity = quantity
+            cart_item.quantity += quantity
             cart_item.save()
         messages.success(request, f"{quantity} item(s) added to cart!")
         return redirect('spartans:detail', product_id=product_id, product_name=product.name)
     else:
         messages.error(request, "Please login first!")
         return redirect('spartans:sign_in')
-
 
 
 def shoping_card(request):
@@ -271,9 +273,21 @@ def shoping_card(request):
         for item in cart_items:
             print(f"Product: {item.product.brand}, Name: {item.product.brand_model}")
         subtotal = sum(item.get_total_price() for item in cart_items)
-        return render(request, 'shoping-cart.html', {'cart_items': cart_items,'subtotal': subtotal})
+        return render(request, 'shoping-cart.html', {'cart_items': cart_items,
+'subtotal': subtotal
+        })
     return render(request, 'shoping-cart.html', {'cart_items': []})
 
 
+
+
+def remove_cart(request, cart_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        try:
+            Cart.objects.filter(id=cart_id, user=request.user).delete()
+            return JsonResponse({'success': True})
+        except:
+            return JsonResponse({'success': False})
+    return JsonResponse({'success': False})
 
 

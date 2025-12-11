@@ -172,4 +172,58 @@ function updateSubtotal() {
 }
 </script>
 
+<script>
+function changeQuantity(cartId, change) {
+    const qtyInput = document.getElementById(`qty-${cartId}`);
+    let currentQty = parseInt(qtyInput.value);
+    let newQty = currentQty + change;
+    
+    if (newQty < 1) return;
+    
+    qtyInput.value = newQty;
+    
+    const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
+    const newTotal = productPrice * newQty;
+    
+    document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
+    updateSubtotal();
+}
+
+function removeRow(element) {
+    if (confirm('Remove this item from cart?')) {
+        const row = element.closest('tr');
+        const cartId = row.querySelector('[id^="qty-"]').id.split('-')[1];
+        
+        // Send delete request to database
+        fetch(`/remove_cart/${cartId}/`, {
+            method: 'POST',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}
+        })
+        .then(response => {
+            if (response.ok) {
+                row.remove();
+                updateSubtotal();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error removing item');
+        });
+    }
+}
+
+function updateSubtotal() {
+    let subtotal = 0;
+    const totalElements = document.querySelectorAll('[id^="total-"]');
+    
+    totalElements.forEach(element => {
+        const price = parseFloat(element.innerHTML.replace('₹', ''));
+        subtotal += price;
+    });
+    
+    document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
+    document.querySelector('.cart__total ul li:first-child span').innerHTML = `₹${subtotal}`;
+}
+</script>
+
 {% endblock %}
