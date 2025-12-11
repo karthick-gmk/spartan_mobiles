@@ -44,24 +44,25 @@
                                         <img style="width:150px;" src="{{ item.product.main_image.url }}" alt="">
                                     </div>
                                     <div class="product__cart__item__text">
-                                        <h5>{{ item.product.brand }}</h6>
-                                        <h6>{{ item.product.brand_model}}</h6>
-                                        <div class="rating">
-                                            {% for i in "12345" %}
-                                                <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > item.product.rating %}-o{% endif %}"></i>
-                                            {% endfor %}
+                                        <h6>{{ item.product.name }}</h6>
+                                        <h5 id="price-{{ item.id }}" data-price="{{ item.product.price }}">₹{{ item.product.price }}</h5>
+                                    </div>
+                                </td>
+                                <td class="quantity__item" style="text-align: center;">
+                                    <div class="quantity" style="display: flex;">
+                                        <div class="pro-qty-2" style="display:flex; align-items: center;">
+                                            <button type="button" onclick="changeQuantity({{ item.id }}, -1)">-</button>
+                                            <input type="number" id="qty-{{ item.id }}" value="{{ item.quantity }}" min="1" readonly style="text-align: center;">
+                                            <button type="button" onclick="changeQuantity({{ item.id }}, 1)">+</button>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="number" value="{{ item.quantity }}" min="1" max="9999">
-                                        </div>
-                                    </div>
+
+                                <td class="cart__price" id="total-{{ item.id }}">₹{{ item.get_total_price }}</td>
+                                <td class="cart__close" onclick="removeRow(this)" style="cursor: pointer;">
+                                    <i class="fa fa-close"></i>
                                 </td>
-                                <td class="cart__price">₹{{ item.get_total_price }}</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
+
                             </tr>
                             {% empty %}
                             <tr>
@@ -94,6 +95,81 @@
 </section>
 <!-- Shopping Cart Section End -->
 
+<script>
+function changeQuantity(cartId, change) {
+    const qtyInput = document.getElementById(`qty-${cartId}`);
+    let currentQty = parseInt(qtyInput.value);
+    let newQty = currentQty + change;
+    
+    if (newQty < 1) return;
+    
+    // Update quantity display
+    qtyInput.value = newQty;
+    
+    // Get product price (you need to add this as data attribute)
+    const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
+    const newTotal = productPrice * newQty;
+    
+    // Update item total
+    document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
+    
+    // Update subtotal
+    updateSubtotal();
+}
 
+function updateSubtotal() {
+    let subtotal = 0;
+    const totalElements = document.querySelectorAll('[id^="total-"]');
+    
+    totalElements.forEach(element => {
+        const price = parseFloat(element.innerHTML.replace('₹', ''));
+        subtotal += price;
+    });
+    
+    document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
+}
+</script>
+
+<script>
+function changeQuantity(cartId, change) {
+    const qtyInput = document.getElementById(`qty-${cartId}`);
+    let currentQty = parseInt(qtyInput.value);
+    let newQty = currentQty + change;
+    
+    if (newQty < 1) return;
+    
+    qtyInput.value = newQty;
+    
+    const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
+    const newTotal = productPrice * newQty;
+    
+    document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
+    updateSubtotal();
+}
+
+function removeRow(element) {
+    if (confirm('Remove this item from cart?')) {
+        // Find the parent row and remove it
+        const row = element.closest('tr');
+        row.remove();
+        
+        // Update subtotal after removing
+        updateSubtotal();
+    }
+}
+
+function updateSubtotal() {
+    let subtotal = 0;
+    const totalElements = document.querySelectorAll('[id^="total-"]');
+    
+    totalElements.forEach(element => {
+        const price = parseFloat(element.innerHTML.replace('₹', ''));
+        subtotal += price;
+    });
+    
+    document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
+    document.querySelector('.cart__total ul li:first-child span').innerHTML = `₹${subtotal}`;
+}
+</script>
 
 {% endblock %}

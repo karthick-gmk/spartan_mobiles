@@ -253,7 +253,8 @@ def add_to_cart(request, product_id):
             defaults={'quantity': quantity}
         )
         if not created:
-            cart_item.quantity += quantity
+            # Replace quantity instead of adding
+            cart_item.quantity = quantity
             cart_item.save()
         messages.success(request, f"{quantity} item(s) added to cart!")
         return redirect('spartans:detail', product_id=product_id, product_name=product.name)
@@ -262,17 +263,15 @@ def add_to_cart(request, product_id):
         return redirect('spartans:sign_in')
 
 
+
 def shoping_card(request):
     if request.user.is_authenticated:
         cart_items = Cart.objects.filter(user=request.user)
         print("Cart items:", cart_items)
         for item in cart_items:
-            print(f"Product: {item.product}, Name: {item.product.name}")
+            print(f"Product: {item.product.brand}, Name: {item.product.brand_model}")
         subtotal = sum(item.get_total_price() for item in cart_items)
-        return render(request, 'shoping-cart.html', {
-            'cart_items': cart_items,
-            'subtotal': subtotal
-        })
+        return render(request, 'shoping-cart.html', {'cart_items': cart_items,'subtotal': subtotal})
     return render(request, 'shoping-cart.html', {'cart_items': []})
 
 

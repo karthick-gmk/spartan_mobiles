@@ -10,6 +10,7 @@ class Cart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'cart'
         unique_together = ('user', 'product')
 
     def get_total_price(self):
