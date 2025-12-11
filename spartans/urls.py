@@ -11,7 +11,6 @@ urlpatterns = [
     path("about", views.about, name='about'),
     path('shop', views.shop, name='shop'),
     path('service_type',views.service_type,name='service-type'),
-    path('shoping', views.shoping, name='shoping'),
     path('checkout', views.checkout, name='checkout'),
     path('sign_up', views.sign_up, name='sign_up'),
     path('sign_in',views.sign_in, name='sign_in'),
@@ -20,5 +19,6 @@ urlpatterns = [
     path('reset_pw', views.reset_pw, name='reset_pw'),
     path('shoping_card', views.shoping_card, name='shoping_card'),
     path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    
     ]
 

@@ -265,10 +265,16 @@ def add_to_cart(request, product_id):
 def shoping_card(request):
     if request.user.is_authenticated:
         cart_items = Cart.objects.filter(user=request.user)
+        print("Cart items:", cart_items)
+        for item in cart_items:
+            print(f"Product: {item.product}, Name: {item.product.name}")
         subtotal = sum(item.get_total_price() for item in cart_items)
         return render(request, 'shoping-cart.html', {
             'cart_items': cart_items,
             'subtotal': subtotal
         })
     return render(request, 'shoping-cart.html', {'cart_items': []})
+
+
+
 
