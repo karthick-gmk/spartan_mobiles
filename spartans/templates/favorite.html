@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{%block content%}
+{% load static %}
+
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Favorites</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/">Home</a>
+                        <a href="/shop">Shop</a>
+                        <span>Favorites</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+
+<!-- Favorites Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in favorite_items %}
+                            <tr>
+                                <td class="product__cart__item">
+                                    <div class="product__cart__item__pic">
+                                         <a href="{% url 'spartans:detail' item.product.id item.product.name %}"><img style="width:150px;" src="{{ item.product.main_image.url }}" alt=""></a>
+                                    </div>
+                                    <div class="product__cart__item__text">
+                                        <h6>{{ item.product.brand }}</h6>
+                                        <h6>{{ item.product.brand_model }}</h6>
+                                        <div class="rating">
+                                            {% for i in "12345" %}
+                                               <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > item.product.rating %}-o{% endif %}"></i>
+
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart__price">₹{{ item.product.price }}</td>
+                                <td class="cart__close">
+                                    <a href="/remove_favorite/{{ item.id }}/" style="cursor: pointer;">
+                                        <i class="fa fa-close"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center">Your favorites list is empty</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Favorites Section End -->
+
+{%endblock%}
+
+
+

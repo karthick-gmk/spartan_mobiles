@@ -109,8 +109,7 @@
                             </form>
                         </div>
                         <div class="product__details__btns__option">
-                            <a href="#"><i class="fa fa-heart"></i> Add to Wishlist</a>
-                           
+                            <a href="{% url 'spartans:add_to_favorite' product.id %}"><i class="fa fa-heart"></i> Add to Wishlist</a>
                         </div>
                          <a href="#" class="primary-btn">Payment</a>
                     </div>

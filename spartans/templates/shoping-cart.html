@@ -59,10 +59,11 @@
                                 </td>
 
                                 <td class="cart__price" id="total-{{ item.id }}">₹{{ item.get_total_price }}</td>
-                                <td class="cart__close" onclick="removeRow(this)" style="cursor: pointer;">
-                                    <i class="fa fa-close"></i>
+                                 <td class="cart__close">
+                                    <a href="/remove_cart/{{ item.id }}/" style="cursor: pointer;">
+                                        <i class="fa fa-close"></i>
+                                    </a>
                                 </td>
-
                             </tr>
                             {% empty %}
                             <tr>
@@ -75,7 +76,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="/shop">Continue Shopping</a>
+                            <a style=" margin-bottom: 20px;" href="/shop">Continue Shopping</a>
                         </div>
                     </div>
                 </div>
@@ -90,140 +91,109 @@
                     <a href="{% url 'spartans:checkout' %}" class="primary-btn">Proceed to checkout</a>
                 </div>
             </div>
+            
         </div>
     </div>
 </section>
 <!-- Shopping Cart Section End -->
 
-<script>
-function changeQuantity(cartId, change) {
-    const qtyInput = document.getElementById(`qty-${cartId}`);
-    let currentQty = parseInt(qtyInput.value);
-    let newQty = currentQty + change;
-    
-    if (newQty < 1) return;
-    
-    // Update quantity display
-    qtyInput.value = newQty;
-    
-    // Get product price (you need to add this as data attribute)
-    const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
-    const newTotal = productPrice * newQty;
-    
-    // Update item total
-    document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
-    
-    // Update subtotal
-    updateSubtotal();
-}
 
-function updateSubtotal() {
-    let subtotal = 0;
-    const totalElements = document.querySelectorAll('[id^="total-"]');
-    
-    totalElements.forEach(element => {
-        const price = parseFloat(element.innerHTML.replace('₹', ''));
-        subtotal += price;
-    });
-    
-    document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
-}
-</script>
+ <script>
+    function changeQuantity(cartId, change) {
+        const qtyInput = document.getElementById(`qty-${cartId}`);
+        let currentQty = parseInt(qtyInput.value);
+        let newQty = currentQty + change;
 
-<script>
-function changeQuantity(cartId, change) {
-    const qtyInput = document.getElementById(`qty-${cartId}`);
-    let currentQty = parseInt(qtyInput.value);
-    let newQty = currentQty + change;
-    
-    if (newQty < 1) return;
-    
-    qtyInput.value = newQty;
-    
-    const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
-    const newTotal = productPrice * newQty;
-    
-    document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
-    updateSubtotal();
-}
+        if (newQty < 1) return;
 
-function removeRow(element) {
-    if (confirm('Remove this item from cart?')) {
-        // Find the parent row and remove it
-        const row = element.closest('tr');
-        row.remove();
-        
-        // Update subtotal after removing
-        updateSubtotal();
-    }
-}
-
-function updateSubtotal() {
-    let subtotal = 0;
-    const totalElements = document.querySelectorAll('[id^="total-"]');
-    
-    totalElements.forEach(element => {
-        const price = parseFloat(element.innerHTML.replace('₹', ''));
-        subtotal += price;
-    });
-    
-    document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
-    document.querySelector('.cart__total ul li:first-child span').innerHTML = `₹${subtotal}`;
-}
-</script>
-
-<script>
-function changeQuantity(cartId, change) {
-    const qtyInput = document.getElementById(`qty-${cartId}`);
-    let currentQty = parseInt(qtyInput.value);
-    let newQty = currentQty + change;
-    
-    if (newQty < 1) return;
-    
-    qtyInput.value = newQty;
-    
-    const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
-    const newTotal = productPrice * newQty;
-    
-    document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
-    updateSubtotal();
-}
-
-function removeRow(element) {
-    if (confirm('Remove this item from cart?')) {
-        const row = element.closest('tr');
-        const cartId = row.querySelector('[id^="qty-"]').id.split('-')[1];
-        
-        // Send delete request to database
-        fetch(`/remove_cart/${cartId}/`, {
+        // Update the database
+        fetch(`/update_cart_quantity/`, {
             method: 'POST',
-            headers: {'X-CSRFToken': '{{ csrf_token }}'}
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `cart_id=${cartId}&quantity=${newQty}`
         })
-        .then(response => {
-            if (response.ok) {
-                row.remove();
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                qtyInput.value = newQty;
+                const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
+                const newTotal = productPrice * newQty;
+                document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
                 updateSubtotal();
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error removing item');
         });
-    }
-}
 
-function updateSubtotal() {
-    let subtotal = 0;
-    const totalElements = document.querySelectorAll('[id^="total-"]');
-    
-    totalElements.forEach(element => {
-        const price = parseFloat(element.innerHTML.replace('₹', ''));
-        subtotal += price;
-    });
-    
-    document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
-    document.querySelector('.cart__total ul li:first-child span').innerHTML = `₹${subtotal}`;
-}
-</script>
+    }
+
+    function updateSubtotal() {
+        let subtotal = 0;
+        const totalElements = document.querySelectorAll('[id^="total-"]');
+        
+        totalElements.forEach(element => {
+            const price = parseFloat(element.innerHTML.replace('₹', ''));
+            subtotal += price;
+        });
+        
+        document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
+        document.querySelector('.cart__total ul li:first-child span').innerHTML = `₹${subtotal}`;
+    }
+</script> 
+
+<style>
+    @media (min-width: 320px) and (max-width: 425px) {
+        .shopping__cart__table {
+            overflow-x: auto;
+        }
+        
+        .shopping__cart__table table {
+            min-width: 500px;
+            font-size: 12px;
+        }
+        
+        .product__cart__item__pic img {
+            width: 80px !important;
+        }
+        
+        .product__cart__item__text h6 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .product__cart__item__text h5 {
+            font-size: 14px;
+        }
+        
+        .pro-qty-2 {
+            width: 80px;
+        }
+        
+        .pro-qty-2 button {
+            width: 25px;
+            height: 25px;
+            font-size: 12px;
+        }
+        
+        .pro-qty-2 input {
+            width: 30px;
+            height: 25px;
+            font-size: 12px;
+        }
+        
+        .cart__price {
+            font-size: 14px;
+        }
+        
+        .cart__total {
+            margin-top: 20px;
+        }
+        
+        .continue__btn {
+            margin-bottom: 40px;
+        }
+    }
+</style>
 
 {% endblock %}

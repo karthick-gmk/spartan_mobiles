@@ -9,8 +9,8 @@ from spartans.models.service_model import Service, UserRequestService
 from spartans.models.master_model import Category, Brand, BrandModel
 from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
-from .models.shop_cart import Cart
-
+from .models.shop_cart import Cart, Favorite
+from django.http import JsonResponse
 
 
 
@@ -257,7 +257,7 @@ def add_to_cart(request, product_id):
             defaults={'quantity': quantity}
         )
         if not created:
-            cart_item.quantity += 1
+            cart_item.quantity += quantity
             cart_item.save()
         messages.success(request, f"{quantity} item(s) added to cart!")
         return redirect('spartans:detail', product_id=product_id, product_name=product.name)
@@ -269,20 +269,65 @@ def add_to_cart(request, product_id):
 def shoping_card(request):
     if request.user.is_authenticated:
         cart_items = Cart.objects.filter(user=request.user)
-        print("Cart items:", cart_items)
-        for item in cart_items:
-            print(f"Product: {item.product.brand}, Name: {item.product.brand_model}")
         subtotal = sum(item.get_total_price() for item in cart_items)
+        print("Cart items:", cart_items)
         return render(request, 'shoping-cart.html', {'cart_items': cart_items,'subtotal': subtotal})
-    return render(request, 'shoping-cart.html', {'cart_items': []})
-
-
-
+    else:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')   
 
 def remove_cart(request, cart_id):
    cart_item = Cart.objects.get(id=cart_id)
    cart_item.delete()
    return redirect('spartans:shoping_card')
+
+
+
+def update_cart_quantity(request):
+    if request.method == 'POST':
+        cart_id = request.POST.get('cart_id')
+        quantity = int(request.POST.get('quantity'))
+        
+        cart_item = Cart.objects.get(id=cart_id, user=request.user)
+        cart_item.quantity = quantity
+        cart_item.save()
+        
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+
+
+def favorites(request):
+    if request.user.is_authenticated:
+        favorite_items = Favorite.objects.filter(user=request.user)
+        print("Favorite items:", favorite_items)
+        return render(request, 'favorite.html', {'favorite_items': favorite_items})
+    else:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')
+
+
+
+def add_to_favorite(request, product_id):
+    if request.user.is_authenticated:
+        product_obj = product.objects.get(id=product_id)
+        favorite_item, created = Favorite.objects.get_or_create(user=request.user,product=product_obj)
+        if created:
+            messages.success(request, "Product added to favorites!")
+        else:
+            messages.error(request, "Product is already in favorites!")
+        return redirect('spartans:detail', product_id=product_id, product_name=product_obj.name)
+    else:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')
+    
+
+def remove_favorite(request, favorite_id):
+    favorite_item = Favorite.objects.get(id=favorite_id)
+    favorite_item.delete()
+    return redirect('spartans:favorites')
+
+           
             
      
 
