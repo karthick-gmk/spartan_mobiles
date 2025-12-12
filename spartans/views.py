@@ -10,7 +10,7 @@ from spartans.models.master_model import Category, Brand, BrandModel
 from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
 from .models.shop_cart import Cart
-from django.http import JsonResponse
+
 
 
 
@@ -282,12 +282,10 @@ def shoping_card(request):
 
 
 def remove_cart(request, cart_id):
-    if request.method == 'POST' and request.user.is_authenticated:
-        try:
-            Cart.objects.filter(id=cart_id, user=request.user).delete()
-            return JsonResponse({'success': True})
-        except:
-            return JsonResponse({'success': False})
-    return JsonResponse({'success': False})
+   cart_item = Cart.objects.get(id=cart_id)
+   cart_item.delete()
+   return redirect('spartans:shoping_card')
+            
+     
 
 
