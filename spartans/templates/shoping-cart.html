@@ -44,8 +44,14 @@
                                         <img style="width:150px;" src="{{ item.product.main_image.url }}" alt="">
                                     </div>
                                     <div class="product__cart__item__text">
+                                        <h6>{{ item.product.brand }}</h6>
                                         <h6>{{ item.product.name }}</h6>
                                         <h5 id="price-{{ item.id }}" data-price="{{ item.product.price }}">₹{{ item.product.price }}</h5>
+                                        <div class="rating" style="margin-top:5px;">
+                                            {% for i in "12345" %}
+                                               <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > item.product.rating %}-o{% endif %}"></i>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="quantity__item" style="text-align: center;">
@@ -91,12 +97,10 @@
                     <a href="{% url 'spartans:checkout' %}" class="primary-btn">Proceed to checkout</a>
                 </div>
             </div>
-            
         </div>
     </div>
 </section>
 <!-- Shopping Cart Section End -->
-
 
  <script>
     function changeQuantity(cartId, change) {

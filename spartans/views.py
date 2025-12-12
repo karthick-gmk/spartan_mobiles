@@ -11,6 +11,7 @@ from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
 from .models.shop_cart import Cart, Favorite
 from django.http import JsonResponse
+from spartans.models.check_out_model import Checkout
 
 
 
@@ -38,7 +39,6 @@ def shop(request):
 
 
 def service_type(request):
-    
     if request.method == 'POST':
         print("service_request",request.POST)
         user_id = request.POST.get('user_id')
@@ -171,12 +171,38 @@ def contact(request):
     return render(request, 'contact.html')
 
 
-def shoping(request):
-    return render(request, 'shoping-card.html')
-
 
 def checkout(request):
-    return render(request, 'checkout.html')
+    cart_items = Cart.objects.filter(user=request.user)
+    subtotal = sum(item.get_total_price() for item in cart_items)
+    if request.method == 'POST':
+        print("checkout", request.POST)
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        address1 = request.POST.get('address1')
+        address2 = request.POST.get('address2')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        pincode = request.POST.get('pincode')
+
+        try:
+            checkout_request = Checkout.objects.create( user=request.user,
+                name=name,
+                email=email,
+                phone=mobile,
+                address1=address1,
+                address2=address2,
+                city=city,
+                state=state,
+                pin_code=pincode
+            )
+            checkout_request.save()
+            messages.success(request, "Order placed successfully!")
+            return redirect('/checkout')
+        except User.DoesNotExist:
+            messages.error(request, "Error sending message. Please try again!")
+    return render(request, 'checkout.html',{'cart_items': cart_items,'subtotal': subtotal})
 
 
 def sign_up(request):
@@ -326,9 +352,7 @@ def remove_favorite(request, favorite_id):
     favorite_item = Favorite.objects.get(id=favorite_id)
     favorite_item.delete()
     return redirect('spartans:favorites')
+         
 
-           
-            
-     
 
 

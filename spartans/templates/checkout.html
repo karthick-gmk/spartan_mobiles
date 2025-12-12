@@ -1,108 +1,83 @@
 {% extends 'base.html' %}
 {%block content%}
 {% load static %}
- <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__text">
-                    <h4>Check Out</h4>
-                    <div class="breadcrumb__links">
-                        <a href="/">Home</a>
-                        <a href="/shop">Shop</a>
-                        <span>Check Out</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Breadcrumb Section End -->
 
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <form action="#">
+            <form method="post">
+                 {% if messages %}
+                        <div class="messages" style="margin: 20px 0;">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin: 5px 0; border-radius: 4px; {% if message.tags == 'success' %}background: #d4edda; color: #155724; border: 1px solid #c3e6cb;{% elif message.tags == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                {% endif %}
+                {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
-                        <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
-                        here</a> to enter your code</h6>
                         <h6 class="checkout__title">Billing Details</h6>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Fist Name<span>*</span></p>
-                                    <input type="text">
+                                    <p>Full Name<span>*</span></p>
+                                    <input name="name" style="color:black;" type="text" placeholder="Enter Your name" required  autocomplete="off"/>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Last Name<span>*</span></p>
-                                    <input type="text">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Country<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Address<span>*</span></p>
-                            <input type="text" placeholder="Street Address" class="checkout__input__add">
-                            <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Town/City<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Country/State<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Postcode / ZIP<span>*</span></p>
-                            <input type="text">
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Phone<span>*</span></p>
-                                    <input type="text">
+                                    <input type="text" style="color:black;"  name="mobile" maxlength="10" placeholder="Enter Your phone number" required autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Email<span>*</span></p>
-                                    <input type="text">
+                                    <input type="text" style="color:black;"  name="email" placeholder="Enter Your email" required  autocomplete="off">
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout__input__checkbox">
-                            <label for="acc">
-                                Create an account?
-                                <input type="checkbox" id="acc">
-                                <span class="checkmark"></span>
-                            </label>
-                            <p>Create an account by entering the information below. If you are a returning customer
-                            please login at the top of the page</p>
+                        <div class="checkout__input">
+                            <p>Address Type<span>*</span></p>
+                            <select id="addressType" class="form-control">
+                                <option value="home">Home Address</option>
+                                <option value="office">Office Address</option>
+                                <option value="other">Other Address</option>
+                            </select>
+                        </div>
+
+                        <div class="checkout__input mt-3">
+                            <p>Address Line 1<span>*</span></p>
+                            <input type="text" id="addr1" style="color:black;"  name="address1" placeholder="Street Address" autocomplete="off">
+                        </div>
+
+                        <div class="checkout__input">
+                            <p>Address Line 2</p>
+                            <input type="text" id="addr2" style="color:black;"  name="address2" placeholder="Apartment, Suite, Unit (optional)" autocomplete="off">
+                        </div>
+
+                        <!-- Other Address Input (Hidden By Default) -->
+                        <div class="checkout__input" id="otherAddressBox" style="display:none;">
+                            <p>Specify Address<span>*</span></p>
+                            <input type="text" style="color:black;"  name="address3" placeholder="Enter Other Address Type (e.g., V2, Warehouse)" autocomplete="off">
+                        </div>
+
+                        <div class="checkout__input">
+                            <p>Town/City<span>*</span></p>
+                            <input type="text" style="color:black;"  name="city" placeholder="Enter Your city" required autocomplete="off">
                         </div>
                         <div class="checkout__input">
-                            <p>Account Password<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input__checkbox">
-                            <label for="diff-acc">
-                                Note about your order, e.g, special noe for delivery
-                                <input type="checkbox" id="diff-acc">
-                                <span class="checkmark"></span>
-                            </label>
+                            <p>Country/State<span>*</span></p>
+                            <input type="text" style="color:black;"  name="state" placeholder="Enter Your state" required autocomplete="off">
                         </div>
                         <div class="checkout__input">
-                            <p>Order notes<span>*</span></p>
-                            <input type="text"
-                            placeholder="Notes about your order, e.g. special notes for delivery.">
+                            <p>Postcode / ZIP<span>*</span></p>
+                            <input type="text" style="color:black;"  maxlength="6" name="pincode" placeholder="Enter Your pincode" required autocomplete="off">
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -110,47 +85,82 @@
                             <h4 class="order__title">Your order</h4>
                             <div class="checkout__order__products">Product <span>Total</span></div>
                             <ul class="checkout__total__products">
-                                <li>01. Vanilla salted caramel <span>$ 300.0</span></li>
-                                <li>02. German chocolate <span>$ 170.0</span></li>
-                                <li>03. Sweet autumn <span>$ 170.0</span></li>
-                                <li>04. Cluten free mini dozen <span>$ 110.0</span></li>
+                                {% for item in cart_items %}
+                                <li>{{ item.product.name }} <span>₹{{ item.get_total_price }}</span></li>
+                                {% empty %}
+                                <li>No items in cart</li>
+                                {% endfor %}
                             </ul>
                             <ul class="checkout__total__all">
-                                <li>Subtotal <span>$750.99</span></li>
-                                <li>Total <span>$750.99</span></li>
+                                <li>Subtotal <span>₹{{ subtotal|default:0 }}</span></li>
+                                <li>Total <span>₹{{ subtotal|default:0 }}</span></li>
                             </ul>
-                            <div class="checkout__input__checkbox">
-                                <label for="acc-or">
-                                    Create an account?
-                                    <input type="checkbox" id="acc-or">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua.</p>
-                            <div class="checkout__input__checkbox">
-                                <label for="payment">
-                                    Check Payment
-                                    <input type="checkbox" id="payment">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="paypal">
-                                    Paypal
-                                    <input type="checkbox" id="paypal">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <button type="submit" class="site-btn">PLACE ORDER</button>
+                            <button type="submit" style="color:white;" class="btn primary-btn">PLACE ORDER</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
-</section>
-<!-- Checkout Section End -->
+        
+        <!-- Spartans Mobile - Order Modal -->
+        <div class="modal fade" id="spartansOrderModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
 
+                    <div class="modal-header" style="background:#000; color:#fff;">
+                        <h5 class="modal-title">Spartans Mobile - Order Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span style="color:white;">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
+                                width="70" class="mb-3">
+                            <h4 class="mb-2">Order Placed Successfully!</h4>
+                            <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
+                            <p>Your mobile service request has been submitted.</p>
+
+                            <div class="alert alert-success mt-3">
+                                <strong>Total Amount:</strong> ₹{{ subtotal|default:0 }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Close
+                        </button>
+                        <a href="/" class="btn btn-primary">
+                            Continue Payment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Submit form data
+        fetch('', {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Show modal after successful submission
+            $('#spartansOrderModal').modal('show');
+        });
+    });
+</script>
 
 {% endblock %}

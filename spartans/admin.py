@@ -5,6 +5,8 @@ from .models.service_model import UserRequestService
 from .models.product_review_model import ProductReview
 from .models.contact_model import Contact
 from .models.shop_cart import Cart 
+from .models.check_out_model import Checkout
+from .models.shop_cart import Favorite
 
 
 admin.site.register(product)
@@ -17,3 +19,5 @@ admin.site.register(UserRequestService)
 admin.site.register(ProductReview)
 admin.site.register(Contact)
 admin.site.register(Cart)
+admin.site.register(Favorite)
+admin.site.register(Checkout)
