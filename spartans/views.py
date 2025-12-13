@@ -187,7 +187,7 @@ def checkout(request):
         pincode = request.POST.get('pincode')
 
         try:
-            checkout_request = Checkout.objects.create( user=request.user,
+            checkout_request = Checkout.objects.create(
                 name=name,
                 email=email,
                 phone=mobile,
