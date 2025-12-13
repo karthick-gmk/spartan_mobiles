@@ -100,7 +100,75 @@
         </div>
     </div>
 </section>
-<!-- Shopping Cart Section End -->
+
+<!-- Checkout Details Modal -->
+<div class="modal fade" id="proceedCheckoutModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form method="post" action="{% url 'spartans:checkout' %}">
+                {% csrf_token %}
+                <div class="modal-header" style="background:#000;color:#fff;">
+                    <h5 class="modal-title" style="color:white;">Enter Billing Details</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <span style="color:#fff;">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <input name="name" class="form-control" value="{{ user.first_name|default:'' }}" placeholder="Full Name" required  autocomplete="off">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input name="email" type="email" class="form-control" value="{{ user.email|default:'' }}" placeholder="Email" required  autocomplete="off">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input name="mobile" type="tel" class="form-control" value="{{ user.phone|default:'' }}" placeholder="Phone" maxlength="10" required  autocomplete="off">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input name="pincode" type="text" class="form-control" placeholder="Pincode" maxlength="6" required  autocomplete="off">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input name="city" class="form-control" value="{{ user.city|default:'' }}" placeholder="City" required  autocomplete="off">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input name="state" class="form-control" value="{{ user.state|default:'' }}" placeholder="State" required  autocomplete="off">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <input name="address1" class="form-control" value="{{ user.address1|default:'' }}" placeholder="Address Line 1" required  autocomplete="off">
+                    </div>
+                    <div class="col-12">
+                        <input name="address2" class="form-control" value="{{ user.address2|default:'' }}" placeholder="Address Line 2 (optional)"  autocomplete="off">
+                    </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                    Place Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+    const checkoutBtn = document.querySelector("a.primary-btn");
+
+    checkoutBtn.addEventListener("click", function (e) {
+        e.preventDefault(); // ❌ stop redirect
+        $('#proceedCheckoutModal').modal('show'); // ✅ open modal
+    });
+
+    });
+</script>
 
  <script>
     function changeQuantity(cartId, change) {

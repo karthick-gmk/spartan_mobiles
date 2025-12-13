@@ -56,57 +56,57 @@
         <!-- Full name -->
         <div>
           <label for="fullname">Full name</label>
-          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2" value="{{ request.POST.fullname }}" />
+          <input id="fullname" name="fullname" type="text" placeholder="John Doe" required minlength="2" value="{{ request.POST.fullname }}" autocomplete="off"/>
         </div>
 
         <!-- Email -->
         <div>
             <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" required value="{{ request.POST.email }}"/>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required value="{{ request.POST.email }}" autocomplete="off"/>
         </div>
 
 
         <!-- Mobile (required) -->
         <div>
           <label for="mobile">Mobile</label>
-          <input id="mobile" name="mobile" type="tel" placeholder="98765 43210" pattern="[0-9]{10}" maxlength="10" required value="{{ request.POST.mobile }}"/>
+          <input id="mobile" name="mobile" type="tel" placeholder="98765 43210" pattern="[0-9]{10}" maxlength="10" required value="{{ request.POST.mobile }}" autocomplete="off"/>
           <div class="small">Enter 10 digit mobile number only.</div>
         </div>
 
         <!-- State -->
         <div>
           <label for="state">State</label>
-          <input id="state" name="state" type="text" placeholder="Tamil Nadu" required  value="{{ request.POST.state }}" />
+          <input id="state" name="state" type="text" placeholder="Tamil Nadu" required  value="{{ request.POST.state }}"  autocomplete="off"/>
         </div>
 
         <!-- Address1 -->
         <div class="full">
           <label for="addr1">Address 1</label>
-          <input id="addr1" name="address1" type="text" placeholder="House / Flat no., Street" required  value="{{ request.POST.address1 }}"/>
+          <input id="addr1" name="address1" type="text" placeholder="House / Flat no., Street" required  value="{{ request.POST.address1 }}" autocomplete="off"/>
         </div>
 
         <!-- Address2 -->
         <div class="full">
           <label for="addr2">Address 2 (optional)</label>
-          <input id="addr2" name="address2" type="text" placeholder="Locality / Landmark" required value="{{ request.POST.address2 }}"/>
+          <input id="addr2" name="address2" type="text" placeholder="Locality / Landmark" required value="{{ request.POST.address2 }}" autocomplete="off"/>
         </div>
 
         <!-- City -->
         <div>
           <label for="city">City</label>
-          <input id="city" name="city" type="text" placeholder="Chennai" required  value="{{ request.POST.city }}"/>
+          <input id="city" name="city" type="text" placeholder="Chennai" required  value="{{ request.POST.city }}" autocomplete="off"/>
         </div>
 
         <!-- Shop name (pre-filled) -->
         <div>
           <label for="shop">Shop name</label>
-          <input id="shop" name="shop" type="text" value="SPARTANS" required />
+          <input id="shop" name="shop" type="text" value="SPARTANS" required  autocomplete="off"/>
         </div>
 
         <div>
           <label for="password">Password</label>
           <div class="password-input-container">
-            <input style="margin-bottom:8px;" type="password" id="password" placeholder="Enter your password">
+            <input style="margin-bottom:8px;" type="password" id="password" placeholder="Enter your password" autocomplete="off">
             <button id="togglePassword" class="toggle-password">
                       <i class="fas fa-eye"></i>
             </button>
@@ -144,7 +144,7 @@
         <div>
           <label for="confirmPassword">Confirm Password</label>
           <div class="password-input-container">
-            <input style="margin-bottom:8px;" id="confirmPassword" name="cpassword" type="password" placeholder="Confirm password" required />
+            <input style="margin-bottom:8px;" id="confirmPassword" name="cpassword" type="password" placeholder="Confirm password" required  autocomplete="off"/>
             <button id="toggleConfirmPassword" class="toggle-password" type="button">
               <i class="fas fa-eye"></i>
             </button>

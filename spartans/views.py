@@ -174,7 +174,6 @@ def contact(request):
 
 def checkout(request):
     cart_items = Cart.objects.filter(user=request.user)
-    subtotal = sum(item.get_total_price() for item in cart_items)
     if request.method == 'POST':
         print("checkout", request.POST)
         name = request.POST.get('name')
@@ -198,11 +197,12 @@ def checkout(request):
                 pin_code=pincode
             )
             checkout_request.save()
+            cart_items.delete()
             messages.success(request, "Order placed successfully!")
-            return redirect('/checkout')
+            return redirect('/')
         except User.DoesNotExist:
             messages.error(request, "Error sending message. Please try again!")
-    return render(request, 'checkout.html',{'cart_items': cart_items,'subtotal': subtotal})
+    return render(request, 'checkout.html',{'cart_items': cart_items,})
 
 
 def sign_up(request):

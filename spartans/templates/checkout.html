@@ -6,141 +6,67 @@
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <form method="post">
-                 {% if messages %}
-                        <div class="messages" style="margin: 20px 0;">
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin: 5px 0; border-radius: 4px; {% if message.tags == 'success' %}background: #d4edda; color: #155724; border: 1px solid #c3e6cb;{% elif message.tags == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% endif %}">
-                                    {{ message }}
-                                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="checkout__order">
+                        <h4 class="order__title">Your order</h4>
+                        <div class="checkout__order__products">Product <span>Total</span></div>
+                        <ul class="checkout__total__products">
+                            {% for item in cart_items %}
+                            <li>{{ item.product.name }} <span>₹{{ item.get_total_price }}</span></li>
+                            {% empty %}
+                            <li>No items in cart</li>
                             {% endfor %}
-                        </div>
-                {% endif %}
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-lg-8 col-md-6">
-                        <h6 class="checkout__title">Billing Details</h6>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Full Name<span>*</span></p>
-                                    <input name="name" style="color:black;" type="text" placeholder="Enter Your name" required  autocomplete="off"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Phone<span>*</span></p>
-                                    <input type="text" style="color:black;"  name="mobile" maxlength="10" placeholder="Enter Your phone number" required autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Email<span>*</span></p>
-                                    <input type="text" style="color:black;"  name="email" placeholder="Enter Your email" required  autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Address Type<span>*</span></p>
-                            <select id="addressType" class="form-control">
-                                <option value="home">Home Address</option>
-                                <option value="office">Office Address</option>
-                                <option value="other">Other Address</option>
-                            </select>
-                        </div>
+                        </ul>
+                        <ul class="checkout__total__all">
+                            <li>Subtotal <span>₹{{ subtotal|default:0 }}</span></li>
+                            <li>Total <span>₹{{ subtotal|default:0 }}</span></li>
+                        </ul>
+                       <button type="button" data-toggle="modal" data-target="#spartansOrderModal" style="color:white;" class="btn primary-btn">PLACE ORDER</button>
 
-                        <div class="checkout__input mt-3">
-                            <p>Address Line 1<span>*</span></p>
-                            <input type="text" id="addr1" style="color:black;"  name="address1" placeholder="Street Address" autocomplete="off">
-                        </div>
-
-                        <div class="checkout__input">
-                            <p>Address Line 2</p>
-                            <input type="text" id="addr2" style="color:black;"  name="address2" placeholder="Apartment, Suite, Unit (optional)" autocomplete="off">
-                        </div>
-
-                        <!-- Other Address Input (Hidden By Default) -->
-                        <div class="checkout__input" id="otherAddressBox" style="display:none;">
-                            <p>Specify Address<span>*</span></p>
-                            <input type="text" style="color:black;"  name="address3" placeholder="Enter Other Address Type (e.g., V2, Warehouse)" autocomplete="off">
-                        </div>
-
-                        <div class="checkout__input">
-                            <p>Town/City<span>*</span></p>
-                            <input type="text" style="color:black;"  name="city" placeholder="Enter Your city" required autocomplete="off">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Country/State<span>*</span></p>
-                            <input type="text" style="color:black;"  name="state" placeholder="Enter Your state" required autocomplete="off">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Postcode / ZIP<span>*</span></p>
-                            <input type="text" style="color:black;"  maxlength="6" name="pincode" placeholder="Enter Your pincode" required autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="checkout__order">
-                            <h4 class="order__title">Your order</h4>
-                            <div class="checkout__order__products">Product <span>Total</span></div>
-                            <ul class="checkout__total__products">
-                                {% for item in cart_items %}
-                                <li>{{ item.product.name }} <span>₹{{ item.get_total_price }}</span></li>
-                                {% empty %}
-                                <li>No items in cart</li>
-                                {% endfor %}
-                            </ul>
-                            <ul class="checkout__total__all">
-                                <li>Subtotal <span>₹{{ subtotal|default:0 }}</span></li>
-                                <li>Total <span>₹{{ subtotal|default:0 }}</span></li>
-                            </ul>
-                            <button type="submit" style="color:white;" class="btn primary-btn">PLACE ORDER</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        
-        <!-- Spartans Mobile - Order Modal -->
-        <div class="modal fade" id="spartansOrderModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-
-                    <div class="modal-header" style="background:#000; color:#fff;">
-                        <h5 class="modal-title">Spartans Mobile - Order Confirmation</h5>
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span style="color:white;">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="text-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                                width="70" class="mb-3">
-                            <h4 class="mb-2">Order Placed Successfully!</h4>
-                            <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
-                            <p>Your mobile service request has been submitted.</p>
-
-                            <div class="alert alert-success mt-3">
-                                <strong>Total Amount:</strong> ₹{{ subtotal|default:0 }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            Close
-                        </button>
-                        <a href="/" class="btn btn-primary">
-                            Continue Payment
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
-</section>
+         <!-- Spartans Mobile - Order Modal -->
+            <div class="modal fade" id="spartansOrderModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
 
+                        <div class="modal-header" style="background:#000; color:#fff;">
+                            <h5 class="modal-title">Spartans Mobile - Order Confirmation</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span style="color:white;">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="text-center">
+                                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
+                                    width="70" class="mb-3">
+                                <h4 class="mb-2">Order Placed Successfully!</h4>
+                                <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
+                                <p>Your mobile service request has been submitted.</p>
+
+                                <div class="alert alert-success mt-3">
+                                    <strong>Total Amount:</strong> ₹{{ subtotal|default:0 }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                Close
+                            </button>
+                            <a href="/" class="btn btn-primary">
+                                Continue Payment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        
+    </div>
+</section>
 
 
 <script>

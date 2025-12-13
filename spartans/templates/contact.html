@@ -59,16 +59,16 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-lg-6">
-                                <input style="color:black;" name="name" type="text" placeholder="Full Name" required >
+                                <input style="color:black;" name="name" type="text" placeholder="Full Name" required  autocomplete="off">
                             </div>
                             <div class="col-lg-6">
-                                <input style="color:black;" name="mobile" type="tel" placeholder="Mobile Number" maxlength="10" required>
+                                <input style="color:black;" name="mobile" type="tel" placeholder="Mobile Number" maxlength="10" required autocomplete="off">
                             </div>
                             <div class="col-lg-12">
-                                <input style="color:black;" name="email" type="email" placeholder="Email Address" required>
+                                <input style="color:black;" name="email" type="email" placeholder="Email Address" required autocomplete="off">
                             </div>
                             <div class="col-lg-12">
-                                <textarea style="color:black;" name="message" placeholder="Type your message here..." required></textarea>
+                                <textarea style="color:black;" name="message" placeholder="Type your message here..." required autocomplete="off"></textarea>
                                 <button type="submit" class="site-btn">
                                     Send to Spartan Support
                                 </button>

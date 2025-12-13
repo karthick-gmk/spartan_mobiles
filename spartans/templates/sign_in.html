@@ -45,13 +45,13 @@
         
        <div>
           <label for="fullname">Enter Email</label>
-          <input id="fullname" name="fullname" type="text" placeholder="spartans@123gmail.com" required minlength="2" value="{{ request.POST.fullname }}"/>
+          <input id="fullname" name="fullname" type="text" placeholder="spartans@123gmail.com" required minlength="2" value="{{ request.POST.fullname }}" autocomplete="off"/>
         </div>
 
         <div>
           <label for="password">Password</label>
           <div class="password-input-container">
-            <input style="margin-bottom:8px;" id="password" name="password" type="password" placeholder="••••••••" required />
+            <input style="margin-bottom:8px;" id="password" name="password" type="password" placeholder="••••••••" required autocomplete="off"/>
             <button id="togglePassword" class="toggle-password">
                       <i class="fas fa-eye"></i>
             </button>
