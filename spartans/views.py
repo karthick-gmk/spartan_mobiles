@@ -11,7 +11,7 @@ from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
 from .models.shop_cart import Cart, Favorite
 from django.http import JsonResponse
-from spartans.models.check_out_model import BillingAddress
+from .models.billing_model import BillingAddress
 from .models.shop_cart import Cart, Favorite, CartItem
 from spartans.models.order_model import Order, OrderItem
 
