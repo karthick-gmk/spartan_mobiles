@@ -11,7 +11,11 @@ from spartans.models.product_review_model import ProductReview
 from spartans.models.contact_model import Contact
 from .models.shop_cart import Cart, Favorite
 from django.http import JsonResponse
-from spartans.models.check_out_model import Checkout
+from spartans.models.check_out_model import BillingAddress
+from .models.shop_cart import Cart, Favorite, CartItem
+from spartans.models.order_model import Order, OrderItem
+
+
 
 
 
@@ -173,9 +177,18 @@ def contact(request):
 
 
 def checkout(request):
-    cart_items = Cart.objects.filter(user=request.user)
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')
+        
+    cart = Cart.objects.filter(user=request.user).first()
+    if not cart:
+        messages.error(request, "Your cart is empty!")
+        return redirect('spartans:shoping_card')
+        
+    cart_items = CartItem.objects.filter(cart=cart)
+    
     if request.method == 'POST':
-        print("checkout", request.POST)
         name = request.POST.get('name')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
@@ -186,23 +199,47 @@ def checkout(request):
         pincode = request.POST.get('pincode')
 
         try:
-            checkout_request = Checkout.objects.create(
+            # Calculate total
+            total_amount = sum(item.get_total_price() for item in cart_items)
+            
+            # Create Order first
+            order = Order.objects.create(
+                user=request.user,
+                total_amount=total_amount,
+                status='pending'
+            )
+            
+            # Create OrderItems from cart items
+            for cart_item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.product,
+                    quantity=cart_item.quantity,
+                    price=cart_item.product.price
+                )
+            
+            # Create BillingAddress with order
+            billing_address = BillingAddress.objects.create(
+                order=order,
                 name=name,
                 email=email,
-                phone=mobile,
+                mobile=mobile,
                 address1=address1,
                 address2=address2,
                 city=city,
                 state=state,
-                pin_code=pincode
+                pincode=pincode
             )
-            checkout_request.save()
+            
+            # Clear cart
             cart_items.delete()
             messages.success(request, "Order placed successfully!")
             return redirect('/')
-        except User.DoesNotExist:
-            messages.error(request, "Error sending message. Please try again!")
-    return render(request, 'checkout.html',{'cart_items': cart_items,})
+        except Exception as e:
+            messages.error(request, f"Error placing order: {str(e)}")
+    return render(request, 'checkout.html', {'cart_items': cart_items})
+
+
 
 
 def sign_up(request):
@@ -276,45 +313,58 @@ def reset_pw(request):
 
 def add_to_cart(request, product_id):
     if request.user.is_authenticated:
+        product_obj = product.objects.get(id=product_id)
         quantity = int(request.POST.get('quantity', 1))
-        cart_item, created = Cart.objects.get_or_create(
-            user=request.user,
-            product_id=product_id,
+        
+        # Get or create cart for user
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        
+        # Get or create cart item
+        cart_item, item_created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product_obj,
             defaults={'quantity': quantity}
         )
-        if not created:
+        
+        if not item_created:
             cart_item.quantity += quantity
             cart_item.save()
+            
         messages.success(request, f"{quantity} item(s) added to cart!")
-        return redirect('spartans:detail', product_id=product_id, product_name=product.name)
+        return redirect('spartans:detail', product_id=product_id, product_name=product_obj.name)
     else:
         messages.error(request, "Please login first!")
         return redirect('spartans:sign_in')
 
 
+
 def shoping_card(request):
     if request.user.is_authenticated:
-        cart_items = Cart.objects.filter(user=request.user)
-        subtotal = sum(item.get_total_price() for item in cart_items)
+        # Get the user's cart
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_items = CartItem.objects.filter(cart=cart)
+            subtotal = sum(item.get_total_price() for item in cart_items)
+        else:
+            cart_items = []
+            subtotal = 0
         print("Cart items:", cart_items)
         return render(request, 'shoping-cart.html', {'cart_items': cart_items,'subtotal': subtotal})
     else:
         messages.error(request, "Please login first!")
-        return redirect('spartans:sign_in')   
+        return redirect('spartans:sign_in')
 
 def remove_cart(request, cart_id):
-   cart_item = Cart.objects.get(id=cart_id)
-   cart_item.delete()
-   return redirect('spartans:shoping_card')
-
-
+    cart_item = CartItem.objects.get(id=cart_id)
+    cart_item.delete()
+    return redirect('spartans:shoping_card')
 
 def update_cart_quantity(request):
     if request.method == 'POST':
         cart_id = request.POST.get('cart_id')
         quantity = int(request.POST.get('quantity'))
         
-        cart_item = Cart.objects.get(id=cart_id, user=request.user)
+        cart_item = CartItem.objects.get(id=cart_id)
         cart_item.quantity = quantity
         cart_item.save()
         

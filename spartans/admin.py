@@ -5,7 +5,9 @@ from .models.service_model import UserRequestService
 from .models.product_review_model import ProductReview
 from .models.contact_model import Contact
 from .models.shop_cart import Cart 
-from .models.check_out_model import Checkout
+from .models.check_out_model import BillingAddress
+from .models.order_model import Order, OrderItem
+from .models.shop_cart import CartItem
 from .models.shop_cart import Favorite
 
 
@@ -20,4 +22,7 @@ admin.site.register(ProductReview)
 admin.site.register(Contact)
 admin.site.register(Cart)
 admin.site.register(Favorite)
-admin.site.register(Checkout)
+admin.site.register(BillingAddress)
+admin.site.register(Order)
+admin.site.register(OrderItem)
+admin.site.register(CartItem)
