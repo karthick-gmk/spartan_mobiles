@@ -24,11 +24,9 @@ class Service(models.Model):
 class UserRequestService(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     brandModel = models.ForeignKey(BrandModel, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    delivery_date = models.DateTimeField()
+    notes = models.TextField(null=True, blank=True)
     request_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default='Pending') # Enum need to add 
 

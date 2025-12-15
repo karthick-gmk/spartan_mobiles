@@ -47,11 +47,9 @@ def service_type(request):
         print("service_request",request.POST)
         user_id = request.POST.get('user_id')
         service_id = request.POST.get('service_id')
-        category_id = request.POST.get('category_id')
         brand_id = request.POST.get('brand_id')
         brand_model_name = request.POST.get('brand_model_id')  # Text input
-        price = request.POST.get('price')
-        delivery_date = request.POST.get('delivery_date')
+        notes = request.POST.get('notes')
 
         try:
             # Get or create BrandModel from text input
@@ -63,11 +61,9 @@ def service_type(request):
             user_request = UserRequestService(
                 user_id=user_id,
                 service_id=service_id,
-                category_id=category_id,
                 brand_id=brand_id,
                 brandModel_id=brand_model.id,  # Use the created/found BrandModel ID
-                price=price,
-                delivery_date=delivery_date
+                notes = notes,
             )
             user_request.save()
             messages.success(request, "Service request submitted successfully!")   

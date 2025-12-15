@@ -85,7 +85,7 @@
               </select>
             </div>
 
-            <div>
+            {% comment %} <div>
               <label for="category">Category</label>
               <select id="category" name="category_id" required>
                 <option value="">— Select category —</option>
@@ -93,7 +93,7 @@
                   <option value="{{ category.id }}">{{ category.name }}</option>
                 {% endfor %}
               </select>
-            </div>
+            </div> {% endcomment %}
 
             <div>
               <label for="brand">Brand</label>
@@ -107,18 +107,18 @@
 
             <div class="full">
               <label for="brandModel">Brand Model</label>
-              <input id="brandModel" name="brand_model_id" type="text" placeholder="Enter your Brand Model" required />
+              <input id="brandModel" name="brand_model_id" type="text" placeholder="Enter your Brand Model" required autocomplete="off"/>
             </div>
 
-            <div>
+            {% comment %} <div>
               <label for="price">Price (optional)</label>
               <input id="price" name="price" type="number" step="any" min="0" placeholder="e.g. 1500.00" />
-            </div>
+            </div> {% endcomment %}
 
-            <div>
+            {% comment %} <div>
               <label for="delivery_date">Delivery Date & Time</label>
               <input id="delivery_date" name="delivery_date" type="datetime-local" required />
-            </div>
+            </div> {% endcomment %}
 
             <div class="full">
               <label for="notes">Notes (optional)</label>
