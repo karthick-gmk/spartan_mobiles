@@ -355,6 +355,7 @@ def add_to_cart(request, product_id):
             defaults={'quantity': quantity}
         )
         
+        
         if not item_created:
             cart_item.quantity += quantity
             cart_item.save()

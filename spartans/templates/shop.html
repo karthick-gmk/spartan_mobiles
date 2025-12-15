@@ -172,50 +172,246 @@
     </div>
 </section>
 <!-- Shop Section End -->
+
+
+
+
+
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content success-modal">
+
+            <!-- Icon Section -->
+            <div class="success-icon">
+                <i class="fa fa-check"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Completed Successfully!</h4>
+                <p class="text-muted mb-0">
+                    Your action has been processed without any issues.
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-success px-4" data-dismiss="modal">
+                    Continue
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content login-modal">
+            <!-- Icon Section -->
+            <div class="login-icon">
+                <i class="fa fa-user"></i>
+            </div>
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Login Required!</h4>
+                <p class="text-muted mb-0">
+                    Please sign in to continue with this action.
+                </p>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <a href="{% url 'spartans:sign_in' %}" class="btn btn-primary px-4">Sign In</a>
+                <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Already in Cart Modal -->
+<div class="modal fade" id="alreadyInCartModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content login-modal">
+            <!-- Icon Section -->
+            <div class="login-icon" style="background: linear-gradient(135deg, #ffc107, #fd7e14);">
+                <i class="fa fa-exclamation"></i>
+            </div>
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Already in Cart!</h4>
+                <p class="text-muted mb-0">
+                    This product is already added to your cart. Quantity has been updated.
+                </p>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-warning px-4" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Already in Favorites Modal -->
+<div class="modal fade" id="alreadyInFavModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content login-modal">
+            <!-- Icon Section -->
+            <div class="login-icon" style="background: linear-gradient(135deg, #dc3545, #fd7e14);">
+                <i class="fa fa-heart"></i>
+            </div>
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Already in Favorites!</h4>
+                <p class="text-muted mb-0">
+                    This product is already added to your favorites.
+                </p>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-danger px-4" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
-function addToCartFromShop(productId) {
-    fetch(`/add_to_cart/${productId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: 'quantity=1'
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Product added to cart!');
-        } else {
-            alert('Please login first!');
+    let cartClicked = new Set();
+    let favClicked = new Set();
+    
+    function addToCartFromShop(productId) {
+        if (cartClicked.has(productId)) {
+            $('#alreadyInCartModal').modal('show');
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-function addToFavoriteFromShop(productId) {
-    fetch(`/add_to_favorite/${productId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: 'quantity=1'
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Product added to favorite!');
-        } else {
-            alert('Please login first!');
+        
+        fetch(`/add_to_cart/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: 'quantity=1'
+        })
+        .then(response => {
+            if (response.url.includes('sign_in')) {
+                $('#loginModal').modal('show');
+            } else {
+                cartClicked.add(productId);
+                document.querySelector('#successModal .modal-body h4').textContent = 'Product Added to Cart!';
+                document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to cart.';
+                $('#successModal').modal('show');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function addToFavoriteFromShop(productId) {
+        if (favClicked.has(productId)) {
+            $('#alreadyInFavModal').modal('show');
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
+        
+        fetch(`/add_to_favorite/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: 'quantity=1'
+        })
+        .then(response => {
+            if (response.url.includes('sign_in')) {
+                $('#loginModal').modal('show');
+            } else {
+                return response.text();
+            }
+        })
+        .then(html => {
+            if (html && html.includes('already')) {
+                $('#alreadyInFavModal').modal('show');
+            } else if (html) {
+                favClicked.add(productId);
+                document.querySelector('#successModal .modal-body h4').textContent = 'Added to Favorites!';
+                document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to favorites.';
+                $('#successModal').modal('show');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 </script>
 
+
+
+
+
 <style>
+
+    <style>
+    .success-modal, .login-modal {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .success-icon {
+        background: linear-gradient(135deg, #28a745, #5cd68d);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-icon {
+        background: linear-gradient(135deg, #007bff, #6610f2);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-icon i, .login-icon i {
+        font-size: 60px;
+        color: #fff;
+        animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+    }
+</style>
+
+
+<style>
+        .success-modal {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .success-icon {
+        background: linear-gradient(135deg, #28a745, #5cd68d);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-icon i {
+        font-size: 60px;
+        color: #fff;
+        animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+    }
+
     /* Mobile gap between image and text */
     @media (min-width: 100px) and (max-width: 320px) {
         .product__item__text {

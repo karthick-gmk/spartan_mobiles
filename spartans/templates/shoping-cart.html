@@ -280,159 +280,153 @@
 <!-- Checkout Details Modal end-->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
+    /* Mobile & Tablet */
+    @media (min-width: 320px) and (max-width: 1024px) {
 
-</style>
+        /* Modal full usable height */
+        .modal-dialog {
+            max-width: 95% !important;
+            height: 95vh;
+            margin: 10px auto;
+        }
 
+        .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            margin-left: 15px;
+        }
 
+        /* ONLY body scroll */
+        .modal-body {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 15px !important;
+        }
 
+        /* Footer normal (NOT sticky) */
+        .modal-footer {
+            flex-shrink: 0;
+            padding: 12px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+        }
 
+        /* Stack columns */
+        .col-lg-7,
+        .col-lg-5 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
 
-<style>
-/* Mobile & Tablet */
-@media (min-width: 320px) and (max-width: 1024px) {
+        /* Billing & Order box */
+        .billing-box,
+        .order-box {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
 
-    /* Modal full usable height */
-    .modal-dialog {
-        max-width: 95% !important;
-        height: 95vh;
-        margin: 10px auto;
+        /* Inputs */
+        .billing-box input,
+        .billing-box select {
+            width: 100%;
+            height: 42px;
+            font-size: 14px;
+        }
+
+        /* Footer buttons */
+        .modal-footer .btn {
+            width: 100%;
+            height: 45px;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
     }
 
-    .modal-content {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        border-radius: 8px;
-        margin-left: 15px;
+    /* Small mobile full screen */
+    @media (max-width: 576px) {
+        .modal-dialog {
+            height: 100vh;
+            margin: 0;
+        }
+
+        .modal-content {
+            height: 100vh;
+            border-radius: 0;
+        }
+        .order-box {
+        margin-bottom: 200px;
     }
 
-    /* ONLY body scroll */
-    .modal-body {
-        flex: 1 1 auto;
-        overflow-y: auto;
-        padding: 15px !important;
     }
 
-    /* Footer normal (NOT sticky) */
-    .modal-footer {
-        flex-shrink: 0;
-        padding: 12px;
-        background: #fff;
-        border-top: 1px solid #ddd;
-    }
+    @media (min-width: 320px) and (max-width: 1024px) {
 
-    /* Stack columns */
-    .col-lg-7,
-    .col-lg-5 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
+        /* Full height modal */
+        .modal-dialog {
+            height: 95vh;
+        }
 
-    /* Billing & Order box */
-    .billing-box,
+        .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scroll only body */
+        .modal-body {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            max-height: calc(95vh - 120px);
+        }
+
+        /* Footer always visible */
+        .modal-footer {
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            z-index: 10;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .modal-footer .btn {
+            height: 44px;
+            font-size: 15px;
+        }
+    }
+    @media (min-width: 426px) and (max-width: 1024px){
     .order-box {
-        width: 100%;
-        padding: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 250px;
     }
-
-    /* Inputs */
-    .billing-box input,
-    .billing-box select {
-        width: 100%;
-        height: 42px;
-        font-size: 14px;
     }
-
-    /* Footer buttons */
-    .modal-footer .btn {
-        width: 100%;
-        height: 45px;
-        font-size: 15px;
-        margin-bottom: 8px;
-    }
-}
-
-/* Small mobile full screen */
-@media (max-width: 576px) {
-    .modal-dialog {
-        height: 100vh;
-        margin: 0;
-    }
-
-    .modal-content {
-        height: 100vh;
-        border-radius: 0;
-    }
-    .order-box {
-    margin-bottom: 200px;
-}
-
-}
-
-@media (min-width: 320px) and (max-width: 1024px) {
-
-    /* Full height modal */
-    .modal-dialog {
-        height: 95vh;
-    }
-
-    .modal-content {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Scroll only body */
-    .modal-body {
-        flex: 1 1 auto;
-        overflow-y: auto;
-        max-height: calc(95vh - 120px);
-    }
-
-    /* Footer always visible */
-    .modal-footer {
-        position: sticky;
-        bottom: 0;
-        background: #fff;
-        z-index: 10;
-        padding: 10px;
-        border-top: 1px solid #ddd;
-    }
-
-    .modal-footer .btn {
-        height: 44px;
-        font-size: 15px;
-    }
-}
-@media (min-width: 426px) and (max-width: 1024px){
-.order-box {
-    margin-bottom: 250px;
-}
-}
-.billing-box{
-   height: 500px;
-}
-@media (min-width: 426px) and (max-width: 1440px){
     .billing-box{
-   height: 400px;
-}
-}
+    height: 500px;
+    }
+    @media (min-width: 426px) and (max-width: 1440px){
+        .billing-box{
+    height: 400px;
+    }
+    }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
