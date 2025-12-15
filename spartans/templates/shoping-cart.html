@@ -111,7 +111,11 @@
                     <ul>
                         <li style="font-weight: bold; font-size: 20px; ">Total <span id="page-total">₹{{ subtotal|default:0 }}</span></li>
                     </ul>
-                    <a href="{% url 'spartans:checkout' %}" class="primary-btn">Proceed to checkout</a>
+                   {% if has_items %}
+                        <a href="{% url 'spartans:checkout' %}" class="primary-btn">Proceed to checkout</a>
+                    {% else %}
+                        <button class="primary-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Cart is Empty</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -176,7 +180,7 @@
                                     <!-- Address Selection -->
                                     <div class="col-12 mb-3">
                                         <label class="form-label">Select Address</label>
-                                        <select name="selected_address_id" class="form-control" onchange="handleAddressSelection()" id="addressSelect">
+                                        <select name="selected_address_id" class="form-control" onchange="handleAddressSelection()" id="addressSelect" required autocomplete="off">
                                             <option value="">Choose saved address or add new</option>
                                             {% for address in user_addresses %}
                                             <option value="{{ address.id }}" data-type="{{ address.address_type }}" 
@@ -201,11 +205,11 @@
                                         </div>
                                         
                                         <div class="col-12 mb-2">
-                                            <input name="address_line1" class="form-control" placeholder="Address Line 1" autocomplete="off">
+                                            <input name="address_line1" class="form-control" placeholder="Address Line 1" required autocomplete="off">
                                         </div>
                                         
                                         <div class="col-12 mb-2">
-                                            <input name="address_line2" class="form-control" placeholder="Address Line 2 (optional)" autocomplete="off">
+                                            <input name="address_line2" class="form-control" placeholder="Address Line 2 (optional)" required autocomplete="off">
                                         </div>
                                         
                                         <div class="col-12 mb-2">
@@ -284,6 +288,47 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const checkoutBtn = document.querySelector("a.primary-btn");
+        
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener("click", function (e) {
+                {% if has_items %}
+                    e.preventDefault();
+                    $('#proceedCheckoutModal').modal('show');
+                {% else %}
+                    e.preventDefault();
+                    alert('Your cart is empty!');
+                {% endif %}
+            });
+        }
+    });
+</script>
+
+
 <script>
     function handleAddressSelection() {
         const select = document.getElementById('addressSelect');
@@ -314,31 +359,25 @@
 </script>
 
 
-
 <style>
-.selected-address-box {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-}
+    .selected-address-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
 
-.selected-address-box strong {
-    color: #495057;
-    font-size: 14px;
-}
+    .selected-address-box strong {
+        color: #495057;
+        font-size: 14px;
+    }
 
-.selected-address-box p {
-    margin: 5px 0;
-    color: #6c757d;
-}
+    .selected-address-box p {
+        margin: 5px 0;
+        color: #6c757d;
+    }
 </style>
-
-
-
-
-
 
 
 <style>
@@ -362,72 +401,60 @@
 </style>
 
 
-
-
-
-
-
-
-
-
-
 <style>
-.selected-address-box {
-    background: #e8f5e8;
-    border: 2px solid #28a745;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+    .selected-address-box {
+        background: #e8f5e8;
+        border: 2px solid #28a745;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-.selected-address-box strong {
-    color: #155724;
-    font-size: 16px;
-    display: block;
-    margin-bottom: 8px;
-}
+    .selected-address-box strong {
+        color: #155724;
+        font-size: 16px;
+        display: block;
+        margin-bottom: 8px;
+    }
 
-.selected-address-box p {
-    margin: 5px 0;
-    color: #155724;
-    font-weight: 500;
-}
+    .selected-address-box p {
+        margin: 5px 0;
+        color: #155724;
+        font-weight: 500;
+    }
 
-.selected-address-box .btn {
-    margin-top: 10px;
-    background: #28a745;
-    color: white;
-    border: none;
-}
+    .selected-address-box .btn {
+        margin-top: 10px;
+        background: #28a745;
+        color: white;
+        border: none;
+    }
 
-.selected-address-box .btn:hover {
-    background: #218838;
-}
+    .selected-address-box .btn:hover {
+        background: #218838;
+    }
 
-/* Address selection dropdown styling */
-#addressSelect {
-    border: 2px solid #ddd;
-    font-weight: 500;
-}
+    /* Address selection dropdown styling */
+    #addressSelect {
+        border: 2px solid #ddd;
+        font-weight: 500;
+    }
 
-#addressSelect:focus {
-    border-color: #28a745;
-    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
-}
+    #addressSelect:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+    }
 
-/* New address form styling */
-#newAddressForm {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 10px;
-}
+    /* New address form styling */
+    #newAddressForm {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+    }
 </style>
-
-
-
 
 
 <style>

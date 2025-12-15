@@ -378,18 +378,20 @@ def shoping_card(request):
             cart_items = []
             subtotal = 0
         
-        # Get user's saved addresses
+        # Get user's saved addresses ordered by most recent first
         user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
         
         print("Cart items:", cart_items)
         return render(request, 'shoping-cart.html', {
             'cart_items': cart_items,
             'subtotal': subtotal,
-            'user_addresses': user_addresses
+            'user_addresses': user_addresses,
+            'has_items': len(cart_items) > 0  # Add this flag
         })
     else:
         messages.error(request, "Please login first!")
         return redirect('spartans:sign_in')
+
 
 
 def remove_cart(request, cart_id):
