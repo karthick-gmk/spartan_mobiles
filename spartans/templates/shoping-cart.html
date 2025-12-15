@@ -90,9 +90,26 @@
             <div class="col-lg-4">
                 <div class="cart__total">
                     <h6>Cart total</h6>
+                    
+                    <!-- Product List -->
+                    <div class="cart-items-summary">
+                        {% for item in cart_items %}
+                        <div class="cart-item-row" data-cart-id="{{ item.id }}">
+                            <div class="item-details">
+                                <strong>{{ item.product.name }}</strong>
+                                <small id="cart-qty-{{ item.id }}">Qty: {{ item.quantity }} × ₹{{ item.product.price }}</small>
+                            </div>
+                            <div class="item-total" id="cart-total-{{ item.id }}">₹{{ item.get_total_price }}</div>
+                        </div>
+                        
+                        {% endfor %}
+                        <ul>
+                            <li style="border-bottom: 1px solid #000; padding-bottom: 10px;">Subtotal <span id="page-subtotal">₹{{ subtotal|default:0 }}</span></li>
+                         </ul>
+                    </div>
+                    
                     <ul>
-                        <li>Subtotal <span>₹{{ subtotal|default:0 }}</span></li>
-                        <li>Total <span>₹{{ subtotal|default:0 }}</span></li>
+                        <li style="font-weight: bold; font-size: 20px; ">Total <span id="page-total">₹{{ subtotal|default:0 }}</span></li>
                     </ul>
                     <a href="{% url 'spartans:checkout' %}" class="primary-btn">Proceed to checkout</a>
                 </div>
@@ -116,30 +133,90 @@
 
                 <div class="modal-body">
                     <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <input name="name" class="form-control" value="{{ user.first_name|default:'' }}" placeholder="Full Name" required  autocomplete="off">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <input name="email" type="email" class="form-control" value="{{ user.email|default:'' }}" placeholder="Email" required  autocomplete="off">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <input name="mobile" type="tel" class="form-control" value="{{ user.phone|default:'' }}" placeholder="Phone" maxlength="10" required  autocomplete="off">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <input name="pincode" type="text" class="form-control" placeholder="Pincode" maxlength="6" required  autocomplete="off">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <input name="city" class="form-control" value="{{ user.city|default:'' }}" placeholder="City" required  autocomplete="off">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <input name="state" class="form-control" value="{{ user.state|default:'' }}" placeholder="State" required  autocomplete="off">
-                    </div>
-                    <div class="col-12 mb-2">
-                        <input name="address1" class="form-control" value="{{ user.address1|default:'' }}" placeholder="Address Line 1" required  autocomplete="off">
-                    </div>
-                    <div class="col-12">
-                        <input name="address2" class="form-control" value="{{ user.address2|default:'' }}" placeholder="Address Line 2 (optional)"  autocomplete="off">
-                    </div>
+                        <!-- Billing Details -->
+                        <div class="col-lg-7">
+                            <div class="billing-box">
+                                <h6>Billing Details</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <input name="name" class="form-control"
+                                        value="{{ user.first_name|default:'' }}"
+                                        placeholder="Full Name" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <input name="email" type="email" class="form-control"
+                                        value="{{ user.email|default:'' }}"
+                                        placeholder="Email" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <input name="mobile" class="form-control"
+                                        value="{{ user.phone|default:'' }}"
+                                        placeholder="Phone" maxlength="10" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <input name="pincode" class="form-control"
+                                        placeholder="Pincode" maxlength="6" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <input name="city" class="form-control"
+                                        value="{{ user.city|default:'' }}"
+                                        placeholder="City" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <input name="state" class="form-control"
+                                        value="{{ user.state|default:'' }}"
+                                        placeholder="State" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-12 mb-2">
+                                        <input name="address1" class="form-control"
+                                        value="{{ user.address1|default:'' }}"
+                                        placeholder="Address Line 1" required autocomplete="off">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <input name="address2" class="form-control"
+                                        value="{{ user.address2|default:'' }}"
+                                        placeholder="Address Line 2 (optional)" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Summary -->
+                       <!-- Order Summary -->
+                        <div class="col-lg-5">
+                            <div class="order-box">
+                                <h6 style="color:white;">Your Order</h6>
+
+                                <ul class="list-group mb-3">
+                                    {% for item in cart_items %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" data-cart-id="{{ item.id }}">
+                                        <div>
+                                            <strong style="font-size: 12px;">{{ item.product.name }}</strong><br>
+                                            <small class="text-muted" id="modal-qty-{{ item.id }}">
+                                                Qty: {{ item.quantity }} × ₹{{ item.product.price }}
+                                            </small>
+                                        </div>
+                                        <span style="font-size: 12px;" class="font-weight-bold" id="modal-total-{{ item.id }}">
+                                            ₹{{ item.get_total_price }}
+                                        </span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <div class="order-total d-flex justify-content-between">
+                                    <span>Total</span>
+                                    <span id="modal-subtotal">₹{{ subtotal|default:0 }}</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -157,6 +234,125 @@
 </div>
 <!-- Checkout Details Modal end-->
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+        /* Modal overall */
+    #proceedCheckoutModal .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+    }
+
+    /* Header gradient */
+    #proceedCheckoutModal .modal-header {
+        background: linear-gradient(135deg, #000000, #434343);
+        color: #fff;
+        border-bottom: none;
+    }
+
+    /* Titles */
+    #proceedCheckoutModal h6 {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #222;
+    }
+
+    /* Inputs */
+    #proceedCheckoutModal .form-control {
+        border-radius: 10px;
+        height: 45px;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    #proceedCheckoutModal .form-control:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    /* Billing box */
+    .billing-box {
+        background: #f9fafb;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    /* Order box */
+    .order-box {
+        background: linear-gradient(135deg, #111, #333);
+        color: #fff;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .order-box .list-group-item {
+        background: transparent;
+        border: none;
+        color: #fff;
+        padding: 8px 0;
+    }
+
+    /* Total highlight */
+    .order-total {
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    /* Footer buttons */
+    #proceedCheckoutModal .btn-primary {
+        background: linear-gradient(135deg, #000, #444);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 28px;
+    }
+
+    #proceedCheckoutModal .btn-secondary {
+        border-radius: 30px;
+    }
+
+</style>
+
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -170,7 +366,7 @@
     });
 </script>
 
- <script>
+<script>
     function changeQuantity(cartId, change) {
         const qtyInput = document.getElementById(`qty-${cartId}`);
         let currentQty = parseInt(qtyInput.value);
@@ -178,7 +374,6 @@
 
         if (newQty < 1) return;
 
-        // Update the database
         fetch(`/update_cart_quantity/`, {
             method: 'POST',
             headers: {
@@ -193,26 +388,75 @@
                 qtyInput.value = newQty;
                 const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
                 const newTotal = productPrice * newQty;
+                
+                // Update main table
                 document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
+                
+                // Update cart summary
+                document.getElementById(`cart-qty-${cartId}`).innerHTML = `Qty: ${newQty} × ₹${productPrice}`;
+                document.getElementById(`cart-total-${cartId}`).innerHTML = `₹${newTotal}`;
+                
+                // Update modal
+                if (document.getElementById(`modal-qty-${cartId}`)) {
+                    document.getElementById(`modal-qty-${cartId}`).innerHTML = `Qty: ${newQty} × ₹${productPrice}`;
+                    document.getElementById(`modal-total-${cartId}`).innerHTML = `₹${newTotal}`;
+                }
+                
                 updateSubtotal();
             }
         });
-
     }
 
     function updateSubtotal() {
         let subtotal = 0;
-        const totalElements = document.querySelectorAll('[id^="total-"]');
-        
-        totalElements.forEach(element => {
-            const price = parseFloat(element.innerHTML.replace('₹', ''));
-            subtotal += price;
+        document.querySelectorAll('[id^="total-"]').forEach(element => {
+            subtotal += parseFloat(element.innerHTML.replace('₹', ''));
         });
         
-        document.querySelector('.cart__total ul li:last-child span').innerHTML = `₹${subtotal}`;
-        document.querySelector('.cart__total ul li:first-child span').innerHTML = `₹${subtotal}`;
+        // Update page totals
+        document.getElementById('page-subtotal').innerHTML = `₹${subtotal}`;
+        document.getElementById('page-total').innerHTML = `₹${subtotal}`;
+        
+        // Update modal total
+        if (document.getElementById('modal-subtotal')) {
+            document.getElementById('modal-subtotal').innerHTML = `₹${subtotal}`;
+        }
     }
+
 </script> 
+
+
+<style>
+    .cart-items-summary {
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+    }
+
+    .cart-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 8px 0;
+    }
+
+    .item-details strong {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+
+    .item-details small {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .item-total {
+        font-weight: bold;
+        color: #333;
+    }
+</style>
 
 <style>
     @media (min-width: 320px) and (max-width: 425px) {
