@@ -102,14 +102,14 @@
                                 {% csrf_token %}
                                 <div class="quantity">
                                     <div class="pro-qty">
-                                        <input type="number" name="quantity" value="1" min="1" max="99">
+                                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="99">
                                     </div>
                                 </div>
-                                <button type="submit" class="primary-btn">Add to Cart</button>
+                                <button type="button" class="primary-btn" onclick="addToCartFromDetail({{ product.id }})">Add to Cart</button>
                             </form>
                         </div>
                         <div class="product__details__btns__option">
-                            <a href="{% url 'spartans:add_to_favorite' product.id %}"><i class="fa fa-heart"></i> Add to Wishlist</a>
+                           <a href="#" onclick="addToFavoriteFromDetail({{ product.id }})"><i class="fa fa-heart"></i> Add to Wishlist</a>
                         </div>
                          <a href="#" class="primary-btn">Payment</a>
                     </div>
@@ -347,6 +347,174 @@
     </div>
 </section>
 <!-- Related Section End -->
+
+
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content success-modal">
+
+            <!-- Icon Section -->
+            <div class="success-icon">
+                <i class="fa fa-check"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Completed Successfully!</h4>
+                <p class="text-muted mb-0">
+                    Your action has been processed without any issues.
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-success px-4" data-dismiss="modal">
+                    Continue
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content login-modal">
+            <!-- Icon Section -->
+            <div class="login-icon">
+                <i class="fa fa-user"></i>
+            </div>
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Login Required!</h4>
+                <p class="text-muted mb-0">
+                    Please sign in to continue with this action.
+                </p>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <a href="{% url 'spartans:sign_in' %}" class="btn btn-primary px-4">Sign In</a>
+                <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    let favClicked = new Set();
+    let cartClicked = new Set();
+    
+    function addToCartFromDetail(productId) {
+        if (cartClicked.has(productId)) {
+            $('#successModal').modal('show');
+            return;
+        }
+        
+        const quantity = document.getElementById('quantity').value;
+        
+        fetch(`/add_to_cart/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `quantity=${quantity}`
+        })
+        .then(response => {
+            if (response.url.includes('sign_in')) {
+                $('#loginModal').modal('show');
+            } else {
+                cartClicked.add(productId);
+                document.querySelector('#successModal .modal-body h4').textContent = 'Product Added to Cart!';
+                document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to cart.';
+                $('#successModal').modal('show');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function addToFavoriteFromDetail(productId) {
+        if (favClicked.has(productId)) {
+            $('#successModal').modal('show');
+            return;
+        }
+        
+        fetch(`/add_to_favorite/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: 'quantity=1'
+        })
+        .then(response => {
+            if (response.url.includes('sign_in')) {
+                $('#loginModal').modal('show');
+            } else {
+              favClicked.add(productId);
+                document.querySelector('#successModal .modal-body h4').textContent = 'Added to Favorites!';
+                document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to favorites.';
+                $('#successModal').modal('show');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+
+
+<style>
+    .success-modal, .login-modal {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .success-icon {
+        background: linear-gradient(135deg, #28a745, #5cd68d);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-icon {
+        background: linear-gradient(135deg, #007bff, #6610f2);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-icon i, .login-icon i {
+        font-size: 60px;
+        color: #fff;
+        animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+    }
+</style>
 
 
 <style>
