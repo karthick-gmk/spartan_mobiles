@@ -135,7 +135,7 @@
                     <div class="row">
                         <!-- Billing Details -->
                         <div class="col-lg-7">
-                            <div class="billing-box">
+                            <div  style="height:500px; width:600px;" class="billing-box">
                                 <h6>Billing Details</h6>
                                 <div class="row">
                                     <div class="col-md-6 mb-2">
@@ -173,16 +173,56 @@
                                         placeholder="State" required autocomplete="off">
                                     </div>
 
-                                    <div class="col-12 mb-2">
-                                        <input name="address1" class="form-control"
-                                        value="{{ user.address1|default:'' }}"
-                                        placeholder="Address Line 1" required autocomplete="off">
+                                    <!-- Address Selection -->
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Select Address</label>
+                                        <select name="selected_address_id" class="form-control" onchange="handleAddressSelection()" id="addressSelect">
+                                            <option value="">Choose saved address or add new</option>
+                                            {% for address in user_addresses %}
+                                            <option value="{{ address.id }}" data-type="{{ address.address_type }}" 
+                                                    data-line1="{{ address.address_line1 }}" 
+                                                    data-line2="{{ address.address_line2|default:'' }}">
+                                                {{ address.address_type|title }} - {{ address.address_line1|truncatechars:30 }}
+                                            </option>
+                                            {% endfor %}
+                                            <option value="new">+ Add New Address</option>
+                                        </select>
                                     </div>
 
-                                    <div class="col-12">
-                                        <input name="address2" class="form-control"
-                                        value="{{ user.address2|default:'' }}"
-                                        placeholder="Address Line 2 (optional)" autocomplete="off">
+                                    <!-- New Address Form (hidden by default) -->
+                                    <div id="newAddressForm" style="display:none;">
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Address Type</label>
+                                            <select name="address_type" class="form-control" id="addressType">
+                                                <option value="home">Home Address</option>
+                                                <option value="office">Office Address</option>
+                                                <option value="other">Other Address</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-12 mb-2">
+                                            <input name="address_line1" class="form-control" placeholder="Address Line 1" autocomplete="off">
+                                        </div>
+                                        
+                                        <div class="col-12 mb-2">
+                                            <input name="address_line2" class="form-control" placeholder="Address Line 2 (optional)" autocomplete="off">
+                                        </div>
+                                        
+                                        <div class="col-12 mb-2">
+                                            <label>
+                                                <input type="checkbox" name="save_address" value="1" checked> Save this address for future orders
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Selected Address Display -->
+                                    <div id="selectedAddressDisplay" style="display:none;">
+                                        <div class="selected-address-box">
+                                            <strong id="displayAddressType"></strong>
+                                            <p id="displayAddressLine1"></p>
+                                            <p id="displayAddressLine2"></p>
+                                            <button type="button" onclick="editAddress()" class="btn btn-sm btn-outline-primary">Change Address</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -244,6 +284,82 @@
 
 
 
+<script>
+    function handleAddressSelection() {
+        const select = document.getElementById('addressSelect');
+        const newForm = document.getElementById('newAddressForm');
+        const display = document.getElementById('selectedAddressDisplay');
+        
+        if (select.value === 'new') {
+            newForm.style.display = 'block';
+            display.style.display = 'none';
+        } else if (select.value === '') {
+            newForm.style.display = 'none';
+            display.style.display = 'none';
+        } else {
+            const option = select.selectedOptions[0];
+            document.getElementById('displayAddressType').textContent = option.dataset.type.toUpperCase();
+            document.getElementById('displayAddressLine1').textContent = option.dataset.line1;
+            document.getElementById('displayAddressLine2').textContent = option.dataset.line2;
+            
+            newForm.style.display = 'none';
+            display.style.display = 'block';
+        }
+    }
+
+    function editAddress() {
+        document.getElementById('addressSelect').value = '';
+        handleAddressSelection();
+    }
+</script>
+
+
+
+<style>
+.selected-address-box {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.selected-address-box strong {
+    color: #495057;
+    font-size: 14px;
+}
+
+.selected-address-box p {
+    margin: 5px 0;
+    color: #6c757d;
+}
+</style>
+
+
+
+
+
+
+
+<style>
+    #proceedCheckoutModal .modal-dialog {
+        max-width: 60%;
+        height: 90vh;
+    }
+
+    #proceedCheckoutModal .modal-content {
+        height: 80%;
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+    }
+
+    #proceedCheckoutModal .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(90vh - 120px);
+    }
+</style>
 
 
 
@@ -255,18 +371,60 @@
 
 
 
+<style>
+.selected-address-box {
+    background: #e8f5e8;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
+.selected-address-box strong {
+    color: #155724;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 8px;
+}
 
+.selected-address-box p {
+    margin: 5px 0;
+    color: #155724;
+    font-weight: 500;
+}
 
+.selected-address-box .btn {
+    margin-top: 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+}
 
+.selected-address-box .btn:hover {
+    background: #218838;
+}
 
+/* Address selection dropdown styling */
+#addressSelect {
+    border: 2px solid #ddd;
+    font-weight: 500;
+}
 
+#addressSelect:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
 
-
-
-
-
-
+/* New address form styling */
+#newAddressForm {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+}
+</style>
 
 
 

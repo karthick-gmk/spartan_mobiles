@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from .models.billing_model import BillingAddress
 from .models.shop_cart import Cart, Favorite, CartItem
 from spartans.models.order_model import Order, OrderItem
+from .models.billing_model import UserAddress
 
 
 
@@ -183,16 +184,43 @@ def checkout(request):
         return redirect('spartans:shoping_card')
         
     cart_items = CartItem.objects.filter(cart=cart)
+    user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
     
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
-        address1 = request.POST.get('address1')
-        address2 = request.POST.get('address2')
         city = request.POST.get('city')
         state = request.POST.get('state')
         pincode = request.POST.get('pincode')
+        
+        # Handle address selection
+        selected_address_id = request.POST.get('selected_address_id')
+        
+        if selected_address_id and selected_address_id != 'new':
+                # Use existing address
+                user_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
+                address1 = user_address.address_line1
+                address2 = user_address.address_line2
+
+        else:
+            # New address
+            address_type = request.POST.get('address_type')
+            address1 = request.POST.get('address_line1')  # Changed from 'address1'
+            address2 = request.POST.get('address_line2', '')  # Changed from 'address2'
+            save_address = request.POST.get('save_address')
+            
+            # Save new address if requested
+            if save_address:
+                UserAddress.objects.create(
+                    user=request.user,
+                    address_type=address_type,
+                    address_line1=address1,
+                    address_line2=address2,
+                    city=city,
+                    state=state,
+                    pincode=pincode
+                )
 
         try:
             # Calculate total
@@ -233,7 +261,12 @@ def checkout(request):
             return redirect('/')
         except Exception as e:
             messages.error(request, f"Error placing order: {str(e)}")
-    return render(request, 'checkout.html', {'cart_items': cart_items})
+    
+    return render(request, 'checkout.html', {
+        'cart_items': cart_items,
+        'user_addresses': user_addresses
+    })
+
 
 
 
@@ -344,11 +377,20 @@ def shoping_card(request):
         else:
             cart_items = []
             subtotal = 0
+        
+        # Get user's saved addresses
+        user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
+        
         print("Cart items:", cart_items)
-        return render(request, 'shoping-cart.html', {'cart_items': cart_items,'subtotal': subtotal})
+        return render(request, 'shoping-cart.html', {
+            'cart_items': cart_items,
+            'subtotal': subtotal,
+            'user_addresses': user_addresses
+        })
     else:
         messages.error(request, "Please login first!")
         return redirect('spartans:sign_in')
+
 
 def remove_cart(request, cart_id):
     cart_item = CartItem.objects.get(id=cart_id)
