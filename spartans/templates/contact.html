@@ -8,8 +8,8 @@
     </div>
     <!-- Map End -->
 
-    <!-- Contact Section Begin -->
-   <section class="contact spad">
+<!-- Contact Section Begin -->
+<section class="contact spad">
     <div class="container">
         <div class="row">
             <!-- Contact Info -->
@@ -17,7 +17,7 @@
                 <div class="contact__text">
                     <div class="section-title">
                         <span>Support</span>
-                        <h2>Spartan Mobile Contact</h2>
+                        <h2>Spartans Mobile Contact</h2>
                         <p>
                             Need help with mobiles, accessories, service support, or orders?
                             Our Spartan Mobile support team is always ready to assist you.
@@ -70,8 +70,9 @@
                             <div class="col-lg-12">
                                 <textarea style="color:black;" name="message" placeholder="Type your message here..." required autocomplete="off"></textarea>
                                 <button type="submit" class="site-btn">
-                                    Send to Spartan Support
+                                    <i class="fa fa-paper-plane"></i> Send to Spartans Support
                                 </button>
+
                             </div>
                         </div>
                     </form>
@@ -80,8 +81,77 @@
 
         </div>
     </div>
-    </section>
+</section>
 
-    <!-- Contact Section End -->
+<!-- Contact Section End -->
 
+<!-- Contact Success Modal -->
+<div class="modal fade" id="contactSuccessModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content success-modal">
+
+            <!-- Icon -->
+            <div class="success-icon">
+                <i class="fa fa-check"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Message Sent Successfully!</h4>
+                <p class="text-muted">
+                    Thanks for contacting Spartan Mobile.  
+                    Our support team will reach you shortly.
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <button class="btn btn-success px-4" data-dismiss="modal">
+                    OK
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                $('#contactSuccessModal').modal('show');
+            {% endif %}
+        {% endfor %}
+    });
+</script>
+{% endif %}
+
+<style>
+    .success-modal {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .success-icon {
+        background: linear-gradient(135deg, #28a745, #5cd68d);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-icon i {
+        font-size: 60px;
+        color: #fff;
+        animation: pop 0.4s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+    }
+
+</style>
 {% endblock %}
