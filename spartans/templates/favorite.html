@@ -57,7 +57,7 @@
                                 </td>
                                 <td class="cart__price">₹{{ item.product.price }}</td>
                                 <td class="cart__close">
-                                    <a href="/remove_favorite/{{ item.id }}/" style="cursor: pointer;">
+                                    <a href="javascript:void(0)"class="remove-fav-btn"data-id="{{ item.id }}"style="cursor:pointer;">
                                         <i class="fa fa-close"></i>
                                     </a>
                                 </td>
@@ -66,15 +66,82 @@
                             <tr>
                                 <td colspan="3" class="text-center">Your favorites list is empty</td>
                             </tr>
-                            {% endfor %}
-                        </tbody>
+                            {% endfor %}                         
+                        </tbody>                       
                     </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a style=" margin-bottom: 20px;" href="/shop">Continue Shopping</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
 <!-- Favorites Section End -->
+<div class="modal fade" id="removeFavModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Icon -->
+            <div class="login-icon" style="background:linear-gradient(135deg,#dc3545,#ff6b6b)">
+                <i class="fa fa-heart-broken"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Remove from Favorites?</h4>
+                <p class="text-muted">
+                    Are you sure you want to remove this product from your favorites?
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <button class="btn btn-secondary px-4" data-dismiss="modal">
+                    Cancel
+                </button>
+                <a id="confirmRemoveFav" class="btn btn-danger px-4">
+                    Remove
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    let favIdToRemove = null;
+
+    document.querySelectorAll('.remove-fav-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            favIdToRemove = this.getAttribute('data-id');
+            $('#removeFavModal').modal('show');
+        });
+    });
+
+    document.getElementById('confirmRemoveFav').addEventListener('click', function () {
+        if (favIdToRemove) {
+            window.location.href = `/remove_favorite/${favIdToRemove}/`;
+        }
+    });
+</script>
 
 {%endblock%}
 
