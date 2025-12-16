@@ -128,9 +128,9 @@
                             <div class="product__item__pic">
                               <a href="{% url 'spartans:detail' product.id product.name|slugify %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% endif %}" alt="{{ product.name }}"></a>
                                 <ul class="product__hover">
-                                    <li><a href="#"  onclick="addToFavoriteFromShop({{ product.id }})"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
+                                    <li><a href="/shop"  onclick="addToFavoriteFromShop({{ product.id }})"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
                                     <li>
-                                        <a href="#" onclick="addToCartFromShop({{ product.id }})">
+                                        <a href="/shop" onclick="addToCartFromShop({{ product.id }})">
                                             <svg style="background:white; width:33px; height:33px; padding:2px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black">
                                                 <path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/>
                                             </svg>
@@ -254,72 +254,77 @@
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
-    let favClicked = new Set();
-    let cartClicked = new Set();
+   function addToCartFromShop(productId) {
+    event.preventDefault();
     
-    function addToCartFromShop(productId) {
-        if (cartClicked.has(productId)) {
-            $('#successModal').modal('show');
-            return;
-        }
-        
+    {% if user.is_authenticated %}
         fetch(`/add_to_cart/${productId}/`, {
             method: 'POST',
             headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': '{{ csrf_token }}'
             },
             body: 'quantity=1'
         })
         .then(response => {
-            if (response.url.includes('sign_in')) {
-                $('#loginModal').modal('show');
-            } else {
-                cartClicked.add(productId);
-                document.querySelector('#successModal .modal-body h4').textContent = 'Product Added to Cart!';
-                document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to cart.';
-                $('#successModal').modal('show');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-    
-    function addToFavoriteFromShop(productId) {
-        if (favClicked.has(productId)) {
+            document.querySelector('#successModal .modal-body h4').textContent = 'Product Added to Cart!';
+            document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to cart.';
             $('#successModal').modal('show');
-            return;
-        }
+            setTimeout(() => location.reload(), 1500);
+        });
+    {% else %}
+        $('#loginModal').modal('show');
+    {% endif %}
+    }
+
+    function addToFavoriteFromShop(productId) {
+        event.preventDefault();
         
-        fetch(`/add_to_favorite/${productId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: 'quantity=1'
-        })
-        .then(response => {
-            if (response.url.includes('sign_in')) {
-                $('#loginModal').modal('show');
-            } else {
-               favClicked.add(productId);
+        {% if user.is_authenticated %}
+            fetch(`/add_to_favorite/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => {
                 document.querySelector('#successModal .modal-body h4').textContent = 'Added to Favorites!';
                 document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to favorites.';
                 $('#successModal').modal('show');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            });
+        {% else %}
+            $('#loginModal').modal('show');
+        {% endif %}
     }
-</script>
-
-
-
-
+</script> 
 
 
 <style>
