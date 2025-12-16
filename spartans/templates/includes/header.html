@@ -49,8 +49,11 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href="/"><img src="img/logo.png" alt=""></a>
+                    <a href="/">
+                        <img src="{% static 'img/spartans.png' %}" alt="Spartans Logo" class="site-logo">
+                    </a>
                 </div>
+
             </div>
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
@@ -71,8 +74,8 @@
                     
                         <div class="profile-dropdown">
                             <a href="#" class="profile-toggle"><img src="{% static "img/user.png"%}" alt="Profile"></a>
-                            <span>My Profile</span>
                             <ul class="profile-menu">
+                                <li ><a href="/" style="color:black;">My Profile</a></li>
                                 <li><a href="/">{{ user.first_name }}</a></li>
                                 <li><a href="/">{{ user.email }}</a></li>
                                 <li><a href="/logout">Logout</a></li>
