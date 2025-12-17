@@ -4026,3 +4026,90 @@ ol {
 
 
 
+
+            /* Social Icons */
+    .hero__social {
+        margin-top: 30px;
+    }
+
+    .hero__social a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.15);
+        color: black;
+        border-radius: 50%;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .hero__social a:hover {
+        background: gray;
+        transform: scale(1.1);
+    }
+
+    .owl-prev:before {
+        content: "‹";
+        font-size: 30px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .owl-next:before {
+        content: "›";
+        font-size: 30px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .owl-prev, .owl-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.8);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .owl-prev {
+        left: 20px;
+    }
+
+    .owl-next {
+        right: 20px;
+    }
+
+    .owl-prev:hover, .owl-next:hover {
+        background: rgba(255,255,255,1);
+    }
+    .owl-prev:before {
+        content: "\f104";
+        font-family: "FontAwesome";
+        font-size: 20px;
+    }
+
+    .owl-next:before {
+        content: "\f105";
+        font-family: "FontAwesome";
+        font-size: 20px;
+    }
+
+	.social-youtube {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: #ff0000;
+    color:red !important;
+    border-radius: 50%;
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
