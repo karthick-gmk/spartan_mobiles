@@ -414,6 +414,11 @@
 
 
 
+
+
+
+
+
 <script>
     let favClicked = new Set();
     let cartClicked = new Set();
@@ -479,9 +484,51 @@
     }
 </script>
 
+<script>
+    function editReview(reviewId, reviewText, rating) {
+        // Show edit form
+        document.getElementById('edit-form').style.display = 'block';
+        
+        // Fill form with existing data
+        document.getElementById('edit-review').value = reviewText;
+        document.querySelector(`input[name="rating"][value="${rating}"]`).checked = true;
+        
+        // Scroll to form
+        document.getElementById('edit-form').scrollIntoView({behavior: 'smooth'});
+    }
 
+    function cancelEdit() {
+        document.getElementById('edit-form').style.display = 'none';
+    }
+</script>
 
 <style>
+    .tab-content .tab-pane {
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+    }
+
+    .tab-content .tab-pane.active {
+        opacity: 1;
+    }
+
+    .nav-tabs .nav-link {
+        transition: all 0.3s ease;
+    }
+
+    .product__thumb__pic {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+
+    .product__thumb__pic:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .nav-tabs .nav-item .nav-link.active .product__thumb__pic {
+        border: 2px solid #FF9529;
+    }
     .success-modal, .login-modal {
         border-radius: 15px;
         overflow: hidden;
@@ -513,39 +560,6 @@
         0% { transform: scale(0); }
         100% { transform: scale(1); }
     }
-</style>
-
-
-<style>
-    .tab-content .tab-pane {
-        opacity: 0;
-        transition: opacity 0.4s ease-in-out;
-    }
-
-    .tab-content .tab-pane.active {
-        opacity: 1;
-    }
-
-    .nav-tabs .nav-link {
-        transition: all 0.3s ease;
-    }
-
-    .product__thumb__pic {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        cursor: pointer;
-    }
-
-    .product__thumb__pic:hover {
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-
-    .nav-tabs .nav-item .nav-link.active .product__thumb__pic {
-        border: 2px solid #FF9529;
-    }
-</style>
-
-<style>
     .star-rating {
         direction: rtl;
         display: inline-block;
@@ -565,25 +579,6 @@
         color: #ffc107;
     }
 </style>
-
-
-<script>
-    function editReview(reviewId, reviewText, rating) {
-        // Show edit form
-        document.getElementById('edit-form').style.display = 'block';
-        
-        // Fill form with existing data
-        document.getElementById('edit-review').value = reviewText;
-        document.querySelector(`input[name="rating"][value="${rating}"]`).checked = true;
-        
-        // Scroll to form
-        document.getElementById('edit-form').scrollIntoView({behavior: 'smooth'});
-    }
-
-    function cancelEdit() {
-        document.getElementById('edit-form').style.display = 'none';
-    }
-</script>
 
 {% endblock %}    
 

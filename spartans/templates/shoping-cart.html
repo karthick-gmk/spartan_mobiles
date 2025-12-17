@@ -129,7 +129,7 @@
             <form method="post" action="{% url 'spartans:checkout' %}">
                 {% csrf_token %}
                 <div class="modal-header" style="background:#000;color:#fff;">
-                    <h5 class="modal-title" style="color:white;">Enter Billing Details</h5>
+                    <h5 class="modal-title" style="color:white;">Enter Delivery Details</h5>
                     <button type="button" class="close" data-dismiss="modal">
                     <span style="color:#fff;">&times;</span>
                     </button>
@@ -295,6 +295,119 @@
 
 
 
+
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const checkoutBtn = document.querySelector("a.primary-btn");
+        
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener("click", function (e) {
+                {% if has_items %}
+                    e.preventDefault();
+                    $('#proceedCheckoutModal').modal('show');
+                {% else %}
+                    e.preventDefault();
+                    alert('Your cart is empty!');
+                {% endif %}
+            });
+        }
+    });
+</script>
+
+<script>
+    function handleAddressSelection() {
+        const select = document.getElementById('addressSelect');
+        const newForm = document.getElementById('newAddressForm');
+        const display = document.getElementById('selectedAddressDisplay');
+        
+        if (select.value === 'new') {
+            newForm.style.display = 'block';
+            display.style.display = 'none';
+        } else if (select.value === '') {
+            newForm.style.display = 'none';
+            display.style.display = 'none';
+        } else {
+            const option = select.selectedOptions[0];
+            document.getElementById('displayAddressType').textContent = option.dataset.type.toUpperCase();
+            document.getElementById('displayAddressLine1').textContent = option.dataset.line1;
+            document.getElementById('displayAddressLine2').textContent = option.dataset.line2;
+            
+            newForm.style.display = 'none';
+            display.style.display = 'block';
+        }
+    }
+
+    function editAddress() {
+        document.getElementById('addressSelect').value = '';
+        handleAddressSelection();
+    }
+</script>
+
+<script>
+    function changeQuantity(cartId, change) {
+        const qtyInput = document.getElementById(`qty-${cartId}`);
+        let currentQty = parseInt(qtyInput.value);
+        let newQty = currentQty + change;
+
+        if (newQty < 1) return;
+
+        fetch(`/update_cart_quantity/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `cart_id=${cartId}&quantity=${newQty}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                qtyInput.value = newQty;
+                const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
+                const newTotal = productPrice * newQty;
+                
+                // Update main table
+                document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
+                
+                // Update cart summary
+                document.getElementById(`cart-qty-${cartId}`).innerHTML = `Qty: ${newQty} × ₹${productPrice}`;
+                document.getElementById(`cart-total-${cartId}`).innerHTML = `₹${newTotal}`;
+                
+                // Update modal
+                if (document.getElementById(`modal-qty-${cartId}`)) {
+                    document.getElementById(`modal-qty-${cartId}`).innerHTML = `Qty: ${newQty} × ₹${productPrice}`;
+                    document.getElementById(`modal-total-${cartId}`).innerHTML = `₹${newTotal}`;
+                }
+                
+                updateSubtotal();
+            }
+        });
+    }
+
+    function updateSubtotal() {
+        let subtotal = 0;
+        document.querySelectorAll('[id^="total-"]').forEach(element => {
+            subtotal += parseFloat(element.innerHTML.replace('₹', ''));
+        });
+        
+        // Update page totals
+        document.getElementById('page-subtotal').innerHTML = `₹${subtotal}`;
+        document.getElementById('page-total').innerHTML = `₹${subtotal}`;
+        
+        // Update modal total
+        if (document.getElementById('modal-subtotal')) {
+            document.getElementById('modal-subtotal').innerHTML = `₹${subtotal}`;
+        }
+    }
+
+</script> 
+
 <style>
     /* Mobile & Tablet */
     @media (min-width: 320px) and (max-width: 1024px) {
@@ -426,81 +539,6 @@
     height: 400px;
     }
     }
-</style>
-
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const checkoutBtn = document.querySelector("a.primary-btn");
-        
-        if (checkoutBtn) {
-            checkoutBtn.addEventListener("click", function (e) {
-                {% if has_items %}
-                    e.preventDefault();
-                    $('#proceedCheckoutModal').modal('show');
-                {% else %}
-                    e.preventDefault();
-                    alert('Your cart is empty!');
-                {% endif %}
-            });
-        }
-    });
-</script>
-
-
-<script>
-    function handleAddressSelection() {
-        const select = document.getElementById('addressSelect');
-        const newForm = document.getElementById('newAddressForm');
-        const display = document.getElementById('selectedAddressDisplay');
-        
-        if (select.value === 'new') {
-            newForm.style.display = 'block';
-            display.style.display = 'none';
-        } else if (select.value === '') {
-            newForm.style.display = 'none';
-            display.style.display = 'none';
-        } else {
-            const option = select.selectedOptions[0];
-            document.getElementById('displayAddressType').textContent = option.dataset.type.toUpperCase();
-            document.getElementById('displayAddressLine1').textContent = option.dataset.line1;
-            document.getElementById('displayAddressLine2').textContent = option.dataset.line2;
-            
-            newForm.style.display = 'none';
-            display.style.display = 'block';
-        }
-    }
-
-    function editAddress() {
-        document.getElementById('addressSelect').value = '';
-        handleAddressSelection();
-    }
-</script>
-
-
-<style>
-    .selected-address-box {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-
-    .selected-address-box strong {
-        color: #495057;
-        font-size: 14px;
-    }
-
-    .selected-address-box p {
-        margin: 5px 0;
-        color: #6c757d;
-    }
-</style>
-
-
-<style>
     #proceedCheckoutModal .modal-dialog {
         max-width: 60%;
         height: 90vh;
@@ -518,11 +556,24 @@
         overflow-y: auto;
         max-height: calc(90vh - 120px);
     }
-</style>
+     .selected-address-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
 
+    .selected-address-box strong {
+        color: #495057;
+        font-size: 14px;
+    }
 
-<style>
-    .selected-address-box {
+    .selected-address-box p {
+        margin: 5px 0;
+        color: #6c757d;
+    }
+     .selected-address-box {
         background: #e8f5e8;
         border: 2px solid #28a745;
         border-radius: 8px;
@@ -574,11 +625,7 @@
         padding: 15px;
         margin-top: 10px;
     }
-</style>
-
-
-<style>
-        /* Modal overall */
+     /* Modal overall */
     #proceedCheckoutModal .modal-content {
         border-radius: 16px;
         overflow: hidden;
@@ -654,84 +701,6 @@
     #proceedCheckoutModal .btn-secondary {
         border-radius: 30px;
     }
-
-</style>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-    const checkoutBtn = document.querySelector("a.primary-btn");
-
-    checkoutBtn.addEventListener("click", function (e) {
-        e.preventDefault(); // ❌ stop redirect
-        $('#proceedCheckoutModal').modal('show'); // ✅ open modal
-    });
-
-    });
-</script>
-
-<script>
-    function changeQuantity(cartId, change) {
-        const qtyInput = document.getElementById(`qty-${cartId}`);
-        let currentQty = parseInt(qtyInput.value);
-        let newQty = currentQty + change;
-
-        if (newQty < 1) return;
-
-        fetch(`/update_cart_quantity/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: `cart_id=${cartId}&quantity=${newQty}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                qtyInput.value = newQty;
-                const productPrice = parseFloat(document.getElementById(`price-${cartId}`).dataset.price);
-                const newTotal = productPrice * newQty;
-                
-                // Update main table
-                document.getElementById(`total-${cartId}`).innerHTML = `₹${newTotal}`;
-                
-                // Update cart summary
-                document.getElementById(`cart-qty-${cartId}`).innerHTML = `Qty: ${newQty} × ₹${productPrice}`;
-                document.getElementById(`cart-total-${cartId}`).innerHTML = `₹${newTotal}`;
-                
-                // Update modal
-                if (document.getElementById(`modal-qty-${cartId}`)) {
-                    document.getElementById(`modal-qty-${cartId}`).innerHTML = `Qty: ${newQty} × ₹${productPrice}`;
-                    document.getElementById(`modal-total-${cartId}`).innerHTML = `₹${newTotal}`;
-                }
-                
-                updateSubtotal();
-            }
-        });
-    }
-
-    function updateSubtotal() {
-        let subtotal = 0;
-        document.querySelectorAll('[id^="total-"]').forEach(element => {
-            subtotal += parseFloat(element.innerHTML.replace('₹', ''));
-        });
-        
-        // Update page totals
-        document.getElementById('page-subtotal').innerHTML = `₹${subtotal}`;
-        document.getElementById('page-total').innerHTML = `₹${subtotal}`;
-        
-        // Update modal total
-        if (document.getElementById('modal-subtotal')) {
-            document.getElementById('modal-subtotal').innerHTML = `₹${subtotal}`;
-        }
-    }
-
-</script> 
-
-
-<style>
     .cart-items-summary {
         margin-bottom: 15px;
         border-bottom: 1px solid #eee;
@@ -761,9 +730,6 @@
         font-weight: bold;
         color: #333;
     }
-</style>
-
-<style>
     @media (min-width: 320px) and (max-width: 425px) {
         .shopping__cart__table {
             overflow-x: auto;

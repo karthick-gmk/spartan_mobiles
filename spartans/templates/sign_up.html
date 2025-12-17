@@ -175,128 +175,128 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const form = document.querySelector('form');
-    const submitBtn = document.querySelector('.btn[type="submit"]');
+  document.addEventListener('DOMContentLoaded', () => {
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const form = document.querySelector('form');
+      const submitBtn = document.querySelector('.btn[type="submit"]');
 
-    // Disable submit button initially
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = "0.5";
-    submitBtn.style.cursor = "not-allowed";
+      // Disable submit button initially
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = "0.5";
+      submitBtn.style.cursor = "not-allowed";
 
-    function enableSubmitIfValid() {
-        if (form.checkValidity()) {
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = "1";
-            submitBtn.style.cursor = "pointer";
-        } else {
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = "0.5";
-            submitBtn.style.cursor = "not-allowed";
-        }
-    }
+      function enableSubmitIfValid() {
+          if (form.checkValidity()) {
+              submitBtn.disabled = false;
+              submitBtn.style.opacity = "1";
+              submitBtn.style.cursor = "pointer";
+          } else {
+              submitBtn.disabled = true;
+              submitBtn.style.opacity = "0.5";
+              submitBtn.style.cursor = "not-allowed";
+          }
+      }
 
-    const togglePassword = document.getElementById('togglePassword');
-    const strengthMeter = document.querySelector('.strength-meter-fill');
-    const strengthText = document.getElementById('strengthText');
+      const togglePassword = document.getElementById('togglePassword');
+      const strengthMeter = document.querySelector('.strength-meter-fill');
+      const strengthText = document.getElementById('strengthText');
 
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+      const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
 
-    const requirements = {
-        length: document.getElementById('length'),
-        uppercase: document.getElementById('uppercase'),
-        lowercase: document.getElementById('lowercase'),
-        number: document.getElementById('number'),
-        special: document.getElementById('special')
-    };
+      const requirements = {
+          length: document.getElementById('length'),
+          uppercase: document.getElementById('uppercase'),
+          lowercase: document.getElementById('lowercase'),
+          number: document.getElementById('number'),
+          special: document.getElementById('special')
+      };
 
-        // Password matching validation
-    confirmPasswordInput.addEventListener('input', () => {
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-        const errorDiv = document.getElementById('passwordMismatchError');
-        
-        if (confirmPassword && password !== confirmPassword) {
-            confirmPasswordInput.setCustomValidity('Passwords do not match');
-            errorDiv.style.display = 'block';
-            confirmPasswordInput.style.borderColor = 'red';
-        } else {
-            confirmPasswordInput.setCustomValidity('');
-            errorDiv.style.display = 'none';
-            confirmPasswordInput.style.borderColor = '';
-        }
+          // Password matching validation
+      confirmPasswordInput.addEventListener('input', () => {
+          const password = passwordInput.value;
+          const confirmPassword = confirmPasswordInput.value;
+          const errorDiv = document.getElementById('passwordMismatchError');
+          
+          if (confirmPassword && password !== confirmPassword) {
+              confirmPasswordInput.setCustomValidity('Passwords do not match');
+              errorDiv.style.display = 'block';
+              confirmPasswordInput.style.borderColor = 'red';
+          } else {
+              confirmPasswordInput.setCustomValidity('');
+              errorDiv.style.display = 'none';
+              confirmPasswordInput.style.borderColor = '';
+          }
 
-        enableSubmitIfValid();
-    });
+          enableSubmitIfValid();
+      });
 
 
-    // Toggle password visibility
-    togglePassword.addEventListener('click', () => {
-        const type = passwordInput.type === 'password' ? 'text' : 'password';
-        passwordInput.type = type;
-        togglePassword.querySelector('i').classList.toggle('fa-eye');
-        togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
-    });
+      // Toggle password visibility
+      togglePassword.addEventListener('click', () => {
+          const type = passwordInput.type === 'password' ? 'text' : 'password';
+          passwordInput.type = type;
+          togglePassword.querySelector('i').classList.toggle('fa-eye');
+          togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+      });
 
-    // Toggle confirm password visibility
-    toggleConfirmPassword.addEventListener('click', (e) => {
-        e.preventDefault();
-        const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
-        confirmPasswordInput.type = type;
-        toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye');
-        toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye-slash');
-    });
+      // Toggle confirm password visibility
+      toggleConfirmPassword.addEventListener('click', (e) => {
+          e.preventDefault();
+          const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+          confirmPasswordInput.type = type;
+          toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye');
+          toggleConfirmPassword.querySelector('i').classList.toggle('fa-eye-slash');
+      });
 
-    // Check password strength
-    passwordInput.addEventListener('input', () => {
-        const password = passwordInput.value;
-        let strength = 0;
-        let validRequirements = 0;
+      // Check password strength
+      passwordInput.addEventListener('input', () => {
+          const password = passwordInput.value;
+          let strength = 0;
+          let validRequirements = 0;
 
-        // Check length
-        if (password.length >= 8) { requirements.length.classList.add('valid'); validRequirements++; }
-        else { requirements.length.classList.remove('valid'); }
+          // Check length
+          if (password.length >= 8) { requirements.length.classList.add('valid'); validRequirements++; }
+          else { requirements.length.classList.remove('valid'); }
 
-        // Uppercase
-        if (/[A-Z]/.test(password)) { requirements.uppercase.classList.add('valid'); validRequirements++; }
-        else { requirements.uppercase.classList.remove('valid'); }
+          // Uppercase
+          if (/[A-Z]/.test(password)) { requirements.uppercase.classList.add('valid'); validRequirements++; }
+          else { requirements.uppercase.classList.remove('valid'); }
 
-        // Lowercase
-        if (/[a-z]/.test(password)) { requirements.lowercase.classList.add('valid'); validRequirements++; }
-        else { requirements.lowercase.classList.remove('valid'); }
+          // Lowercase
+          if (/[a-z]/.test(password)) { requirements.lowercase.classList.add('valid'); validRequirements++; }
+          else { requirements.lowercase.classList.remove('valid'); }
 
-        // Number
-        if (/[0-9]/.test(password)) { requirements.number.classList.add('valid'); validRequirements++; }
-        else { requirements.number.classList.remove('valid'); }
+          // Number
+          if (/[0-9]/.test(password)) { requirements.number.classList.add('valid'); validRequirements++; }
+          else { requirements.number.classList.remove('valid'); }
 
-        // Special char
-        if (/[^A-Za-z0-9]/.test(password)) { requirements.special.classList.add('valid'); validRequirements++; }
-        else { requirements.special.classList.remove('valid'); }
+          // Special char
+          if (/[^A-Za-z0-9]/.test(password)) { requirements.special.classList.add('valid'); validRequirements++; }
+          else { requirements.special.classList.remove('valid'); }
 
-        // Strength logic
-        if (password.length > 0) {
-            strength = Math.min(4, Math.floor(validRequirements * 0.8));
-        }
+          // Strength logic
+          if (password.length > 0) {
+              strength = Math.min(4, Math.floor(validRequirements * 0.8));
+          }
 
-        strengthMeter.setAttribute('data-strength', strength);
+          strengthMeter.setAttribute('data-strength', strength);
 
-        switch (strength) {
-            case 0: strengthText.textContent = 'Enter a password'; strengthText.style.color = '#666'; break;
-            case 1: strengthText.textContent = 'Very Weak'; break;
-            case 2: strengthText.textContent = 'Weak'; break;
-            case 3: strengthText.textContent = 'Strong'; break;
-            case 4: strengthText.textContent = 'Very Strong'; break;
-        }
+          switch (strength) {
+              case 0: strengthText.textContent = 'Enter a password'; strengthText.style.color = '#666'; break;
+              case 1: strengthText.textContent = 'Very Weak'; break;
+              case 2: strengthText.textContent = 'Weak'; break;
+              case 3: strengthText.textContent = 'Strong'; break;
+              case 4: strengthText.textContent = 'Very Strong'; break;
+          }
 
-        enableSubmitIfValid();
-    });
+          enableSubmitIfValid();
+      });
 
-    // Check all form inputs on typing
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', enableSubmitIfValid);
-    });
-});
+      // Check all form inputs on typing
+      document.querySelectorAll('input').forEach(input => {
+          input.addEventListener('input', enableSubmitIfValid);
+      });
+  });
 </script>
 {% endblock %}

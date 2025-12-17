@@ -175,9 +175,6 @@
 
 
 
-
-
-
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content success-modal">
@@ -230,28 +227,7 @@
     </div>
 </div>
 
-<!-- Already in Favorites Modal -->
-<div class="modal fade" id="alreadyInFavModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content login-modal">
-            <!-- Icon Section -->
-            <div class="login-icon" style="background: linear-gradient(135deg, #dc3545, #fd7e14);">
-                <i class="fa fa-heart"></i>
-            </div>
-            <!-- Body -->
-            <div class="modal-body text-center">
-                <h4 class="mt-3">Already in Favorites!</h4>
-                <p class="text-muted mb-0">
-                    This product is already added to your favorites.
-                </p>
-            </div>
-            <!-- Footer -->
-            <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="btn btn-danger px-4" data-dismiss="modal">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 
 
@@ -328,8 +304,6 @@
 
 
 <style>
-
-    <style>
     .success-modal, .login-modal {
         border-radius: 15px;
         overflow: hidden;
@@ -361,11 +335,7 @@
         0% { transform: scale(0); }
         100% { transform: scale(1); }
     }
-</style>
-
-
-<style>
-        .success-modal {
+    .success-modal {
         border-radius: 15px;
         overflow: hidden;
     }
@@ -391,16 +361,26 @@
 
     /* Mobile gap between image and text */
     @media (min-width: 100px) and (max-width: 320px) {
-        .product__item__text {
-            margin-top: 35px ;
+        .product__item__text h6 {
+            margin-top: 0px ;
+        }
+        .product__item__text{
+             margin-top: 50px ;
+        
         }
     }
     @media (min-width: 321px) and (max-width: 767px) {
+        .product__item__text h6 {
+            margin-top: 0px ;
+        }
         .product__item__text {
             margin-top: 120px ;
         }
     }
     @media (min-width: 768px) and (max-width:1023px) {
+        .product__item__text h6 {
+            margin-top: 0px ;
+        }
         .product__item__text {
             margin-top: 80px ;
         }

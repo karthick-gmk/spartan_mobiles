@@ -4176,7 +4176,7 @@ ol {
     margin-top: 25px;
 }
 @media (max-width: 768px) {
-    .product__item__text h6 {
+    .product__item__text  {
         font-size: 14px;
         line-height: 1.2;
 		margin-top: 90px;
@@ -4193,14 +4193,14 @@ ol {
     }
 }
 @media (max-width: 425px) {
-	.product__item__text h6 {
+	.product__item__text  {
         font-size: 14px;
         line-height: 1.2;
 		margin-top: 120px;
     }
 }
 @media (max-width: 325px){
-	.product__item__text h6 {
+	.product__item__text {
         font-size: 14px;
         line-height: 1.2;
 		margin-top: 50px;
