@@ -4113,3 +4113,65 @@ ol {
     transition: all 0.3s ease;
 }
 
+.hero__items::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.35)
+    );
+    z-index: 1;
+}
+.hero__text {
+    position: relative;
+    z-index: 2;
+	color: white;
+}
+
+/* Mobile view button spacing fix */
+@media (max-width: 768px) {
+    .hero__text .primary-btn {
+        margin-top: 10px;   /* button mela space */
+        display: inline-block;
+    }
+}
+@media (max-width: 768px) {
+    .hero__text p {
+        margin-bottom: 25px;
+    }
+
+    .hero__text .primary-btn {
+        margin-bottom: 15px;
+    }
+}
+@media (max-width: 768px) {
+    .hero__text {
+        text-align: center;
+    }
+}
+/* Hero slider nav buttons position */
+.hero__slider .owl-nav {
+    position: relative;
+    bottom: 350px;   /* keezha move aagum */
+    right: 0px;
+}
+@media (max-width: 768px) {
+    .hero__slider .owl-nav {
+        bottom: 20px;   /* mobile-la innum keezha */
+        right: 15px;
+    }
+}
+@media (max-width: 320px) {
+    .hero__slider .owl-nav {
+        bottom: 60px;   /* mobile-la innum keezha */
+        right: 20px;
+    }
+}
+.hero__slider .owl-nav button {
+    margin-top: 10px;
+}
+.hero__slider .owl-dots {
+    margin-top: 25px;
+}
