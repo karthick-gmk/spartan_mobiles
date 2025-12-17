@@ -261,11 +261,7 @@ def checkout(request):
             return redirect('/')
         except Exception as e:
             messages.error(request, f"Error placing order: {str(e)}")
-    
-    return render(request, 'checkout.html', {
-        'cart_items': cart_items,
-        'user_addresses': user_addresses
-    })
+    return render(request, 'checkout.html', {'cart_items': cart_items,'user_addresses': user_addresses})
 
 
 
