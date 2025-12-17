@@ -15,10 +15,10 @@
                             <h2 style="color:white;">Fast & Trusted Mobile Repairs</h2>
                             <p style="color:white;">We fix broken displays, motherboard issues, battery problems, and more. 
                             Professional service with genuine parts and same-day delivery.</p>
-                            <a href="#" class="primary-btn">Book a Repair  <i class="fa fa-arrow-right"></i></a>
+                            <a href="/service_type" class="primary-btn">Book a Repair  <i class="fa fa-arrow-right"></i></a>
                             <div class="hero__social">
                                 <a style="color:blue;" href="#"><i class="fa-brands fa-facebook"></i></a>
-                                <a style="color:#FF69B4;" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                <a style="color:#FF69B4;" href="https://www.instagram.com/spartans_mobiles?igsh=MWgxd3JzbThtbnU4OQ=="><i class="fa-brands fa-instagram"></i></a>
                                 <a style="color:blue;" href="#"><i class="fa-brands fa-twitter"></i></a>
                                 <a href="#" class="social-youtube"><i class="fa-brands fa-youtube"></i></a>
                             </div>
@@ -38,7 +38,7 @@
                             <h2 style="color:white;">Premium Mobile Accessories Available</h2>
                             <p style="color:white;" >Shop high-quality chargers, earphones, cases, tempered glass, smart gadgets,
                             and more. Best prices with warranty guaranteed.</p>
-                            <a href="#" class="primary-btn">Shop Now <span class="arrow_right"></span></a>
+                            <a href="/shop" class="primary-btn">Shop Now <span class="arrow_right"></span></a>
                             <div class="hero__social">
                                <a style="color:blue;" href="#"><i class="fa-brands fa-facebook"></i></a>
                                 <a style="color:#FF69B4;" href="#"><i class="fa-brands fa-instagram"></i></a>
@@ -120,7 +120,8 @@
         {% for product in products %}
         <div class="col-lg-3 col-md-6 col-sm-6 mix {% if product.is_new %}new-arrivals{% elif product.on_sale %}hot-sales{% else %}best-sellers{% endif %}">
             <div class="product__item {% if product.on_sale %}sale{% endif %}">
-                <div class="product__item__pic set-bg" data-setbg="{% if product.main_image %}{{ product.main_image.url }}{% else %}{% static 'images/product/default.jpg' %}{% endif %}">
+                <div class="product__item__pic ">
+                    <a href="{% url 'spartans:detail' product.id product.name|slugify %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% else %}{% static 'images/product/default.jpg' %}{% endif %}"></a>
                     {% if product.is_new %}
                         <span class="label">New</span>
                     {% elif product.on_sale %}
@@ -237,7 +238,7 @@
                     <h2>Instagram</h2>
                     <p>Explore the latest mobile accessories — headphones, chargers, speakers, memory cards, and more.
                     Follow us for daily tech updates and offers.</p>
-                    <h3>#Electronic_Store</h3>
+                    <a href="https://www.instagram.com/spartans_mobiles?igsh=MWgxd3JzbThtbnU4OQ=="><h3>#spartans_mobiles</h3></a>
                 </div>
             </div>
         </div>

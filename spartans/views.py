@@ -83,7 +83,7 @@ def service_type(request):
 
 def detail(request, product_id, product_name):
     product_obj = product.objects.get(id=product_id)
-    related_products = product.objects.exclude(id=product_obj.id)[:4]
+    related_products = product.objects.filter(category=product_obj.category).exclude(id=product_obj.id)[:4]
 
     user_review = None
     if request.user.is_authenticated:
