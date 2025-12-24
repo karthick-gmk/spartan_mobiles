@@ -11,7 +11,6 @@ urlpatterns = [
     path("about", views.about, name='about'),
     path('shop', views.shop, name='shop'),
     path('service_type',views.service_type,name='service-type'),
-    path('checkout', views.checkout, name='checkout'),
     path('sign_up', views.sign_up, name='sign_up'),
     path('sign_in',views.sign_in, name='sign_in'),
     path('logout',views.logout,name='logout'),
@@ -24,7 +23,7 @@ urlpatterns = [
     path('favorites', views.favorites, name='favorites'),
     path('remove_favorite/<int:favorite_id>/', views.remove_favorite, name='remove_favorite'),
     path('update_cart_quantity/', views.update_cart_quantity, name='update_cart_quantity'),
-
+    path('delete_address/', views.delete_address, name='delete_address'),
 
     ]
 

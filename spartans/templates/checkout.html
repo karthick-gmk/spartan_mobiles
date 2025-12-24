@@ -22,52 +22,60 @@
                             <li>Total <span>₹{{ subtotal|default:0 }}</span></li>
                         </ul>
                        <button type="button" data-toggle="modal" data-target="#spartansOrderModal" style="color:white;" class="btn primary-btn">PLACE ORDER</button>
-
                     </div>
                 </div>
             </div>
         </div>
-         <!-- Spartans Mobile - Order Modal -->
-            <div class="modal fade" id="spartansOrderModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-
-                        <div class="modal-header" style="background:#000; color:#fff;">
-                            <h5 class="modal-title">Spartans Mobile - Order Confirmation</h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span style="color:white;">&times;</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="text-center">
-                                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                                    width="70" class="mb-3">
-                                <h4 class="mb-2">Order Placed Successfully!</h4>
-                                <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
-                                <p>Your mobile service request has been submitted.</p>
-
-                                <div class="alert alert-success mt-3">
-                                    <strong>Total Amount:</strong> ₹{{ subtotal|default:0 }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                Close
-                            </button>
-                            <a href="/" class="btn btn-primary">
-                                Continue Payment
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div> 
-        
     </div>
 </section>
 
+
+ <!-- Spartans Mobile - Order Modal -->
+<div class="modal fade" id="spartansOrderModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background:#000; color:#fff;">
+                <h5 class="modal-title">Spartans Mobile - Order Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span style="color:white;">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
+                        width="70" class="mb-3">
+                    <h4 class="mb-2">Order Placed Successfully!</h4>
+                    <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
+                    <p>Your mobile service request has been submitted.</p>
+
+                    <div class="alert alert-success mt-3">
+                        <strong>Total Amount:</strong> ₹{{ subtotal|default:0 }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+                <a href="/" class="btn btn-primary">
+                    Continue Payment
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+<script>
+    {% if show_payment_modal %}
+        $(document).ready(function() {
+            $('#spartansOrderModal').modal('show');
+        });
+    {% endif %}
+</script>
 
 <script>
     document.querySelector('form').addEventListener('submit', function(e) {

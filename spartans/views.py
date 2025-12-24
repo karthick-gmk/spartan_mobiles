@@ -173,99 +173,6 @@ def contact(request):
 
 
 
-def checkout(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "Please login first!")
-        return redirect('spartans:sign_in')
-        
-    cart = Cart.objects.filter(user=request.user).first()
-    if not cart:
-        messages.error(request, "Your cart is empty!")
-        return redirect('spartans:shoping_card')
-        
-    cart_items = CartItem.objects.filter(cart=cart)
-    user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
-    
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        mobile = request.POST.get('mobile')
-        city = request.POST.get('city')
-        state = request.POST.get('state')
-        pincode = request.POST.get('pincode')
-        
-        # Handle address selection
-        selected_address_id = request.POST.get('selected_address_id')
-        
-        if selected_address_id and selected_address_id != 'new':
-                # Use existing address
-                user_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
-                address1 = user_address.address_line1
-                address2 = user_address.address_line2
-
-        else:
-            # New address
-            address_type = request.POST.get('address_type')
-            address1 = request.POST.get('address_line1')  # Changed from 'address1'
-            address2 = request.POST.get('address_line2', '')  # Changed from 'address2'
-            save_address = request.POST.get('save_address')
-            
-            # Save new address if requested
-            if save_address:
-                UserAddress.objects.create(
-                    user=request.user,
-                    address_type=address_type,
-                    address_line1=address1,
-                    address_line2=address2,
-                    city=city,
-                    state=state,
-                    pincode=pincode
-                )
-
-        try:
-            # Calculate total
-            total_amount = sum(item.get_total_price() for item in cart_items)
-            
-            # Create Order first
-            order = Order.objects.create(
-                user=request.user,
-                total_amount=total_amount,
-                status='pending'
-            )
-            
-            # Create OrderItems from cart items
-            for cart_item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product=cart_item.product,
-                    quantity=cart_item.quantity,
-                    price=cart_item.product.price
-                )
-            
-            # Create BillingAddress with order
-            billing_address = BillingAddress.objects.create(
-                order=order,
-                name=name,
-                email=email,
-                mobile=mobile,
-                address1=address1,
-                address2=address2,
-                city=city,
-                state=state,
-                pincode=pincode
-            )
-            
-            # Clear cart
-            cart_items.delete()
-            messages.success(request, "Order placed successfully!")
-            return redirect('/')
-        except Exception as e:
-            messages.error(request, f"Error placing order: {str(e)}")
-    return render(request, 'checkout.html', {'cart_items': cart_items,'user_addresses': user_addresses})
-
-
-
-
 
 def sign_up(request):
     success_message = None
@@ -335,7 +242,6 @@ def reset_pw(request):
     return render(request, 'reset_pw.html')
 
 
-
 def add_to_cart(request, product_id):
     if request.user.is_authenticated:
         product_obj = product.objects.get(id=product_id)
@@ -365,29 +271,115 @@ def add_to_cart(request, product_id):
 
 
 def shoping_card(request):
-    if request.user.is_authenticated:
-        # Get the user's cart
-        cart = Cart.objects.filter(user=request.user).first()
-        if cart:
-            cart_items = CartItem.objects.filter(cart=cart)
-            subtotal = sum(item.get_total_price() for item in cart_items)
-        else:
-            cart_items = []
-            subtotal = 0
-        
-        # Get user's saved addresses ordered by most recent first
-        user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
-        
-        print("Cart items:", cart_items)
-        return render(request, 'shoping-cart.html', {
-            'cart_items': cart_items,
-            'subtotal': subtotal,
-            'user_addresses': user_addresses,
-            'has_items': len(cart_items) > 0  # Add this flag
-        })
-    else:
+    if not request.user.is_authenticated:
         messages.error(request, "Please login first!")
         return redirect('spartans:sign_in')
+    
+    # Get the user's cart
+    cart = Cart.objects.filter(user=request.user).first()
+    if cart:
+        cart_items = CartItem.objects.filter(cart=cart)
+        subtotal = sum(item.get_total_price() for item in cart_items)
+    else:
+        cart_items = []
+        subtotal = 0
+    
+    # Get user's saved addresses ordered by most recent first
+    user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Handle checkout POST request
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        pincode = request.POST.get('pincode')
+        
+        # Handle address selection
+        selected_address_id = request.POST.get('selected_address_id')
+        
+        if selected_address_id and selected_address_id != 'new':
+            # Use existing address
+            user_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
+            address1 = user_address.address_line1
+            address2 = user_address.address_line2
+        else:
+            # New address
+            address_type = request.POST.get('address_type')
+            address1 = request.POST.get('address_line1')
+            address2 = request.POST.get('address_line2', '')
+            save_address = request.POST.get('save_address')
+            
+            # Save new address if requested
+            if save_address:
+                UserAddress.objects.create(
+                    user=request.user,
+                    address_type=address_type,
+                    address_line1=address1,
+                    address_line2=address2,
+                    city=city,
+                    state=state,
+                    pincode=pincode
+                )
+
+        try:
+            # Calculate total
+            total_amount = sum(item.get_total_price() for item in cart_items)
+            
+            # Create Order first
+            order = Order.objects.create(
+                user=request.user,
+                total_amount=total_amount,
+                status='pending'
+            )
+            
+            # Create OrderItems from cart items
+            for cart_item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.product,
+                    quantity=cart_item.quantity,
+                    price=cart_item.product.price
+                )
+            
+            # Create BillingAddress with order
+            billing_address = BillingAddress.objects.create(
+                order=order,
+                name=name,
+                email=email,
+                mobile=mobile,
+                address1=address1,
+                address2=address2,
+                city=city,
+                state=state,
+                pincode=pincode
+            )
+            
+            # Clear cart
+            cart_items.delete()
+            # Clear cart
+                        # Clear cart
+            cart_items.delete()
+            return render(request, 'shoping-cart.html', {
+                'cart_items': [],
+                'subtotal': 0,
+                'user_addresses': user_addresses,
+                'has_items': False,
+                'show_payment_modal': True  # இதை add பண்ணணும்
+            })
+
+
+        except Exception as e:
+            messages.error(request, f"Error placing order: {str(e)}")
+    
+    print("Cart items:", cart_items)
+    return render(request, 'shoping-cart.html', {
+        'cart_items': cart_items,
+        'subtotal': subtotal,
+        'user_addresses': user_addresses,
+        'has_items': len(cart_items) > 0
+    })
 
 
 
@@ -419,6 +411,16 @@ def cart_context(request):
     return {'cart': {'count': cart_count}}
 
 
+def delete_address(request):
+    if request.method == 'POST':
+        address_id = request.POST.get('address_id')
+        try:
+            address = UserAddress.objects.get(id=address_id, user=request.user)
+            address.delete()
+            return JsonResponse({'success': True})
+        except UserAddress.DoesNotExist:
+            return JsonResponse({'success': False})
+    return JsonResponse({'success': False})
 
 
 
