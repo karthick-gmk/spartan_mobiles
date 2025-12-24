@@ -286,7 +286,7 @@
         <div class="modal-content">
 
             <div class="modal-header" style="background:#000; color:#fff;">
-                <h5 class="modal-title">Spartans Mobile - Order Confirmation</h5>
+                <h5 style="color:white;" class="modal-title">Spartans Mobile - Order Confirmation</h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span style="color:white;">&times;</span>
                 </button>
@@ -298,7 +298,6 @@
                         width="70" class="mb-3">
                     <h4 class="mb-2">Order Placed Successfully!</h4>
                     <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
-                    <p>Your mobile service request has been submitted.</p>
 
                     <div class="alert alert-success mt-3">
                         <strong>Total Amount:</strong> ₹<span id="payment-modal-total">{{ subtotal|default:0 }}</span>
@@ -449,12 +448,11 @@
         handleAddressSelection();
     }
     function deleteAddress() {
-    const select = document.getElementById('addressSelect');
-    const selectedAddressId = select.value;
-    
-    if (selectedAddressId && selectedAddressId !== 'new' && selectedAddressId !== '') {
-        if (confirm('Are you sure you want to delete this address?')) {
-            // Delete address via AJAX
+        const select = document.getElementById('addressSelect');
+        const selectedAddressId = select.value;
+        
+        if (selectedAddressId && selectedAddressId !== 'new' && selectedAddressId !== '') {
+            // Delete address via AJAX immediately
             fetch('/delete_address/', {
                 method: 'POST',
                 headers: {
@@ -475,21 +473,14 @@
                     // Reset form
                     select.value = '';
                     handleAddressSelection();
-                    
-                    alert('Address deleted successfully!');
-                } else {
-                    alert('Failed to delete address!');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error deleting address!');
             });
         }
-    } else {
-        alert('Please select an address to delete!');
     }
-    }
+
 </script>
 
 <script>
