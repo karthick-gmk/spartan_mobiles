@@ -4206,15 +4206,16 @@ ol {
 		margin-top: 50px;
     }
 }
-.primary-btn {
+.primarys-btn {
     background: linear-gradient(135deg, #0066ff, #ff2f92);
     border-radius: 30px;
     padding: 14px 34px;
     font-weight: 600;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+	color: white;
 }
 
-.primary-btn:hover {
+.primarys-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 15px 40px rgba(0,0,0,0.45);
 }
