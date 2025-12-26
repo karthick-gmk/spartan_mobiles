@@ -358,6 +358,7 @@ def shoping_card(request):
             
             # Clear cart
             cart_items.delete()
+            print("billing_address",billing_address)
             return render(request, 'shoping-cart.html', {
                 'cart_items': [],
                 'subtotal': 0,
