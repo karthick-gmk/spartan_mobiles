@@ -366,7 +366,7 @@ def shoping_card(request):
                 'subtotal': 0,
                 'user_addresses': user_addresses,
                 'has_items': False,
-                'show_payment_modal': True  # இதை add பண்ணணும்
+                'show_payment_modal': True  
             })
 
 
