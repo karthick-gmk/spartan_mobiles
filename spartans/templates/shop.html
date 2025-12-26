@@ -34,11 +34,11 @@
                     </div>
                     <div class="shop__sidebar__accordion">
                         <div class="accordion" id="accordionExample">
-                            <div class="card">
+                           <div class="card">
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseOne">category</a>
                                 </div>
-                                <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseOne" class="collapse" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
                                             <div class="shop__sidebar__categories">
@@ -59,7 +59,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
                                 </div>
-                                <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__brand">
                                             <ul>
@@ -77,7 +77,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
                                 </div>
-                                <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseThree" class="collapse" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
@@ -95,7 +95,7 @@
                                 <div class="card-heading">
                                     <a data-toggle="collapse" data-target="#collapseSix">Service</a>
                                 </div>
-                                <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
+                                <div id="collapseSix" class="collapse" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__tags">
                                             <a href="#">Display</a>
@@ -254,6 +254,54 @@
 
 
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const products = document.querySelectorAll('.product__filter > div');
+        const itemsPerPage = 12;
+        const totalPages = Math.ceil(products.length / itemsPerPage);
+        let currentPage = 1;
+        
+        function createPagination() {
+            const pagination = document.querySelector('.product__pagination');
+            pagination.innerHTML = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = i;
+                if (i === 1) link.classList.add('active');
+                
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentPage = i;
+                    showPage(currentPage);
+                    updateActive();
+                });
+                
+                pagination.appendChild(link);
+            }
+        }
+        
+        function showPage(page) {
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            
+            products.forEach((product, index) => {
+                product.style.display = (index >= start && index < end) ? 'block' : 'none';
+            });
+        }
+        
+        function updateActive() {
+            document.querySelectorAll('.product__pagination a').forEach((link, index) => {
+                link.classList.toggle('active', index + 1 === currentPage);
+            });
+        }
+        
+        createPagination();
+        showPage(1);
+    });
+</script>
 
 
 <script>
