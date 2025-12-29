@@ -15,6 +15,7 @@ from .models.billing_model import BillingAddress
 from .models.shop_cart import Cart, Favorite, CartItem
 from spartans.models.order_model import Order, OrderItem
 from .models.billing_model import UserAddress
+from spartans.models.service_model import Service, UserRequestService, Servicetype
 
 
 
@@ -24,7 +25,8 @@ from .models.billing_model import UserAddress
 def index(request):
     products = product.objects.all()[:8]  # First 8 products
     services = Service.objects.all()
-    return render(request, 'index.html',{'services': services,'products': products})
+    servicetypes = Servicetype.objects.all()
+    return render(request, 'index.html',{'services': services,'products': products,'servicetypes': servicetypes, })
 
 
 
@@ -43,6 +45,41 @@ def shop(request):
 
 
 
+# def service_type(request):
+#     if request.method == 'POST':
+#         print("service_request",request.POST)
+#         user_id = request.POST.get('user_id')
+#         service_id = request.POST.get('service_id')
+#         brand_id = request.POST.get('brand_id')
+#         brand_model_name = request.POST.get('brand_model_id')  # Text input
+#         notes = request.POST.get('notes')
+
+#         try:
+#             # Get or create BrandModel from text input
+#             brand_model, created = BrandModel.objects.get_or_create(
+#                 name=brand_model_name,
+#                 defaults={'brand_id': brand_id}
+#             )
+            
+#             user_request = UserRequestService(
+#                 user_id=user_id,
+#                 service_id=service_id,
+#                 brand_id=brand_id,
+#                 brandModel_id=brand_model.id,  # Use the created/found BrandModel ID
+#                 notes = notes,
+#             )
+#             user_request.save()
+#             messages.success(request, "Service request submitted successfully!")   
+#         except Exception as e:
+#             print(f"Service-Error: {e}")
+#             messages.error(request, f"Error: {str(e)}")    
+            
+#     services = Service.objects.all()
+#     categories = Category.objects.all()
+#     brands = Brand.objects.all()
+#     users = User.objects.all()
+#     service_type = Servicetype.objects.all()
+#     return render(request, 'service_type.html', {'services': services, 'categories':categories ,'brands':brands , 'users':users , "servicetypes":service_type})
 def service_type(request):
     if request.method == 'POST':
         print("service_request",request.POST)
@@ -63,8 +100,8 @@ def service_type(request):
                 user_id=user_id,
                 service_id=service_id,
                 brand_id=brand_id,
-                brandModel_id=brand_model.id,  # Use the created/found BrandModel ID
-                notes = notes,
+                brandModel=brand_model,  # Fixed: use brandModel instead of brandModel_id
+                notes=notes,
             )
             user_request.save()
             messages.success(request, "Service request submitted successfully!")   
@@ -73,10 +110,11 @@ def service_type(request):
             messages.error(request, f"Error: {str(e)}")    
             
     services = Service.objects.all()
+    servicetypes = Servicetype.objects.all()  # For display with images/descriptions
     categories = Category.objects.all()
     brands = Brand.objects.all()
     users = User.objects.all()
-    return render(request, 'service_type.html', {'services': services, 'categories':categories ,'brands':brands , 'users':users})
+    return render(request, 'service_type.html', {'services': services,  'servicetypes': servicetypes, 'categories': categories,'brands': brands,'users': users})
 
 
    

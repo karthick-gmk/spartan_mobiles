@@ -259,24 +259,23 @@
         </div>
 
         <div class="row">
-            {% for service in services %}
+            {% for servicetype in servicetypes %}
             <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="{% if service.image_url %}{{ service.image_url }}{% else %}{% static 'images/default-service.jpg' %}{% endif %}"></div>
-                        <div class="blog__item__text">
-                            <span><img src="{% static 'img/calendar.png' %}" alt=""> {{ service.service_type }}</span>
-                            <h5>{{ service.name }}</h5>
-                            <p>{{ service.discription }}</p>
-                            <a href="/contact">Contact Now</a>
-                        </div>
+                <div class="blog__item">
+                    <div class="blog__item__pic set-bg" data-setbg="{% if servicetype.image_url %}{{ servicetype.image_url }}{% else %}{% static 'images/default-service.jpg' %}{% endif %}"></div>
+                    <div class="blog__item__text">
+                        <span><img src="{% static 'img/calendar.png' %}" alt=""> {{ servicetype.service_type }}</span>
+                        <h5>{{ servicetype.service.name }}</h5>
+                        <p>{{ servicetype.discription }}</p>
+                        <a href="/service_type">Service Request</a>
                     </div>
                 </div>
-                {% empty %}
-                <div class="col-12">
-                    <p>No services available at the moment.</p>
-                </div>
-                {% endfor %}
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p>No services available at the moment.</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
