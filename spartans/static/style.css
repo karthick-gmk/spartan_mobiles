@@ -4219,3 +4219,46 @@ ol {
     transform: translateY(-3px);
     box-shadow: 0 15px 40px rgba(0,0,0,0.45);
 }
+
+/* Mobile screens 320px to 420px */
+@media (min-width: 320px) and (max-width: 375px) {
+
+    .header__logo  {
+        text-align: center;
+		margin-left: 10px;
+		margin-top: -50px;
+    }
+
+    .site-logo {
+        width: 260px !important;
+        height: auto !important;
+        margin-top: 0 !important;
+    }
+
+    .col-lg-3.col-md-3 {
+        padding: 0;
+    }
+}
+@media (min-width: 376px) and (max-width: 425px){
+	
+    .header__logo  {
+        text-align: center;
+		margin-left: 50px;
+		margin-top: -30px;
+		margin-bottom: 20px;
+    }
+
+    .site-logo {
+        width: 300px !important;
+        height: auto !important;
+        margin-top: 0 !important;
+    }
+
+    .col-lg-3.col-md-3 {
+        padding: 0;
+    }
+}
+.header {
+	background-color: rgb(255, 255, 255);
+    padding: 55px 0;
+}
