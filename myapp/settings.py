@@ -151,3 +151,19 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+import os
+
+# Add at the top of settings.py
+ALLOWED_HOSTS = ['*']
+
+# Add at the bottom
+if 'VERCEL' in os.environ:
+    DEBUG = False
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
