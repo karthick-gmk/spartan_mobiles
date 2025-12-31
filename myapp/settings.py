@@ -84,16 +84,16 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 
 AUTH_USER_MODEL = 'usermanagement.User'
 
-DATABASES = {
-    'default':{
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spartan_mobile_db',
-        'USER': 'postgres',
-        'PASSWORD':'admin',
-        'HOST' : 'localhost',
-        'PORT': '5432'
-    }
-}
+# DATABASES = {
+#     'default':{
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'spartan_mobile_db',
+#         'USER': 'postgres',
+#         'PASSWORD':'admin',
+#         'HOST' : 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 
 
 # Password validation
@@ -145,15 +145,30 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
-import dj_database_url
 import os
 
-# Local-la irukkum pothu pathaiya database, 
-# Vercel-la irukkum pothu online database-ah eduthukkum
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://user:password@localhost:5432/your_db_name',
-        conn_max_age=600
-    )
-}
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Database configuration
+if 'VERCEL' in os.environ:
+    # Vercel deployment - use SQLite
+    DEBUG = False
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
+else:
+    # Local development - use PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'spartan_mobile_db',
+            'USER': 'postgres',
+            'PASSWORD': 'admin',
+            'HOST': 'localhost',
+            'PORT': '5432'
+        }
+    }
