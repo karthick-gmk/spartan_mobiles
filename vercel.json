@@ -10,5 +10,13 @@
       "src": "/(.*)",
       "dest": "index.py"
     }
-  ]
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "myapp.settings"
+  },
+  "build": {
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "myapp.settings"
+    }
+  }
 }
