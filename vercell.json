@@ -3,14 +3,11 @@
   "builds": [
     {
       "src": "myapp/wsgi.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config":{"maxLambaSize":"15mb","runtime":"python3.10.13"}
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "myapp/wsgi.py"
