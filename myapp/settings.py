@@ -146,3 +146,14 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+import dj_database_url
+import os
+
+# Local-la irukkum pothu pathaiya database, 
+# Vercel-la irukkum pothu online database-ah eduthukkum
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://user:password@localhost:5432/your_db_name',
+        conn_max_age=600
+    )
+}
