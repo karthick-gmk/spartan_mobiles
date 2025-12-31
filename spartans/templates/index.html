@@ -267,6 +267,9 @@
                         <span><img src="{% static 'img/calendar.png' %}" alt=""> {{ servicetype.service_type }}</span>
                         <h5>{{ servicetype.service.name }}</h5>
                         <p>{{ servicetype.discription }}</p>
+                        <p class="offer">
+                            <span style="color:red;" class="offer-text">{{ servicetype.text }}</span>
+                        </p>
                         <a href="/service_type">Service Request</a>
                     </div>
                 </div>

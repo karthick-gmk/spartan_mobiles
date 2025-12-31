@@ -17,6 +17,7 @@ class Service(models.Model):
 class Servicetype(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     discription = models.TextField()
+    text = models.TextField(null=True, blank=True)
     service_type = models.CharField(max_length=100)
     image_url = models.URLField(null=True, blank=True)
    
