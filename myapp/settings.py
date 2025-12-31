@@ -152,11 +152,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 import dj_database_url
 import os
+from pathlib import Path
 
-# Database configuration using environment variable
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Database configuration
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        # DATABASE_URL variable illai endral, local SQLite use pannum
+        default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
         conn_max_age=600
     )
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql', # Intha line thaan missing
+        'NAME': 'your_db_name',
+        'USER': 'your_user',
+        'PASSWORD': 'your_password',
+        'HOST': 'your_cloud_db_host',
+        'PORT': '5432',
+    }
 }
