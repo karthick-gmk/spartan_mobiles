@@ -1,4 +1,0 @@
-Django==5.2.8
-psycopg2-binary
-Pillow
-whitenoise
