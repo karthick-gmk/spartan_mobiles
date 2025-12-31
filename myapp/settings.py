@@ -26,14 +26,13 @@ SECRET_KEY = 'django-insecure-ln&%59o!%n34x$$hwvxdm71!&%r@8wsnsajgm)w)_%g@z8hjm(
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1',"*"]
 
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +46,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # Added comma here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,16 +82,16 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 
 AUTH_USER_MODEL = 'usermanagement.User'
 
-# DATABASES = {
-#     'default':{
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'spartan_mobile_db',
-#         'USER': 'postgres',
-#         'PASSWORD':'admin',
-#         'HOST' : 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+DATABASES = {
+    'default':{
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'spartan_mobile_db',
+        'USER': 'postgres',
+        'PASSWORD':'admin',
+        'HOST' : 'localhost',
+        'PORT': '5432'
+    }
+}
 
 
 # Password validation
@@ -144,34 +142,3 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-import os
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-import dj_database_url
-import os
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Database configuration
-DATABASES = {
-    'default': dj_database_url.config(
-        # DATABASE_URL variable illai endral, local SQLite use pannum
-        default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
-        conn_max_age=600
-    )
-}
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql', # Intha line thaan missing
-        'NAME': 'your_db_name',
-        'USER': 'your_user',
-        'PASSWORD': 'your_password',
-        'HOST': 'your_cloud_db_host',
-        'PORT': '5432',
-    }
-}
