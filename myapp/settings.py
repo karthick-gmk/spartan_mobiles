@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ln&%59o!%n34x$$hwvxdm71!&%r@8wsnsajgm)w)_%g@z8hjm(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 
 
@@ -151,19 +151,3 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
-import os
-
-# Add at the top of settings.py
-ALLOWED_HOSTS = ['*']
-
-# Add at the bottom
-if 'VERCEL' in os.environ:
-    DEBUG = False
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
-    }
