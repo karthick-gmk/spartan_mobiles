@@ -23,9 +23,14 @@ from spartans.models.service_model import Service, UserRequestService, Servicety
 
 
 def index(request):
-    products = product.objects.all()[:8]  # First 8 product
-    services = Service.objects.all()
-    servicetypes = Servicetype.objects.all()
+    try:
+        products = product.objects.all()[:8]  # First 8 product
+        services = Service.objects.all()
+        servicetypes = Servicetype.objects.all()
+    except:
+        products = []
+        services = []
+        servicetypes = []
     return render(request, 'index.html',{'services': services,'products': products,'servicetypes': servicetypes, })
 
 
