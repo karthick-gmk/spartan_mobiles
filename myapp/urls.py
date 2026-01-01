@@ -15,17 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse("<h1>Welcome to Spartan Mobiles</h1><p>Website is working on Vercel!</p>")
 
 def favicon_view(request):
     return HttpResponse(status=204)
 
 urlpatterns = [
-    path("", index, name='index'),
+    path("", include('spartans.urls')),
+    path('admin/', admin.site.urls),
     path('favicon.ico', favicon_view),
     path('favicon.png', favicon_view),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
