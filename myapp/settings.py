@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ln&%59o!%n34x$$hwvxdm71!&%r@8wsnsajgm)w)_%g@z8hjm('
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ln&%59o!%n34x$$hwvxdm71!&%r@8wsnsajgm)w)_%g@z8hjm(')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-
-ALLOWED_HOSTS = ['127.0.0.1',"*"]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '*']
 
 
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,13 +84,13 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 AUTH_USER_MODEL = 'usermanagement.User'
 
 DATABASES = {
-    'default':{
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spartan_mobile_db',
-        'USER': 'postgres',
-        'PASSWORD':'admin',
-        'HOST' : 'localhost',
-        'PORT': '5432'
+        'NAME': os.environ.get('DB_NAME', 'spartan_mobile_db'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -129,7 +130,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'spartans/static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type
