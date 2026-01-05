@@ -69,12 +69,16 @@
                 <div class="col-lg-8">
                     <div class="product__details__text">
                         <h4>{{ product.name }}</h4>
-                        <div class="rating">
+                        <div class="rating" style="color:#FF9529; font-size:20px;">
                             {% for i in "12345" %}
-                                <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > product.rating %}-o{% endif %}"></i>
+                                {% if forloop.counter <= product.rating|default:0 %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
                             {% endfor %}
-                            <span> - {{ product.rating }} Rating</span>
                         </div>
+
 
                         <h3>₹{{ product.price }}</h3>
                         <!-- Options -->
