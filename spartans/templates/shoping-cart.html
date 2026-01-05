@@ -47,9 +47,13 @@
                                         <h6>{{ item.product.brand }}</h6>
                                         <h6>{{ item.product.name }}</h6>
                                         <h5 id="price-{{ item.id }}" data-price="{{ item.product.price }}">₹{{ item.product.price }}</h5>
-                                        <div class="rating" style="margin-top:5px;">
+                                        <div class="rating" style="color:#FF9529; font-size:20px;">
                                             {% for i in "12345" %}
-                                               <i style="color: #FF9529;" class="fa fa-star{% if forloop.counter > item.product.rating %}-o{% endif %}"></i>
+                                                {% if forloop.counter <= item.product.rating|default:0 %}
+                                                    ★
+                                                {% else %}
+                                                    ☆
+                                                {% endif %}
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -927,7 +931,7 @@
         font-weight: bold;
         color: #333;
     }
-    
+
     @media (min-width: 320px) and (max-width: 500px) {
         .shopping__cart__table {
             overflow-x: auto;

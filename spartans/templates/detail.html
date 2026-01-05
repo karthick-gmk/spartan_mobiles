@@ -328,12 +328,12 @@
                     </div>
                     <div class="product__item__text">
                         <h6>{{ related_product.name }}</h6>
-                        <div class="rating">
+                        <div class="rating" style="color:#FF9529; font-size:20px;">
                             {% for i in "12345" %}
-                                {% if forloop.counter <= related_product.rating %}
-                                    <i style="color: #FF9529;"  class="fa fa-star"></i>
+                                {% if forloop.counter <= related_product.rating|default:0 %}
+                                    ★
                                 {% else %}
-                                    <i style="color: #FF9529;"  class="fa fa-star-o"></i>
+                                    ☆
                                 {% endif %}
                             {% endfor %}
                         </div>
