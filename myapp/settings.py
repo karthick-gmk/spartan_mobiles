@@ -82,23 +82,23 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 
 AUTH_USER_MODEL = 'usermanagement.User'
 
-DATABASES = {
-    'default':{
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spartan_mobile_db',
-        'USER': 'postgres',
-        'PASSWORD':'admin',
-        'HOST' : 'localhost',
-        'PORT': '5432'
-    }
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3', # 'NAME' is the path to your database file
+#     'default':{
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'spartan_mobile_db',
+#         'USER': 'postgres',
+#         'PASSWORD':'admin',
+#         'HOST' : 'localhost',
+#         'PORT': '5432'
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3', # 'NAME' is the path to your database file
+    }
+}
 
 
 # Password validation
