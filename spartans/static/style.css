@@ -2480,7 +2480,7 @@ ol {
 }
 
 .shopping__cart__table table tbody tr td.quantity__item .quantity .pro-qty-2 .qtybtn {
-	font-size: 16px;
+	font-size: 0px;
 	color: #888888;
 	width: 10px;
 	cursor: pointer;
@@ -3983,6 +3983,7 @@ ol {
 
 @media (max-width: 1024px) {
     .site-logo {
+		
         height: 160px;
     }
 	
@@ -4225,12 +4226,38 @@ ol {
 
     .header__logo  {
         text-align: center;
-		margin-left: 10px;
-		margin-top: -50px;
+		margin-left: 0px;
+		margin-top: -40px;
     }
 
     .site-logo {
-        width: 260px !important;
+        width: auto !important;
+        height: auto !important;
+        margin-top: 0 !important;
+		padding-bottom: 5px;
+    }
+
+    .col-lg-3.col-md-3 {
+        padding: 0;
+    }
+	.canvas__open{
+		margin-top: 140px;
+	}
+	.header{
+		margin-bottom: 50px;
+	}
+	
+}
+@media (min-width: 376px) and (max-width: 425px){
+	
+    .header__logo  {
+        text-align: center;
+		margin-top: -20px;
+
+    }
+
+    .site-logo {
+        width: auto !important;
         height: auto !important;
         margin-top: 0 !important;
     }
@@ -4238,21 +4265,37 @@ ol {
     .col-lg-3.col-md-3 {
         padding: 0;
     }
+	.canvas__open{
+		margin-top: 200px;
+	}
+	.header{
+		margin-bottom: 80px;
+	}
 }
-@media (min-width: 376px) and (max-width: 425px){
+@media (min-width: 426px) and (max-width: 500px){
 	
     .header__logo  {
         text-align: center;
-		margin-left: 50px;
-		margin-top: -30px;
-		margin-bottom: 20px;
+		margin-left: 0px;
+		margin-top: 20px;
+		
     }
+	.canvas__open{
+		margin-top: 280px;
+	}
+		.header__nav__option {
+		display: none;
+	}
 
     .site-logo {
-        width: 300px !important;
+        width: auto !important;
         height: auto !important;
         margin-top: 0 !important;
     }
+	
+	.header{
+		margin-bottom: 130px;
+	}
 
     .col-lg-3.col-md-3 {
         padding: 0;
@@ -4288,3 +4331,49 @@ ol {
     color: #ff0000;
     font-weight: 600;
 }
+
+@media (min-width: 550px) and (max-width: 768px) {
+    .header .container .row {
+        align-items: center;
+    }
+    
+    .header__logo img {
+        width: 180px !important;
+        height: 120px !important;
+        margin-left: -10px !important;
+    }
+	 .header__nav__option {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+	.header__nav__option svg {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .profile-dropdown img {
+        width: 25px;
+        height: 25px;
+		margin-top: -6px; 
+		margin-left: 10px;
+    }
+    
+    .auth-links {
+        display: flex;
+        gap: 10px;
+        font-size: 14px;
+    }
+    
+    .canvas__open {
+        display: none;
+    }
+	.shop-details{
+		margin-top: 10px;
+	}
+	.breadcrumb-option{
+		margin-top: 10px;
+	}
+}
+
+
