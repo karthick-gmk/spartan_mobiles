@@ -70,3 +70,5 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"{self.product.name} - Image {self.id}"
     
+
+

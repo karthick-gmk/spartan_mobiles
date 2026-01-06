@@ -4242,6 +4242,9 @@ ol {
 
 /* Mobile screens 320px to 420px */
 @media (min-width: 320px) and (max-width: 375px) {
+	.instagram__pic__item {
+		margin-bottom: 5px;
+	}
 
     .header__logo  {
         text-align: center;
@@ -4290,8 +4293,14 @@ ol {
 	.header{
 		margin-bottom: 80px;
 	}
+	.instagram__pic__item {
+		margin-bottom: 5px;
+	}
 }
 @media (min-width: 426px) and (max-width: 500px){
+	.instagram__pic__item {
+		margin-bottom: 5px;
+	}
 	
     .header__logo  {
         text-align: center;

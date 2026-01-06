@@ -180,43 +180,72 @@
                 </div>
             </div>
 
-            <div class="col-lg-4">
+           <div class="col-lg-4">
                 <div class="categories__hot__deal">
-                    <img src="{% static "images/product-sale.png" %}" alt="">
-                    <div class="hot__deal__sticker">
-                        <span>Sale Of</span>
-                        <h5>₹499</h5>
-                    </div>
+                    {% if announcement and announcement.product %}
+                        <a href="{% url 'spartans:detail' announcement.product.id announcement.product.name|slugify %}">
+                            <img src="{% if announcement.product.main_image %}{{ announcement.product.main_image.url }}{% else %}{% static 'images/product-sale.png' %}{% endif %}" alt="">
+                        </a>
+                        <div class="hot__deal__sticker">
+                           <span>Sale Of</span>
+                            <h5>₹{{ announcement.price }}</h5>
+                        </div>
+                    {% else %}
+                        <img src="{% static 'images/product-sale.png' %}" alt="">
+                        <div class="hot__deal__sticker">
+                            <span>Sale Of</span>
+                            <h5>₹499</h5>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
-            <div class="col-lg-4 offset-lg-1">
+
+
+           <div class="col-lg-4 offset-lg-1">
                 <div class="categories__deal__countdown">
                     <span>Deal Of The Week</span>
-                    <h2>Wireless Bluetooth Headphones</h2>
 
-                    <div class="categories__deal__countdown__timer" id="countdown">
-                        <div class="cd-item">
-                            <span>3</span>
-                            <p>Days</p>
-                        </div>
-                        <div class="cd-item">
-                            <span>1</span>
-                            <p>Hours</p>
-                        </div>
-                        <div class="cd-item">
-                            <span>50</span>
-                            <p>Minutes</p>
-                        </div>
-                        <div class="cd-item">
-                            <span>18</span>
-                            <p>Seconds</p>
-                        </div>
+                    <h2>
+                        {% if announcement and announcement.product %}
+                            {{ announcement.product.name }}
+                        {% else %}
+                            Wireless Bluetooth Headphones
+                        {% endif %}
+                    </h2>
+
+                    <div class="categories__deal__countdown__timer">
+                        {% if announcement %}
+                            {% with t=announcement.time_remaining %}
+                            <div class="cd-item">
+                                <span>{{ t.days }}</span>
+                                <p>Days</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>{{ t.hours }}</span>
+                                <p>Hours</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>{{ t.minutes }}</span>
+                                <p>Minutes</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>{{ t.seconds }}</span>
+                                <p>Seconds</p>
+                            </div>
+                            {% endwith %}
+                        {% else %}
+                            <div class="cd-item"><span>0</span><p>Days</p></div>
+                            <div class="cd-item"><span>0</span><p>Hours</p></div>
+                            <div class="cd-item"><span>0</span><p>Minutes</p></div>
+                            <div class="cd-item"><span>0</span><p>Seconds</p></div>
+                        {% endif %}
                     </div>
 
                     <a href="/shop" class="primary-btn">Shop now</a>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
@@ -291,6 +320,34 @@
 
 
 
+<script>
+    function updateCountdown() {
+        {% if announcement %}
+        const endTime = new Date("{{ announcement.end_time|date:'c' }}").getTime();
+        const now = new Date().getTime();
+        const timeLeft = endTime - now;
+        
+        if (timeLeft > 0) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.querySelector('.cd-item:nth-child(1) span').textContent = days;
+            document.querySelector('.cd-item:nth-child(2) span').textContent = hours;
+            document.querySelector('.cd-item:nth-child(3) span').textContent = minutes;
+            document.querySelector('.cd-item:nth-child(4) span').textContent = seconds;
+        } else {
+            document.querySelectorAll('.cd-item span').forEach(span => span.textContent = '0');
+        }
+        {% endif %}
+    }
+
+    {% if announcement %}
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    {% endif %}
+</script>
 
 
 

@@ -10,7 +10,7 @@ from .models.order_model import Order, OrderItem
 from .models.shop_cart import CartItem
 from .models.shop_cart import Favorite
 from .models.service_model import UserRequestService, Servicetype
-
+from .models.announcement_model import Announcement
 
 admin.site.register(product)
 admin.site.register(Service)
@@ -29,5 +29,5 @@ admin.site.register(OrderItem)
 admin.site.register(CartItem)
 admin.site.register(UserAddress)
 admin.site.register(Servicetype)
-
+admin.site.register(Announcement)
 

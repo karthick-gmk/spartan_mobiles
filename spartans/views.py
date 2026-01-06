@@ -16,6 +16,8 @@ from .models.shop_cart import Cart, Favorite, CartItem
 from spartans.models.order_model import Order, OrderItem
 from .models.billing_model import UserAddress
 from spartans.models.service_model import Service, UserRequestService, Servicetype
+from django.utils import timezone
+from spartans.models.announcement_model import Announcement
 
 
 
@@ -26,7 +28,14 @@ def index(request):
     products = product.objects.all()[:8]  # First 8 product
     services = Service.objects.all()
     servicetypes = Servicetype.objects.all()
-    return render(request, 'index.html',{'services': services,'products': products,'servicetypes': servicetypes, })
+    announcement = Announcement.objects.filter(
+        is_active=True,
+        start_time__lte=timezone.now(),
+        end_time__gte=timezone.now()
+    ).first()
+    return render(request, 'index.html',{'services': services,'products': products,'servicetypes': servicetypes, 'announcement': announcement})
+
+
 
 
 
