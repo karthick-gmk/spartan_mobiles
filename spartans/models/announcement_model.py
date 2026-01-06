@@ -5,7 +5,6 @@ from .product_model import product
 
 class Announcement(models.Model):
     product = models.ForeignKey(product, on_delete=models.CASCADE, null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField()
     is_active = models.BooleanField(default=True)
