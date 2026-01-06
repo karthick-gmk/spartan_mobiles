@@ -106,53 +106,53 @@
 <!-- Product Section Begin -->
 <section class="product spad">
   <div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <ul class="filter__controls">
-                <li class="active" data-filter="*">Best Sellers</li>
-                <li data-filter=".new-arrivals">New Arrivals</li>
-                <li data-filter=".hot-sales">Hot Deals</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="row product__filter">
-        {% for product in products %}
-        <div class="col-lg-3 col-md-6 col-sm-6 mix {% if product.is_new %}new-arrivals{% elif product.on_sale %}hot-sales{% else %}best-sellers{% endif %}">
-            <div class="product__item {% if product.on_sale %}sale{% endif %}">
-                <div class="product__item__pic ">
-                    <a href="{% url 'spartans:detail' product.id product.name|slugify %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% else %}{% static 'images/product/default.jpg' %}{% endif %}"></a>
-                    {% if product.is_new %}
-                        <span class="label">New</span>
-                    {% elif product.on_sale %}
-                        <span class="label">Sale</span>
-                    {% endif %}
-                    <ul class="product__hover">
-                        <li><a href="{% url 'spartans:detail' product.id product.name %}"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
-                        <li><a href="{% url 'spartans:detail' product.id product.name %}"><svg style="background:white; width:33px; height:33px; padding:2px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
-                    </ul>
-                </div>
-                <div class="product__item__text">
-                    <h6>{{ product.name }}</h6>
-                    <div class="rating" style="color:#FF9529; font-size:20px;">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= product.rating|default:0 %}
-                                ★
-                            {% else %}
-                                ☆
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <h5>₹{{ product.price }}</h5>
-                </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="filter__controls">
+                    <li class="active" data-filter="*">Best Sellers</li>
+                    <li data-filter=".new-arrivals">New Arrivals</li>
+                    <li data-filter=".hot-sales">Hot Deals</li>
+                </ul>
             </div>
         </div>
-        {% empty %}
-        <div class="col-12">
-            <p>No products available.</p>
+
+        <div class="row product__filter">
+            {% for product in products %}
+            <div class="col-lg-3 col-md-6 col-sm-6 mix {% if product.is_new %}new-arrivals{% elif product.on_sale %}hot-sales{% else %}best-sellers{% endif %}">
+                <div class="product__item {% if product.on_sale %}sale{% endif %}">
+                    <div class="product__item__pic ">
+                        <a href="{% url 'spartans:detail' product.id product.name|slugify %}"><img src="{% if product.main_image %}{{ product.main_image.url }}{% else %}{% static 'images/product/default.jpg' %}{% endif %}"></a>
+                        {% if product.is_new %}
+                            <span class="label">New</span>
+                        {% elif product.on_sale %}
+                            <span class="label">Sale</span>
+                        {% endif %}
+                        <ul class="product__hover">
+                            <li><a href="{% url 'spartans:detail' product.id product.name %}"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
+                            <li><a href="{% url 'spartans:detail' product.id product.name %}"><svg style="background:white; width:33px; height:33px; padding:2px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6>{{ product.name }}</h6>
+                        <div class="rating" style="color:#FF9529; font-size:20px;">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= product.rating|default:0 %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <h5>₹{{ product.price }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p>No products available.</p>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     </div>
 
 </section>

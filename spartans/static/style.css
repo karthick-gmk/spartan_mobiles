@@ -3986,6 +3986,10 @@ ol {
 		
         height: 160px;
     }
+	 .profile-dropdown img {
+		margin-top: -10px; 
+		margin-left: 10px;
+    }
 	
 }
 
@@ -4176,11 +4180,26 @@ ol {
 .hero__slider .owl-dots {
     margin-top: 25px;
 }
+@media (min-width: 426px) and (max-width: 550px) {
+    .product__item__text h6 {
+    margin-top: 50px;
+}
+ .product__hover{
+	margin-right: 25px;
+ }
+	.product__item__pic{
+		margin-left: 15px;
+	}
+	 .product__item__text{
+		margin-left: 15px;
+	}
+}
+
 @media (max-width: 768px) {
-    .product__item__text  {
+    .product__item__text   {
         font-size: 14px;
         line-height: 1.2;
-		margin-top: 90px;
+		margin-top: 80px;
     }
     .product__item__text h5 {
         font-size: 16px;
@@ -4281,20 +4300,20 @@ ol {
 		
     }
 	.canvas__open{
-		margin-top: 280px;
+		margin-top: 260px;
 	}
 		.header__nav__option {
 		display: none;
 	}
 
     .site-logo {
-        width: auto !important;
-        height: auto !important;
+        width: 100%!important;
+        height: auto!important;
         margin-top: 0 !important;
     }
 	
 	.header{
-		margin-bottom: 130px;
+		margin-bottom: 120px;
 	}
 
     .col-lg-3.col-md-3 {
@@ -4332,7 +4351,7 @@ ol {
     font-weight: 600;
 }
 
-@media (min-width: 550px) and (max-width: 768px) {
+@media (min-width: 550px) and (max-width: 800px) {
     .header .container .row {
         align-items: center;
     }
@@ -4353,8 +4372,6 @@ ol {
     }
     
     .profile-dropdown img {
-        width: 25px;
-        height: 25px;
 		margin-top: -6px; 
 		margin-left: 10px;
     }
@@ -4374,6 +4391,9 @@ ol {
 	.breadcrumb-option{
 		margin-top: 10px;
 	}
+	  .product__item__pic{
+   margin-bottom: 80px;
+}
 }
 
 
