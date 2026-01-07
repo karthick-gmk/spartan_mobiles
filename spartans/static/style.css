@@ -4249,7 +4249,8 @@ ol {
     .header__logo  {
         text-align: center;
 		margin-left: 0px;
-		margin-top: -40px;
+		margin-top: -10px;
+		
     }
 
     .site-logo {
@@ -4263,10 +4264,13 @@ ol {
         padding: 0;
     }
 	.canvas__open{
-		margin-top: 140px;
+		margin-top: 130px;
 	}
 	.header{
-		margin-bottom: 50px;
+		margin-bottom: 10px;
+	}
+	.product__item__pic{
+		margin-bottom:auto;
 	}
 	
 }
@@ -4274,30 +4278,30 @@ ol {
 	
     .header__logo  {
         text-align: center;
-		margin-top: -20px;
+		
 
     }
 
     .site-logo {
         width: auto !important;
         height: auto !important;
-        margin-top: 0 !important;
+        margin-top: 10px !important;
     }
 
     .col-lg-3.col-md-3 {
         padding: 0;
     }
 	.canvas__open{
-		margin-top: 200px;
+		margin-top: 180px;
 	}
 	.header{
-		margin-bottom: 80px;
+		margin-bottom: 30px;
 	}
 	.instagram__pic__item {
 		margin-bottom: 5px;
 	}
 }
-@media (min-width: 426px) and (max-width: 500px){
+@media (min-width: 426px) and (max-width: 549px){
 	.instagram__pic__item {
 		margin-bottom: 5px;
 	}
@@ -4305,11 +4309,11 @@ ol {
     .header__logo  {
         text-align: center;
 		margin-left: 0px;
-		margin-top: 20px;
+		margin-top: 10px;
 		
     }
 	.canvas__open{
-		margin-top: 260px;
+		margin-top: 180px;
 	}
 		.header__nav__option {
 		display: none;
@@ -4322,7 +4326,7 @@ ol {
     }
 	
 	.header{
-		margin-bottom: 120px;
+		margin-bottom: 30px;
 	}
 
     .col-lg-3.col-md-3 {
@@ -4366,8 +4370,8 @@ ol {
     }
     
     .header__logo img {
-        width: 180px !important;
-        height: 120px !important;
+        width: 100% !important;
+        height: auto !important;
         margin-left: -10px !important;
     }
 	 .header__nav__option {
