@@ -1,0 +1,431 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>My Orders</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/">Home</a>
+                        <span>My Orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Orders Section Begin -->
+<section class="orders spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="orders__content">
+                    {% if orders %}
+                        {% for order in orders %}
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div class="order-info">
+                                    <h5>Order #{{ order.order_number }}</h5>
+                                    <p>Placed on {{ order.created_at|date:"M d, Y" }}</p>
+                                </div>
+                                <div class="order-status">
+                                    <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                {% for item in order.order_items.all %}
+                                <div class="order-item">
+                                    <div class="item-image">
+                                        <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}">
+                                    </div>
+                                    <div class="item-details">
+                                        <h6>{{ item.product.name }}</h6>
+                                        <p>{{ item.product.brand.name }}</p>
+                                        <p>Qty: {{ item.quantity }} × ₹{{ item.price }}</p>
+                                    </div>
+                                    <div class="item-total">
+                                        <h6>₹{{ item.get_total_price }}</h6>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="order-actions">
+                                
+                                <button class="btn btn-outline-success" onclick="showTracking('{{ order.order_number }}', '{{ order.id }}')">Track Order</button>
+                                {% if order.status == 'pending' %}
+                                    <a href="" class="btn btn-outline-danger">Cancel Order</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-orders">
+                            <div class="text-center">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" width="100" class="mb-3">
+                                <h4>No Orders Yet</h4>
+                                <p>You haven't placed any orders yet.</p>
+                                <a href="/shop" class="btn btn-primary">Start Shopping</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Orders Section End -->
+
+<!-- Tracking Modal -->
+<div class="modal fade" id="trackingModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order Tracking</h5>
+                <a href="javascript:void(0)" onclick="closeModal()" style="cursor:pointer; float: right; font-size: 20px;">
+                    <i class="fa fa-close"></i>
+                </a>
+            </div>
+            
+            <div class="modal-body">
+                <div id="trackingContent">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status"></div>
+                        <p>Loading tracking information...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .orders {
+        padding: 50px 0;
+    }
+
+    .order-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-info h5 {
+        margin: 0;
+        color: #333;
+    }
+
+    .order-info p {
+        margin: 5px 0 0 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .order-status {
+        text-align: right;
+    }
+
+    .status-badge {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-paid {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .order-items {
+        padding: 20px;
+    }
+
+    .order-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+        margin-right: 15px;
+    }
+
+    .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .item-details {
+        flex: 1;
+    }
+
+    .item-details h6 {
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+
+    .item-details p {
+        margin: 2px 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .item-total h6 {
+        margin: 0;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .order-actions {
+        padding: 20px;
+        border-top: 1px solid #eee;
+        text-align: right;
+    }
+
+    .order-actions .btn {
+        margin-left: 10px;
+    }
+
+    .empty-orders {
+        text-align: center;
+        padding: 100px 0;
+    }
+
+    .empty-orders h4 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .empty-orders p {
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .tracking-timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+
+    .tracking-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .tracking-step:last-child {
+        margin-bottom: 0;
+    }
+
+    .step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step-icon.completed {
+        background: #28a745;
+        color: white;
+    }
+
+    .step-icon.current {
+        background: #007bff;
+        color: white;
+    }
+
+    .step-icon.pending {
+        background: #e9ecef;
+        color: #6c757d;
+        border: 2px solid #dee2e6;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step-title {
+        font-weight: 600;
+        margin: 0 0 5px 0;
+    }
+
+    .step-time {
+        color: #6c757d;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .tracking-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 19px;
+        top: 40px;
+        width: 2px;
+        height: 30px;
+        background: #dee2e6;
+        z-index: 1;
+    }
+
+    .tracking-step.completed:not(:last-child)::after {
+        background: #28a745;
+    }
+
+    @media (max-width: 768px) {
+        .order-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .order-status {
+            text-align: left;
+            margin-top: 10px;
+        }
+        
+        .order-item {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .item-image {
+            margin: 0 0 15px 0;
+        }
+        
+        .order-actions {
+            text-align: center;
+        }
+        
+        .order-actions .btn {
+            margin: 5px;
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    function closeModal() {
+    document.getElementById('trackingModal').style.display = 'none';
+    window.location.href = '/orders';
+}
+
+    function showTracking(orderNumber, orderId) {
+        const modal = new bootstrap.Modal(document.getElementById('trackingModal'));
+        modal.show();
+        
+        // Reset content
+        document.getElementById('trackingContent').innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border" role="status"></div>
+                <p>Loading tracking information...</p>
+            </div>
+        `;
+        
+        // Fetch tracking data
+        fetch(`/get-tracking/${orderId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayTracking(orderNumber, data.tracking);
+                } else {
+                    document.getElementById('trackingContent').innerHTML = `
+                        <div class="text-center">
+                            <p class="text-muted">No tracking information available for this order.</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                document.getElementById('trackingContent').innerHTML = `
+                    <div class="text-center">
+                        <p class="text-danger">Error loading tracking information.</p>
+                    </div>
+                `;
+            });
+    }
+
+    function displayTracking(orderNumber, tracking) {
+        const trackingSteps = [
+            { key: 'shipped', title: 'Order Shipped', icon: '📦' },
+            { key: 'courier', title: 'Moved to Courier', icon: '🚚' },
+            { key: 'reached_city', title: 'Reached Your City', icon: '🏙️' },
+            { key: 'out_for_delivery', title: 'Out for Delivery', icon: '🚛' },
+            { key: 'delivered', title: 'Delivered', icon: '✅' }
+        ];
+        
+        const currentStatusIndex = trackingSteps.findIndex(step => step.key === tracking.status);
+        
+        let html = `
+            <div class="mb-3">
+                <h6>Order #${orderNumber}</h6>
+                <p class="text-muted">Last updated: ${new Date(tracking.updated_at).toLocaleString()}</p>
+            </div>
+            <div class="tracking-timeline">
+        `;
+        
+        trackingSteps.forEach((step, index) => {
+            let stepClass = 'pending';
+            if (index < currentStatusIndex) stepClass = 'completed';
+            else if (index === currentStatusIndex) stepClass = 'current';
+            
+            html += `
+                <div class="tracking-step ${stepClass}">
+                    <div class="step-icon ${stepClass}">
+                        ${step.icon}
+                    </div>
+                    <div class="step-content">
+                        <h6 class="step-title">${step.title}</h6>
+                        ${index <= currentStatusIndex ? `<p class="step-time">${new Date(tracking.updated_at).toLocaleDateString()}</p>` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        
+        document.getElementById('trackingContent').innerHTML = html;
+    }
+</script>
+
+{% endblock %}

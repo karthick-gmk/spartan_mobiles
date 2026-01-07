@@ -6,7 +6,7 @@ from .models.product_review_model import ProductReview
 from .models.contact_model import Contact
 from .models.shop_cart import Cart 
 from .models.billing_model import BillingAddress,UserAddress
-from .models.order_model import Order, OrderItem
+from .models.order_model import Order, OrderItem,OrderTracking
 from .models.shop_cart import CartItem
 from .models.shop_cart import Favorite
 from .models.service_model import UserRequestService, Servicetype
@@ -30,4 +30,5 @@ admin.site.register(CartItem)
 admin.site.register(UserAddress)
 admin.site.register(Servicetype)
 admin.site.register(Announcement)
+admin.site.register(OrderTracking)
 

@@ -13,7 +13,7 @@ from .models.shop_cart import Cart, Favorite
 from django.http import JsonResponse
 from .models.billing_model import BillingAddress
 from .models.shop_cart import Cart, Favorite, CartItem
-from spartans.models.order_model import Order, OrderItem
+from spartans.models.order_model import Order, OrderItem, OrderTracking
 from .models.billing_model import UserAddress
 from spartans.models.service_model import Service, UserRequestService, Servicetype
 from django.utils import timezone
@@ -97,7 +97,11 @@ def detail(request, product_id, product_name):
     related_products = product.objects.filter(category=product_obj.category).exclude(id=product_obj.id)[:4]
 
     user_review = None
+    is_in_cart = False
     if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            is_in_cart = CartItem.objects.filter(cart=cart, product=product_obj).exists()
         try:
             user_review = ProductReview.objects.get(user=request.user, product=product_obj)
         except ProductReview.DoesNotExist:
@@ -149,7 +153,7 @@ def detail(request, product_id, product_name):
                 messages.success(request, "Review submitted successfully!")
         return redirect(request.path)
     reviews = ProductReview.objects.filter(product=product_obj).order_by('-created_at')
-    return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products,'reviews': reviews,'user_review': user_review})
+    return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products,'reviews': reviews,'user_review': user_review,'is_in_cart': is_in_cart})
 
 
 
@@ -375,7 +379,8 @@ def shoping_card(request):
                 'subtotal': 0,
                 'user_addresses': user_addresses,
                 'has_items': False,
-                'show_payment_modal': True  
+                'show_payment_modal': True,
+                'order': order
             })
 
 
@@ -462,6 +467,37 @@ def remove_favorite(request, favorite_id):
     favorite_item = Favorite.objects.get(id=favorite_id)
     favorite_item.delete()
     return redirect('spartans:favorites')
+
+
+def orders(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')
+    
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'orders.html', {'orders': orders})
+
+
+def get_tracking(request, order_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'Not authenticated'})
+    
+    try:
+        order = Order.objects.get(id=order_id, user=request.user)
+        tracking = OrderTracking.objects.filter(order=order).first()
+        
+        if tracking:
+            return JsonResponse({
+                'success': True,
+                'tracking': {
+                    'status': tracking.status,
+                    'updated_at': tracking.updated_at.isoformat()
+                }
+            })
+        else:
+            return JsonResponse({'success': False, 'error': 'No tracking information'})
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Order not found'})
          
 
 

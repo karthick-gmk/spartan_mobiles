@@ -320,20 +320,119 @@
     </div>
 </div> 
 
+<!-- Order Confirm Modal -->
+<div class="modal fade" id="orderConfirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-success" style="color:black">Order Confirmed 🎉</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center">
+            <p>Your order has been placed successfully.</p>
+            <p><strong>Order ID:</strong> <span id="order-number-display">{{ order.order_number|default:'Loading...' }}</span></p>
+            {% if order %}
+                <small>Debug: Order exists - {{ order.id }}</small>
+            {% else %}
+                <small>Debug: No order in context</small>
+            {% endif %}
+        </div>
+
+        <div class="modal-footer">
+            <a href="/orders" class="btn btn-primary">
+                View Orders
+            </a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+        // Continue Payment button-க்கு event listener add பண்ணுங்க
+    document.querySelector('#spartansOrderModal .btn-primary').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Remove focus before hiding modal
+        this.blur();
+        
+        // Payment process simulation
+        $('#spartansOrderModal').modal('hide');
+        
+        // Order confirm modal show பண்ணுங்க
+        setTimeout(() => {
+            $('#orderConfirmModal').modal('show');
+        }, 500);
+    });
 
 
+</script>
 
+<style>
+    /* Order Confirm Modal */
+    #orderConfirmModal .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: scaleIn 0.3s ease-in-out;
+    }
 
+    #orderConfirmModal .modal-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-bottom: none;
+        border-radius: 15px 15px 0 0;
+    }
 
+    #orderConfirmModal .modal-title {
+        font-weight: 600;
+        font-size: 20px;
+        color: black;
+    }
 
+    #orderConfirmModal .modal-body {
+        padding: 30px;
+        font-size: 16px;
+        color: #333;
+    }
 
+    #orderConfirmModal .modal-body p {
+        margin-bottom: 15px;
+    }
 
+    #orderConfirmModal .modal-footer {
+        border-top: none;
+        padding: 15px 25px 25px;
+        justify-content: center;
+    }
 
+    #orderConfirmModal .btn-primary {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        margin-right: 10px;
+    }
 
+    #orderConfirmModal .btn-secondary {
+        border-radius: 25px;
+        padding: 10px 20px;
+    }
 
-
-
-
+    @keyframes scaleIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
 
 <style>
     .pro-qty-2 button {

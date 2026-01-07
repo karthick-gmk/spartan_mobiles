@@ -109,7 +109,9 @@
                                         <input type="number" id="quantity" name="quantity" value="1" min="1" max="99">
                                     </div>
                                 </div>
-                                <button type="button" class="primary-btn" onclick="addToCartFromDetail({{ product.id }})">Add to Cart</button>
+                               <button type="button" id="addCartBtn" class="primary-btn" onclick="addToCartFromDetail({{ product.id }})">
+                                    {% if is_in_cart %}Added{% else %}Add to Cart{% endif %}
+                                </button>
                             </form>
                         </div>
                         <div class="product__details__btns__option">
@@ -451,6 +453,10 @@
                 document.querySelector('#successModal .modal-body h4').textContent = 'Product Added to Cart!';
                 document.querySelector('#successModal .modal-body p').textContent = 'Your product has been successfully added to cart.';
                 $('#successModal').modal('show');
+
+                 $('#successModal').on('hidden.bs.modal', function() {
+                window.location.reload();
+            });
             }
         })
         .catch(error => {
