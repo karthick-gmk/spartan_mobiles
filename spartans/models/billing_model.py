@@ -6,6 +6,7 @@ from .order_model import Order
 
 class BillingAddress(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    user_address = models.ForeignKey('UserAddress', on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     mobile = models.CharField(max_length=15)
@@ -35,3 +36,7 @@ class UserAddress(models.Model):
     pincode = models.CharField(max_length=6)
     is_default = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.user.username} - {self.address_type}"

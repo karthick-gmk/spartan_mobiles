@@ -153,7 +153,15 @@ def detail(request, product_id, product_name):
                 messages.success(request, "Review submitted successfully!")
         return redirect(request.path)
     reviews = ProductReview.objects.filter(product=product_obj).order_by('-created_at')
-    return render(request, 'detail.html', {'product': product_obj, 'related_products': related_products,'reviews': reviews,'user_review': user_review,'is_in_cart': is_in_cart})
+    user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at') if request.user.is_authenticated else []
+    return render(request, 'detail.html', {
+        'product': product_obj, 
+        'related_products': related_products,
+        'reviews': reviews,
+        'user_review': user_review,
+        'is_in_cart': is_in_cart,
+        'user_addresses': user_addresses
+    })
 
 
 
@@ -498,6 +506,84 @@ def get_tracking(request, order_id):
             return JsonResponse({'success': False, 'error': 'No tracking information'})
     except Order.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Order not found'})
+
+
+def fast_payment(request, product_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "Please login first!")
+        return redirect('spartans:sign_in')
+    
+    product_obj = product.objects.get(id=product_id)
+    user_addresses = UserAddress.objects.filter(user=request.user).order_by('-created_at')
+    
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        pincode = request.POST.get('pincode')
+        
+        # Handle address selection
+        selected_address_id = request.POST.get('selected_address_id')
+        
+        if selected_address_id and selected_address_id != 'new':
+            user_address = UserAddress.objects.get(id=selected_address_id, user=request.user)
+            address1 = user_address.address_line1
+            address2 = user_address.address_line2
+        else:
+            address_type = request.POST.get('address_type')
+            address1 = request.POST.get('address_line1')
+            address2 = request.POST.get('address_line2', '')
+            save_address = request.POST.get('save_address')
+            
+            if save_address:
+                UserAddress.objects.create(
+                    user=request.user,
+                    address_type=address_type,
+                    address_line1=address1,
+                    address_line2=address2,
+                    city=city,
+                    state=state,
+                    pincode=pincode
+                )
+
+        try:
+            total_amount = quantity * product_obj.price
+            
+            order = Order.objects.create(
+                user=request.user,
+                total_amount=total_amount,
+                status='pending'
+            )
+            
+            OrderItem.objects.create(
+                order=order,
+                product=product_obj,
+                quantity=quantity,
+                price=product_obj.price
+            )
+            
+            BillingAddress.objects.create(
+                order=order,
+                name=name,
+                email=email,
+                mobile=mobile,
+                address1=address1,
+                address2=address2,
+                city=city,
+                state=state,
+                pincode=pincode
+            )
+            
+            messages.success(request, "Order placed successfully!")
+            return redirect('spartans:orders')
+
+        except Exception as e:
+            messages.error(request, f"Error placing order: {str(e)}")
+    
+    return redirect('spartans:detail', product_id=product_id, product_name=product_obj.name)
          
 
 
