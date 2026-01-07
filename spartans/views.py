@@ -578,7 +578,16 @@ def fast_payment(request, product_id):
             )
             
             messages.success(request, "Order placed successfully!")
-            return redirect('spartans:orders')
+            return render(request, 'detail.html', {
+                'product': product_obj, 
+                'related_products': product.objects.filter(category=product_obj.category).exclude(id=product_obj.id)[:4],
+                'reviews': ProductReview.objects.filter(product=product_obj).order_by('-created_at'),
+                'user_review': None,
+                'is_in_cart': False,
+                'user_addresses': user_addresses,
+                'show_order_modal': True,
+                'order': order
+            })
 
         except Exception as e:
             messages.error(request, f"Error placing order: {str(e)}")

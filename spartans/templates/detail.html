@@ -810,10 +810,361 @@
         </div>
     </div>
 </div>
-{% endblock %}    
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('continuePaymentBtn')) {
+        document.getElementById('continuePaymentBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            $('#spartansOrderModal').modal('hide');
+            setTimeout(() => {
+                $('#orderConfirmModal').modal('show');
+            }, 500);
+        });
+    }
+    
+    {% if show_order_modal %}
+    $('#spartansOrderModal').modal('show');
+    document.getElementById('order-number-display').textContent = '{{ order.id }}';
+    {% endif %}
+});
+</script>
 
 
 
 
 
 <!-- Checkout Modal -->
+<!-- Spartans Mobile - Order Modal -->
+<div class="modal fade" id="spartansOrderModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background:#000; color:#fff;">
+                <h5 style="color:white;" class="modal-title">Spartans Mobile - Order Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span style="color:white;">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
+                        width="70" class="mb-3">
+                    <p>Thank you for choosing <strong>Spartans Mobile</strong>.</p>
+
+                    <div class="alert alert-success mt-3">
+                        <strong>Total Amount:</strong> ₹<span id="payment-modal-total">{{ product.price }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" id="continuePaymentBtn">
+                    Continue Payment
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Order Confirm Modal -->
+<div class="modal fade" id="orderConfirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-success" style="color:black">Order Confirmed 🎉</h5>
+            <button type="button" class="close" data-dismiss="modal">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body text-center">
+            <p>Your order has been placed successfully.</p>
+            <p><strong>Order ID:</strong> <span id="order-number-display">Loading...</span></p>
+        </div>
+
+        <div class="modal-footer">
+            <a href="{% url 'spartans:orders' %}" class="btn btn-primary">
+                View Orders
+            </a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('continuePaymentBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    $('#spartansOrderModal').modal('hide');
+    setTimeout(() => {
+        $('#orderConfirmModal').modal('show');
+    }, 500);
+});
+</script>
+
+
+
+
+<style>
+    
+ #proceedCheckoutModal .modal-dialog {
+        max-width: 60%;
+        height: 90vh;
+    }
+
+    #proceedCheckoutModal .modal-content {
+        height: 80%;
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+    }
+
+    #proceedCheckoutModal .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(90vh - 120px);
+    }
+     .selected-address-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .selected-address-box strong {
+        color: #495057;
+        font-size: 14px;
+    }
+
+    .selected-address-box p {
+        margin: 5px 0;
+        color: #6c757d;
+    }
+     .selected-address-box {
+        background: #e8f5e8;
+        border: 2px solid #28a745;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .selected-address-box strong {
+        color: #155724;
+        font-size: 16px;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .selected-address-box p {
+        margin: 5px 0;
+        color: #155724;
+        font-weight: 500;
+    }
+
+    .selected-address-box .btn {
+        margin-top: 10px;
+        background: #28a745;
+        color: white;
+        border: none;
+    }
+
+    .selected-address-box .btn:hover {
+        background: #218838;
+    }
+
+    /* Address selection dropdown styling */
+    #addressSelect {
+        border: 2px solid #ddd;
+        font-weight: 500;
+    }
+
+    #addressSelect:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+    }
+
+    /* New address form styling */
+    #newAddressForm {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+    }
+     /* Modal overall */
+    #proceedCheckoutModal .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+    }
+
+    /* Header gradient */
+    #proceedCheckoutModal .modal-header {
+        background: linear-gradient(135deg, #000000, #434343);
+        color: #fff;
+        border-bottom: none;
+    }
+
+    /* Titles */
+    #proceedCheckoutModal h6 {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #222;
+    }
+
+    /* Inputs */
+    #proceedCheckoutModal .form-control {
+        border-radius: 10px;
+        height: 45px;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    #proceedCheckoutModal .form-control:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    /* Billing box */
+    .billing-box {
+        background: #f9fafb;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    /* Order box */
+    .order-box {
+        background: linear-gradient(135deg, #111, #333);
+        color: #fff;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .order-box .list-group-item {
+        background: transparent;
+        border: none;
+        color: #fff;
+        padding: 8px 0;
+    }
+
+    /* Total highlight */
+    .order-total {
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    /* Footer buttons */
+    #proceedCheckoutModal .btn-primary {
+        background: linear-gradient(135deg, #000, #444);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 28px;
+    }
+
+    #proceedCheckoutModal .btn-secondary {
+        border-radius: 30px;
+    }
+    .cart-items-summary {
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+    }
+
+    .cart-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 8px 0;
+    }
+
+    .item-details strong {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+
+    .item-details small {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .item-total {
+        font-weight: bold;
+        color: #333;
+    }
+
+    @media (min-width: 320px) and (max-width: 500px) {
+        .shopping__cart__table {
+            overflow-x: auto;
+        }
+        
+        .shopping__cart__table table {
+            min-width: 500px;
+            font-size: 12px;
+        }
+        
+        .product__cart__item__pic img {
+            width: 80px !important;
+        }
+        
+        .product__cart__item__text h6 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .product__cart__item__text h5 {
+            font-size: 14px;
+        }
+        
+        .pro-qty-2 {
+            width: 80px;
+        }
+        
+        .pro-qty-2 button {
+            width: 25px;
+            height: 25px;
+            font-size: 12px;
+        }
+        
+        .pro-qty-2 input {
+            width: 30px;
+            height: 25px;
+            font-size: 12px;
+        }
+        
+        .cart__price {
+            font-size: 14px;
+        }
+        
+        .cart__total {
+            margin-top: 20px;
+        }
+        
+        .continue__btn {
+            margin-bottom: 40px;
+        }
+        .billing-box {
+            height: auto;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}    
