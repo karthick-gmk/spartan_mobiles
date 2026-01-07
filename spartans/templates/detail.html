@@ -816,22 +816,22 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('continuePaymentBtn')) {
-        document.getElementById('continuePaymentBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            $('#spartansOrderModal').modal('hide');
-            setTimeout(() => {
-                $('#orderConfirmModal').modal('show');
-            }, 500);
-        });
-    }
-    
-    {% if show_order_modal %}
-    $('#spartansOrderModal').modal('show');
-    document.getElementById('order-number-display').textContent = '{{ order.id }}';
-    {% endif %}
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('continuePaymentBtn')) {
+            document.getElementById('continuePaymentBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                $('#spartansOrderModal').modal('hide');
+                setTimeout(() => {
+                    $('#orderConfirmModal').modal('show');
+                }, 500);
+            });
+        }
+        
+        {% if show_order_modal %}
+        $('#spartansOrderModal').modal('show');
+        document.getElementById('order-number-display').textContent = '{{ order.id }}';
+        {% endif %}
+    });
 </script>
 
 
@@ -904,13 +904,13 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
-document.getElementById('continuePaymentBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    $('#spartansOrderModal').modal('hide');
-    setTimeout(() => {
-        $('#orderConfirmModal').modal('show');
-    }, 500);
-});
+    document.getElementById('continuePaymentBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        $('#spartansOrderModal').modal('hide');
+        setTimeout(() => {
+            $('#orderConfirmModal').modal('show');
+        }, 500);
+    });
 </script>
 
 
