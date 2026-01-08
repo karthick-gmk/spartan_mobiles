@@ -16,6 +16,7 @@ class Command(BaseCommand):
             {'name': 'Realme'},
             {'name': 'Redmi'},
             {'name': 'iqoo'},
+            {'name': 'UBON'},
         ]
 
         for data in brand_data:

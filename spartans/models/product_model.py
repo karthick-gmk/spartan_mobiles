@@ -12,7 +12,7 @@ def product_main_image_path(instance, filename):
     return f"products/{brand}/{product}/main_image/{filename}"
 
 class product(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=1000)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     brand_model = models.ForeignKey(BrandModel, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
