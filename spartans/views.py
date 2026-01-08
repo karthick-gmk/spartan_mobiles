@@ -596,6 +596,16 @@ def fast_payment(request, product_id):
          
 
 
+def cancel_order(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        try:
+            order = Order.objects.get(id=order_id, user=request.user, status='pending')
+            order.delete()
+            return JsonResponse({'success': True})
+        except Order.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Order not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 
 

@@ -325,25 +325,22 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title text-success" style="color:black">Order Confirmed 🎉</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title text-success">Order Confirmed 🎉</h5>
+            <a href="javascript:void(0)" onclick="closeModal()" style="cursor:pointer; float: right; font-size: 20px;">
+                    <i class="fa fa-close"></i>
+                </a>
         </div>
 
         <div class="modal-body text-center">
             <p>Your order has been placed successfully.</p>
             <p><strong>Order ID:</strong> <span id="order-number-display">{{ order.order_number|default:'Loading...' }}</span></p>
-            {% if order %}
-                <small>Debug: Order exists - {{ order.id }}</small>
-            {% else %}
-                <small>Debug: No order in context</small>
-            {% endif %}
         </div>
 
         <div class="modal-footer">
             <a href="/orders" class="btn btn-primary">
                 View Orders
             </a>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <button  href="javascript:void(0)" onclick="closeModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 Close
             </button>
         </div>
@@ -352,6 +349,10 @@
 </div>
 
 <script>
+     function closeModal() {
+    $('#orderConfirmModal').modal('hide');
+    location.reload();
+}
         // Continue Payment button-க்கு event listener add பண்ணுங்க
     document.querySelector('#spartansOrderModal .btn-primary').addEventListener('click', function(e) {
         e.preventDefault();
@@ -382,7 +383,7 @@
 
     #orderConfirmModal .modal-header {
         background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
+        color: black;
         border-bottom: none;
         border-radius: 15px 15px 0 0;
     }
@@ -390,7 +391,7 @@
     #orderConfirmModal .modal-title {
         font-weight: 600;
         font-size: 20px;
-        color: black;
+        color: black !important;
     }
 
     #orderConfirmModal .modal-body {

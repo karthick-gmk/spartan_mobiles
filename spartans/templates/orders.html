@@ -58,10 +58,11 @@
                             </div>
                             
                             <div class="order-actions">
-                                
+                                {% if order.status == 'paid' %}
                                 <button class="btn btn-outline-success" onclick="showTracking('{{ order.order_number }}', '{{ order.id }}')">Track Order</button>
+                                {% endif %}
                                 {% if order.status == 'pending' %}
-                                    <a href="" class="btn btn-outline-danger">Cancel Order</a>
+                                    <a href="javascript:void(0)" onclick="cancelOrder({{ order.id }})" class="btn btn-outline-danger">Cancel Order</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -345,10 +346,32 @@
 </style>
 
 <script>
+    function cancelOrder(orderId) {
+        if (confirm('Are you sure you want to cancel this order?')) {
+            fetch('/cancel_order/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `order_id=${orderId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order cancelled successfully!');
+                    location.reload();
+                } else {
+                    alert('Error cancelling order: ' + data.error);
+                }
+            });
+        }
+    }
+
     function closeModal() {
-    document.getElementById('trackingModal').style.display = 'none';
-    window.location.href = '/orders';
-}
+        document.getElementById('trackingModal').style.display = 'none';
+        window.location.href = '/orders';
+    }
 
     function showTracking(orderNumber, orderId) {
         const modal = new bootstrap.Modal(document.getElementById('trackingModal'));
