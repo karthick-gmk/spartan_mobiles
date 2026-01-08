@@ -829,7 +829,7 @@
         
         {% if show_order_modal %}
         $('#spartansOrderModal').modal('show');
-        document.getElementById('order-number-display').textContent = '{{ order.id }}';
+        document.getElementById('order-number-display').textContent = '{{ order.order_number }}';
         {% endif %}
     });
 </script>
@@ -914,6 +914,68 @@
 </script>
 
 
+<style>
+    /* Order Confirm Modal */
+    #orderConfirmModal .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: scaleIn 0.3s ease-in-out;
+    }
+
+    #orderConfirmModal .modal-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: black;
+        border-bottom: none;
+        border-radius: 15px 15px 0 0;
+    }
+
+    #orderConfirmModal .modal-title {
+        font-weight: 600;
+        font-size: 20px;
+        color: black !important;
+    }
+
+    #orderConfirmModal .modal-body {
+        padding: 30px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    #orderConfirmModal .modal-body p {
+        margin-bottom: 15px;
+    }
+
+    #orderConfirmModal .modal-footer {
+        border-top: none;
+        padding: 15px 25px 25px;
+        justify-content: center;
+    }
+
+    #orderConfirmModal .btn-primary {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        margin-right: 10px;
+    }
+
+    #orderConfirmModal .btn-secondary {
+        border-radius: 25px;
+        padding: 10px 20px;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
 
 
 <style>
@@ -1110,7 +1172,7 @@
         color: #333;
     }
 
-    @media (min-width: 320px) and (max-width: 500px) {
+    @media (min-width: 320px) and (max-width: 1440px) {
         .shopping__cart__table {
             overflow-x: auto;
         }
@@ -1165,6 +1227,49 @@
             padding: 20px;
             margin-bottom: 20px;
         }
+        
     }
 </style>
+
+<style>
+@media (min-width: 320px) and (max-width: 1440px) {
+    #proceedCheckoutModal .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+    
+    #proceedCheckoutModal .modal-body .row {
+        flex-direction: column;
+    }
+    
+    #proceedCheckoutModal .col-lg-7,
+    #proceedCheckoutModal .col-lg-5 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    #proceedCheckoutModal .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 1440px) {
+    #proceedCheckoutModal .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+        height: 95vh;
+    }
+    
+    #proceedCheckoutModal .modal-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #proceedCheckoutModal .modal-body {
+        flex: 1;
+    }
+}
+    </style>
 {% endblock %}    

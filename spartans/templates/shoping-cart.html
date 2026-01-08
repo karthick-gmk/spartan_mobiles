@@ -352,7 +352,7 @@
      function closeModal() {
     $('#orderConfirmModal').modal('hide');
     location.reload();
-}
+    }
         // Continue Payment button-க்கு event listener add பண்ணுங்க
     document.querySelector('#spartansOrderModal .btn-primary').addEventListener('click', function(e) {
         e.preventDefault();
@@ -654,192 +654,7 @@
 
 
 <style>
-    /* Mobile & Tablet */
-    @media (min-width: 320px) and (max-width: 1024px) {
-
-        /* Modal full usable height */
-        .modal-dialog {
-            max-width: 95% !important;
-            height: 95vh;
-            margin: 10px auto;
-        }
-
-        .modal-content {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            border-radius: 8px;
-            margin-left: 15px;
-        }
-
-        /* ONLY body scroll */
-        .modal-body {
-            flex: 1 1 auto;
-            overflow-y: auto;
-            padding: 15px !important;
-        }
-
-        /* Footer normal (NOT sticky) */
-        .modal-footer {
-            flex-shrink: 0;
-            padding: 12px;
-            background: #fff;
-            border-top: 1px solid #ddd;
-        }
-       
-        /* Stack columns */
-        .col-lg-7,
-        .col-lg-5 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        
-        
-
-        /* Billing & Order box */
-        .billing-box,
-        .order-box {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-         .billing-box {
-        height: auto;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-        /* Inputs */
-        .billing-box input,
-        .billing-box select {
-            width: 100%;
-            height: 42px;
-            font-size: 14px;
-        }
-
-        /* Footer buttons */
-        .modal-footer .btn {
-            width: 100%;
-            height: 45px;
-            font-size: 15px;
-            margin-bottom: 8px;
-        }
-    }
-
-    /* Small mobile full screen */
-    @media (max-width: 576px) {
-        .modal-dialog {
-            height: 100vh;
-            margin: 0;
-        }
-
-        .modal-content {
-            height: 100vh;
-            border-radius: 0;
-        }
-        .order-box {
-        margin-bottom: 200px;
-    }
-
-    }
-
-    @media (min-width: 320px) and (max-width: 1024px) {
-
-        /* Full height modal */
-        .modal-dialog {
-            height: 95vh;
-        }
-
-        .modal-content {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Scroll only body */
-        .modal-body {
-            flex: 1 1 auto;
-            overflow-y: auto;
-            max-height: calc(95vh - 120px);
-        }
-
-        /* Footer always visible */
-        .modal-footer {
-            position: sticky;
-            bottom: 0;
-            background: #fff;
-            z-index: 10;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
-
-        .modal-footer .btn {
-            height: 44px;
-            font-size: 15px;
-        }
-    }
-        
-     @media (min-width: 769px) and (max-width: 1024px) {
-         .col-lg-5{
-            margin-bottom:200px;
-        }
-    }
-
-   @media (min-width: 501px) and (max-width: 768px) {
-    .modal-dialog {
-        max-width: 90%;
-        height: 85vh;
-        margin: 20px auto;
-    }
     
-    .modal-content {
-        height: 100%;
-        border-radius: 12px;
-    }
-    
-    .modal-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 20px;
-    }
-    
-    .col-lg-7, .col-lg-5 {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-     .col-lg-5{
-            margin-bottom:150px;
-        }
-    
-    .billing-box {
-        height: auto;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .order-box {
-        margin-top: 0;
-        margin-bottom: 30px;
-    }
-    
-    .form-control {
-        height: 45px;
-        font-size: 15px;
-    }
-    
-    .modal-footer .btn {
-        width: 48%;
-        height: 45px;
-        display: inline-block;
-    }
-    
-    .modal-footer {
-        display: flex;
-        gap: 10px;
-        padding: 15px;
-    }
-}
-
  #proceedCheckoutModal .modal-dialog {
         max-width: 60%;
         height: 90vh;
@@ -1032,7 +847,7 @@
         color: #333;
     }
 
-    @media (min-width: 320px) and (max-width: 500px) {
+    @media (min-width: 320px) and (max-width: 1024px) {
         .shopping__cart__table {
             overflow-x: auto;
         }
@@ -1087,9 +902,50 @@
             padding: 20px;
             margin-bottom: 20px;
         }
+        
     }
 </style>
 
+<style>
+    @media (min-width: 320px) and (max-width: 1024px) {
+        #proceedCheckoutModal .modal-dialog {
+            margin: 0.5rem;
+            max-width: calc(100% - 1rem);
+        }
+        
+        #proceedCheckoutModal .modal-body .row {
+            flex-direction: column;
+        }
+        
+        #proceedCheckoutModal .col-lg-7,
+        #proceedCheckoutModal .col-lg-5 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        
+        #proceedCheckoutModal .col-md-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
 
+    @media (min-width: 320px) and (max-width: 1024px) {
+        #proceedCheckoutModal .modal-dialog {
+            margin: 0.5rem;
+            max-width: calc(100% - 1rem);
+            height: 95vh;
+        }
+        
+        #proceedCheckoutModal .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #proceedCheckoutModal .modal-body {
+            flex: 1;
+        }
+    }
+</style>
 
 {% endblock %}
