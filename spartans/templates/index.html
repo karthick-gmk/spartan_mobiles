@@ -191,11 +191,16 @@
                             <h5>₹{{ announcement.product.price }}</h5>
                         </div>
                     {% else %}
-                        <img src="{% static 'images/product-sale.png' %}" alt="">
-                        <div class="hot__deal__sticker">
+                        <img src="{% static 'img/offers.png' %}" alt="">                                        
+                        {% if announcement and announcement.product %}
+                            <div class="hot__deal__sticker">
                             <span>Sale Of</span>
-                            <h5>₹499</h5>
-                        </div>
+                                <h5>₹499</h5>
+                            </div>
+                            {% else %}                                                    
+                        {% endif %}
+                  
+                        
                     {% endif %}
                 </div>
             </div>
@@ -210,7 +215,7 @@
                         {% if announcement and announcement.product %}
                             {{ announcement.product.name }}
                         {% else %}
-                            Wireless Bluetooth Headphones
+                           Spartans Mobile Offers
                         {% endif %}
                     </h2>
 
