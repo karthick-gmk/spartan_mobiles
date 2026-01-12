@@ -65,7 +65,7 @@
                                             <ul>
                                                 {% for brand in brands %}
                                                     <li data-filter=".{{ brand.name|lower|slugify }}">
-                                                        <a href="#">{{ brand.name }}</a>
+                                                        <a href="{% url 'spartans:shop' %}?brand={{ brand.id }}">{{ brand.name }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
@@ -81,10 +81,8 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li data-filter=".price-0-100"><a href="#">₹0 – ₹100</a></li>
-                                                <li data-filter=".price-100-200"><a href="#">₹100 – ₹200</a></li>
-                                                <li data-filter=".price-200-300"><a href="#">₹200 – ₹300</a></li>
-                                                <li data-filter=".price-300-400"><a href="#">₹300 – ₹400</a></li>
+                                                <li data-filter=".price-0-249"><a href="#">₹0 – ₹249</a></li>
+                                                <li data-filter=".price-250-499"><a href="#">₹250 – ₹499</a></li>
                                                 <li data-filter=".price-500-plus"><a href="#">₹500+</a></li>
                                             </ul>
                                         </div>

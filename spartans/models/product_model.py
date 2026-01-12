@@ -36,16 +36,13 @@ class product(models.Model):
 
     def get_price_range(self):
         price = float(self.price)
-        if price <= 100:
-            return "0-100"
-        elif price <= 200:
-            return "100-200"
-        elif price <= 300:
-            return "200-300"
-        elif price <= 400:
-            return "300-400"
+        if price <= 249:
+            return "0-249"
+        elif price <= 499:
+            return "250-499"
         else:
             return "500-plus"
+
 
     def get_gallery_images(self):
         return self.productimage_set.all()
