@@ -4367,7 +4367,7 @@ ol {
     font-weight: 600;
 }
 
-@media (min-width: 550px) and (max-width: 850px) {
+@media (min-width: 550px) and (max-width: 1020px) {
     .header .container .row {
         align-items: center;
     }
