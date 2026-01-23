@@ -117,7 +117,7 @@
                         <div class="product__details__btns__option">
                            <a href="#" onclick="addToFavoriteFromDetail({{ product.id }})"><i class="fa fa-heart"></i> Add to Wishlist</a>
                         </div>
-                         <a href="#" class="primary-btn" data-toggle="modal" data-target="#proceedCheckoutModal" onclick="updateFastPaymentQuantity()">Payment</a>
+                         <a href="#" class="primary-btn" onclick="checkLoginForPayment()">Payment</a>
                     </div>
                 </div>
             </div>
@@ -328,8 +328,8 @@
                     <div class="product__item__pic">
                         <a href="{% url 'spartans:detail' related_product.id related_product.name|slugify %}"><img src="{% if related_product.main_image %}{{ related_product.main_image.url }}{% endif %}" alt="{{ related_product.name }}"></a>
                          <ul class="product__hover">
-                            <li><a href="#"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
-                            <li><a href="#"><svg style="background:white; width:33px; height:33px; padding:2px; border-radius:3px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
+                            <li><a href="#" onclick="checkLoginForFavorite({{ related_product.id }})"><img  style="width:35px; height: 35px;" src="{% static 'img/heart.png' %}" alt=""></a></li>
+                            <li><a href="#" onclick="checkLoginForCart({{ related_product.id }})"><svg style="background:white; width:33px; height:33px; padding:2px; border-radius:3px;" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="black"><path d="M450-450H200v-60h250v-250h60v250h250v60H510v250h-60v-250Z"/></svg><span>Add To Card</span></a></li>
                         </ul>
                     </div>
                     <div class="product__item__text">
@@ -402,6 +402,31 @@
             <!-- Footer -->
             <div class="modal-footer border-0 justify-content-center">
                 <a href="{% url 'spartans:sign_in' %}" class="btn btn-primary px-4">Sign In</a>
+                <button type="button" class="btn btn-success px-4" data-dismiss="modal" data-toggle="modal" data-target="#signupModal">Sign Up</button>
+                <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content signup-modal">
+            <!-- Icon Section -->
+            <div class="signup-icon">
+                <i class="fa fa-user-plus"></i>
+            </div>
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <h4 class="mt-3">Create Account!</h4>
+                <p class="text-muted mb-0">
+                    Join us to enjoy exclusive features and offers.
+                </p>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-center">
+                <a href="{% url 'spartans:sign_up' %}" class="btn btn-success px-4">Sign Up</a>
                 <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -504,6 +529,31 @@
         document.getElementById('subtotal-value').textContent = total;
     }
     
+    function checkLoginForPayment() {
+        {% if user.is_authenticated %}
+            updateFastPaymentQuantity();
+            $('#proceedCheckoutModal').modal('show');
+        {% else %}
+            $('#loginModal').modal('show');
+        {% endif %}
+    }
+    
+    function checkLoginForCart(productId) {
+        {% if user.is_authenticated %}
+            addToCartFromDetail(productId);
+        {% else %}
+            $('#loginModal').modal('show');
+        {% endif %}
+    }
+    
+    function checkLoginForFavorite(productId) {
+        {% if user.is_authenticated %}
+            addToFavoriteFromDetail(productId);
+        {% else %}
+            $('#loginModal').modal('show');
+        {% endif %}
+    }
+    
     function handleAddressSelection() {
         const select = document.getElementById('addressSelect');
         const selectedValue = select.value;
@@ -604,7 +654,7 @@
     .nav-tabs .nav-item .nav-link.active .product__thumb__pic {
         border: 2px solid #FF9529;
     }
-    .success-modal, .login-modal {
+    .success-modal, .login-modal, .signup-modal {
         border-radius: 15px;
         overflow: hidden;
     }
@@ -624,8 +674,16 @@
         align-items: center;
         justify-content: center;
     }
+    
+    .signup-icon {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-    .success-icon i, .login-icon i {
+    .success-icon i, .login-icon i, .signup-icon i {
         font-size: 60px;
         color: #fff;
         animation: pop 0.5s ease;
